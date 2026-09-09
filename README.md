@@ -128,3 +128,4 @@ club_anglais_accra/
 ---
 
 *Built for the Accra English Club. The interface and all content are in English.*
+# englis-club-v2-ameliorer-
