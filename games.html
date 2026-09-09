@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arcade &amp; Jeux d'Anglais — Accra English Club</title>
+  <meta name="description" content="Arcade de jeux d'anglais du Club Anglais Accra : jeux solo avec timers et bonus, jeux en groupe sur TV (The Big Challenge), mode meeting et serveur multijoueur." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text y='.85em' font-size='60' x='20' fill='white' font-family='sans-serif' font-weight='bold'>A</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/premium.css" />
+  <link rel="stylesheet" href="css/arcade-and-stories.css" />
+  <script src="js/theme.js"></script>
+</head>
+
+<body>
+  <div class="app">
+    <!-- Topbar unifiée épurée -->
+    <header class="topbar">
+      <div class="logo" id="logo" title="Accueil" onclick="location.href='index.html'">
+        <svg class="logo-mark" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="8" fill="#2563eb"/>
+          <text x="7" y="20" font-family="Outfit,sans-serif" font-weight="800" font-size="16" fill="white">A</text>
+        </svg>
+        <span>Accra English Club</span>
+      </div>
+
+      <nav class="topbar-nav" id="topbarNav">
+        <a href="index.html" class="nav-link">Accueil</a>
+        <a href="games.html" class="nav-link active">Jeux &amp; Arcade</a>
+        <a href="learning.html" class="nav-link">Learning Hub <span class="nav-badge-new">Histoires</span></a>
+        <a href="teaching.html" class="nav-link">Teaching &amp; Quiz</a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link" onclick="event.preventDefault()">Club &amp; Outils ▾</a>
+          <div class="nav-dropdown-menu">
+            <a href="games.html?cat=season" class="dropdown-item">🏆 Classement Saison</a>
+            <a href="games.html?cat=manage" class="dropdown-item">✏️ Éditeur de Contenu</a>
+            <a href="https://drive.google.com/drive/folders/1ZJQ3BmKeTyELWlOViCRWl0PoxY_fFWyc" target="_blank" rel="noopener noreferrer" class="dropdown-item">📁 Google Drive</a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="row" style="gap:10px;align-items:center;">
+        <button class="theme-toggle-btn" id="darkModeToggle" title="Basculer Mode Sombre / Clair">
+          <span class="dm-icon">🌙</span>
+          <span class="dm-label">Sombre</span>
+        </button>
+        <button class="btn-back" id="backBtn" style="visibility:hidden">← Retour</button>
+      </div>
+    </header>
+
+    <!-- Zone principale de l'Arcade -->
+    <main id="arcadeMainWrap">
+      <div class="arcade-header">
+        <h1>Arcade &amp; Jeux du Club</h1>
+        <p class="section-sub">
+          Tous les jeux du club en un seul endroit : entraînement individuel, défis en équipe sur grand écran TV, séances complètes et multijoueur en direct.
+        </p>
+      </div>
+
+      <!-- Barre de filtres et recherche instantanée -->
+      <div class="arcade-controls-bar">
+        <div class="arcade-tabs-pills" id="arcadeTabs">
+          <button class="arcade-tab-btn active" data-cat="all">Tous les jeux (<span id="countAll">27</span>)</button>
+          <button class="arcade-tab-btn" data-cat="solo">Solo (<span id="countSolo">9</span>)</button>
+          <button class="arcade-tab-btn" data-cat="group">Groupe &amp; TV (<span id="countGroup">16</span>)</button>
+          <button class="arcade-tab-btn" data-cat="multi">Multijoueur &amp; Live (2)</button>
+          <button class="arcade-tab-btn" data-cat="tools">Outils &amp; Saison (2)</button>
+        </div>
+
+        <div class="arcade-search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="arcadeSearchInput" placeholder="Rechercher un jeu (ex: challenge, match, spelling)..." />
+        </div>
+      </div>
+
+      <!-- Grille des jeux -->
+      <div class="arcade-grid" id="arcadeGrid">
+        <!-- Rendu dynamique JS -->
+      </div>
+    </main>
+
+    <!-- Écran où se chargent les jeux actifs -->
+    <div id="screen" style="display:none;"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/socket.io/socket.io.js" onerror="this.onerror=null;this.src='https://cdn.socket.io/4.7.5/socket.io.min.js';"></script>
+  <script src="content/content.js"></script>
+  <script src="content/description_data.js"></script>
+  <script src="js/util.js"></script>
+  <script src="js/solo.js"></script>
+  <script src="js/group.js"></script>
+  <script src="js/multiplayer.js"></script>
+  <script src="js/meeting.js"></script>
+  <script src="js/editor.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Script d'orchestration de l'Arcade -->
+  <script>
+    (function () {
+      const GAMES_CATALOG = [
+        // --- MULTIPLAYER & LIVE (2) ---
+        {
+          id: "meeting",
+          title: "Meeting Mode",
+          cat: "multi",
+          modeLabel: "Live Club",
+          modeCls: "mode-multi",
+          icon: "📅",
+          desc: "Anime la séance de club complète : warm-up brise-glace, Big Challenge, speaking club, review et podium.",
+          action: () => CAA.meeting.setup()
+        },
+        {
+          id: "multiplayer",
+          title: "Serveur Multijoueur Live",
+          cat: "multi",
+          modeLabel: "Multijoueur",
+          modeCls: "mode-multi",
+          icon: "🌐",
+          desc: "Créez une salle avec code pin, connectez les smartphones des participants et jouez en direct.",
+          action: () => CAA.multiplayer.menu()
+        },
+
+        // --- GROUP GAMES (16) ---
+        {
+          id: "big-challenge",
+          title: "The Big Challenge",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "🏆",
+          desc: "Plateau de 8 thèmes, questions avec points, chrono et possibilité de vol de points entre équipes.",
+          action: () => CAA.group.setup()
+        },
+        {
+          id: "spelling-group",
+          title: "Spelling Bee (Équipes)",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "🐝",
+          desc: "Écoutez la prononciation audio et épelez le mot anglais à voix haute, en équipe.",
+          action: () => CAA.group.spellingBeeSetup()
+        },
+        {
+          id: "pronounce-group",
+          title: "Pronunciation Drill (Équipes)",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "🗣️",
+          desc: "Mots piégeux, astuces phonétiques IPA et écoute du modèle audio pour chaque équipe.",
+          action: () => CAA.group.pronounceSetup()
+        },
+        {
+          id: "anagram-group",
+          title: "Anagram Duel (Équipes)",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "🔤",
+          desc: "Remettez les lettres dans l'ordre le plus vite possible pour trouver le mot caché.",
+          action: () => CAA.group.anagramSetup()
+        },
+        {
+          id: "grammar-group",
+          title: "Grammar Duel",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "✍️",
+          desc: "Complétez la phrase en choisissant la bonne préposition ou règle de grammaire.",
+          action: () => CAA.group.grammarSetup()
+        },
+        {
+          id: "irregular-group",
+          title: "Verbes Irréguliers (Équipes)",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "⚡",
+          desc: "Trouvez le prétérit, le participe passé ou la définition française sous la pression du chrono.",
+          action: () => CAA.group.irregularSetup()
+        },
+        {
+          id: "alphabet-group",
+          title: "Alphabet Race (Équipes)",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "🏁",
+          desc: "Course de A à Z : trouvez un mot valide commençant par chaque lettre à tour de rôle.",
+          action: () => CAA.group.alphabetRaceSetup()
+        },
+        {
+          id: "phrasal-group",
+          title: "Phrasal Verbs Duel",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "💡",
+          desc: "Associez chaque phrasal verb à son sens contextuel en anglais ou en français.",
+          action: () => CAA.group.phrasalSetup()
+        },
+        {
+          id: "wordchain-group",
+          title: "Word Chain (Chaîne de Mots)",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "🔗",
+          desc: "Chaque mot doit commencer par la dernière lettre du mot précédent, validé par SQLite.",
+          action: () => CAA.group.wordChainSetup()
+        },
+        {
+          id: "wheel-group",
+          title: "Spin the Wheel (La Roue)",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "🎡",
+          desc: "Tournez la roue des défis : mime, chant, virelangue ou question surprise.",
+          action: () => CAA.group.wheelSetup()
+        },
+        {
+          id: "charades-group",
+          title: "Charades (Mimes & Action)",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "🎭",
+          desc: "Un joueur mime l'action ou l'objet affiché à l'écran, son équipe doit deviner en anglais.",
+          action: () => CAA.group.charadesSetup()
+        },
+        {
+          id: "wordfromword-group",
+          title: "Word from Word",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "🧩",
+          desc: "Créez le maximum de petits mots anglais à partir des lettres d'un grand mot de base.",
+          action: () => CAA.group.wordFromWordSetup()
+        },
+        {
+          id: "wordbuilder-group",
+          title: "Word Builder",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "🏗️",
+          desc: "Construisez des mots à partir d'un ensemble de lettres distribuées aléatoirement.",
+          action: () => CAA.group.wordBuilderSetup()
+        },
+        {
+          id: "mystery-group",
+          title: "Mystery Object (Équipes)",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "🔍",
+          desc: "Indices progressifs en anglais pour démasquer l'objet mystère. Indice FR pénalisant !",
+          action: () => CAA.group.objectDescSetup()
+        },
+        {
+          id: "desc-group",
+          title: "Description Challenge",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "🎧",
+          desc: "Écoutez la description audio ou lisez le texte descriptif et devinez le terme exact.",
+          action: () => CAA.group.descriptionGameSetup()
+        },
+        {
+          id: "tvvocab-group",
+          title: "TV Vocab (Questions ouvertes)",
+          cat: "group",
+          modeLabel: "Groupe TV",
+          modeCls: "mode-group",
+          icon: "📺",
+          desc: "Thème avec plusieurs réponses cachées : fautes d'équipes et possibilité de vol.",
+          action: () => CAA.group.tvVocabSetup()
+        },
+
+        // --- SOLO GAMES (9) ---
+        {
+          id: "match-solo",
+          title: "Word Match (Image & Mot)",
+          cat: "solo",
+          modeLabel: "Solo",
+          modeCls: "mode-solo",
+          icon: "🧩",
+          desc: "Associez l'image au bon mot d'anglais avec timers personnalisables et jokers 50/50.",
+          action: () => CAA.solo.start("match")
+        },
+        {
+          id: "spelling-solo",
+          title: "Spelling Bee Solo",
+          cat: "solo",
+          modeLabel: "Solo",
+          modeCls: "mode-solo",
+          icon: "🎧",
+          desc: "Écoutez la prononciation et tapez l'orthographe exacte avec validation SQLite immédiate.",
+          action: () => CAA.solo.start("spelling")
+        },
+        {
+          id: "alphabet-solo",
+          title: "Alphabet Race Solo",
+          cat: "solo",
+          modeLabel: "Solo",
+          modeCls: "mode-solo",
+          icon: "⏱️",
+          desc: "Trouvez un mot de A à Z contre la montre avec bonus de vitesse et séries gagnantes.",
+          action: () => CAA.solo.start("alphabet")
+        },
+        {
+          id: "pronounce-solo",
+          title: "Pronunciation Drill Solo",
+          cat: "solo",
+          modeLabel: "Solo",
+          modeCls: "mode-solo",
+          icon: "🎤",
+          desc: "Entraînez-vous sur les mots aux prononciations trompeuses, écoutez la voix modèle et testez au micro.",
+          action: () => CAA.solo.start("pronounce")
+        },
+        {
+          id: "fill-solo",
+          title: "Fill in the Blank Solo",
+          cat: "solo",
+          modeLabel: "Solo",
+          modeCls: "mode-solo",
+          icon: "📝",
+          desc: "Grammaire interactive et prépositions avec jokers d'aide et bonus de série.",
+          action: () => CAA.solo.start("fill")
+        },
+        {
+          id: "irregular-solo",
+          title: "Verbes Irréguliers Solo",
+          cat: "solo",
+          modeLabel: "Solo",
+          modeCls: "mode-solo",
+          icon: "📖",
+          desc: "Révisez les 3 formes (Base, Past, Participle) et les traductions avec multiplicateurs de score.",
+          action: () => CAA.solo.start("irregular")
+        },
+        {
+          id: "phrasal-solo",
+          title: "Phrasal Verbs Solo",
+          cat: "solo",
+          modeLabel: "Solo",
+          modeCls: "mode-solo",
+          icon: "🎯",
+          desc: "Maîtrisez les expressions verbales idiomatiques en contexte avec explications claires.",
+          action: () => CAA.solo.start("phrasal")
+        },
+        {
+          id: "anagram-solo",
+          title: "Anagram Solo",
+          cat: "solo",
+          modeLabel: "Solo",
+          modeCls: "mode-solo",
+          icon: "🔀",
+          desc: "Débloquez les lettres mélangées pour reconstituer le mot anglais avant la fin du chrono.",
+          action: () => CAA.solo.start("anagram")
+        },
+        {
+          id: "mystery-solo",
+          title: "Mystery Object Solo",
+          cat: "solo",
+          modeLabel: "Solo",
+          modeCls: "mode-solo",
+          icon: "🕵️",
+          desc: "Devinez l'objet caché grâce à des indices progressifs en anglais et synthèse vocale.",
+          action: () => CAA.solo.start("mystery")
+        },
+
+        // --- TOOLS & SEASON (2) ---
+        {
+          id: "season",
+          title: "Classement de la Saison",
+          cat: "tools",
+          modeLabel: "Club",
+          modeCls: "mode-tool",
+          icon: "🏆",
+          desc: "Suivez le classement officiel des équipes du club, les victoires et points cumulés.",
+          action: () => CAA.app.season()
+        },
+        {
+          id: "editor",
+          title: "Gestionnaire de Contenu",
+          cat: "tools",
+          modeLabel: "Éditeur",
+          modeCls: "mode-tool",
+          icon: "✏️",
+          desc: "Ajoutez vos propres questions, mots de vocabulaire ou thèmes sans toucher au code.",
+          action: () => CAA.editor.menu()
+        }
+      ];
+
+      let currentCat = "all";
+      let currentSearch = "";
+
+      function renderArcade() {
+        const grid = document.getElementById("arcadeGrid");
+        if (!grid) return;
+
+        let filtered = GAMES_CATALOG;
+        if (currentCat !== "all") {
+          filtered = filtered.filter(g => g.cat === currentCat);
+        }
+        if (currentSearch) {
+          const q = currentSearch.toLowerCase();
+          filtered = filtered.filter(g => 
+            g.title.toLowerCase().includes(q) ||
+            g.desc.toLowerCase().includes(q) ||
+            g.modeLabel.toLowerCase().includes(q)
+          );
+        }
+
+        if (!filtered.length) {
+          grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">
+              <p>Aucun jeu ne correspond à votre recherche.</p>
+              <button class="btn btn-ghost btn-sm" onclick="CAA.resetArcadeSearch()">Effacer la recherche</button>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = filtered.map(game => `
+          <div class="arcade-card" onclick="CAA.launchGame('${game.id}')">
+            <div class="arcade-card-top">
+              <div class="arcade-card-icon">${game.icon}</div>
+              <span class="arcade-card-mode ${game.modeCls}">${game.modeLabel}</span>
+            </div>
+            <h3>${game.title}</h3>
+            <p>${game.desc}</p>
+            <button class="arcade-card-btn">Lancer le jeu →</button>
+          </div>
+        `).join("");
+      }
+
+      window.CAA = window.CAA || {};
+      window.CAA.launchGame = function (gameId) {
+        const game = GAMES_CATALOG.find(g => g.id === gameId);
+        if (!game) return;
+
+        // Cacher la liste de l'arcade et afficher le conteneur du jeu
+        document.getElementById("arcadeMainWrap").style.display = "none";
+        const scr = document.getElementById("screen");
+        scr.style.display = "block";
+
+        const backBtn = document.getElementById("backBtn");
+        if (backBtn) {
+          backBtn.style.visibility = "visible";
+          backBtn.onclick = returnToArcade;
+        }
+
+        game.action();
+      };
+
+      function returnToArcade() {
+        const scr = document.getElementById("screen");
+        scr.innerHTML = "";
+        scr.style.display = "none";
+        document.getElementById("arcadeMainWrap").style.display = "block";
+
+        const backBtn = document.getElementById("backBtn");
+        if (backBtn) backBtn.style.visibility = "hidden";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      window.returnToArcade = returnToArcade;
+
+      window.CAA.resetArcadeSearch = function () {
+        currentSearch = "";
+        document.getElementById("arcadeSearchInput").value = "";
+        renderArcade();
+      };
+
+      // Configuration des onglets
+      document.addEventListener("DOMContentLoaded", () => {
+        const tabBtns = document.querySelectorAll(".arcade-tab-btn");
+        tabBtns.forEach(btn => {
+          btn.addEventListener("click", () => {
+            tabBtns.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            currentCat = btn.getAttribute("data-cat");
+            renderArcade();
+          });
+        });
+
+        const searchInput = document.getElementById("arcadeSearchInput");
+        if (searchInput) {
+          searchInput.addEventListener("input", (e) => {
+            currentSearch = e.target.value.trim();
+            renderArcade();
+          });
+        }
+
+        // Vérifier les paramètres URL (ex: games.html?cat=season ou games.html?cat=solo)
+        const params = new URLSearchParams(window.location.search);
+        const urlCat = params.get("cat");
+        if (urlCat) {
+          if (urlCat === "season") {
+            setTimeout(() => CAA.launchGame("season"), 100);
+          } else if (urlCat === "manage") {
+            setTimeout(() => CAA.launchGame("editor"), 100);
+          } else {
+            const matchBtn = document.querySelector(`.arcade-tab-btn[data-cat="${urlCat}"]`);
+            if (matchBtn) matchBtn.click();
+          }
+        }
+
+        renderArcade();
+      });
+    })();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1393 @@
+/* =====================================================================
+   arcade-and-stories.css — Accra English Club
+   Design System pour la Navigation Épurée, l'Arcade de Jeux,
+   et le Coin Histoires Interactives avec infobulles & audio.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. NAVIGATION GLOBALE ÉPURÉE (TOPBAR & DROPDOWN)
+   --------------------------------------------------------------------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 22px;
+  margin: 8px 0 22px;
+  position: sticky;
+  top: 10px;
+  z-index: 90;
+  background: var(--glass, rgba(255, 255, 255, 0.88));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-line, rgba(226, 232, 240, 0.8));
+  border-radius: var(--radius-lg, 18px);
+  box-shadow: var(--shadow, 0 4px 16px -2px rgba(15, 23, 42, 0.06));
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .topbar {
+  background: rgba(19, 29, 49, 0.85);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.topbar .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display, "Plus Jakarta Sans", sans-serif);
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--ink, #0f172a);
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.topbar .logo:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.topbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink-2, #334155);
+  text-decoration: none;
+  border-radius: var(--radius-pill, 9999px);
+  transition: all 0.16s ease;
+}
+
+[data-theme="dark"] .nav-link {
+  color: #cbd5e1;
+}
+
+.nav-link:hover {
+  color: var(--brand, #2563eb);
+  background: var(--brand-light, rgba(37, 99, 235, 0.08));
+  transform: translateY(-1px);
+}
+
+.nav-link.active {
+  color: #ffffff !important;
+  background: var(--brand, #2563eb) !important;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
+}
+
+.nav-badge-new {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: #f59e0b;
+  color: #ffffff;
+  margin-left: 2px;
+}
+
+/* Dropdown Menu */
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 220px;
+  background: var(--card, #ffffff);
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.1));
+  border-radius: 14px;
+  padding: 8px;
+  box-shadow: var(--shadow-lg, 0 16px 32px rgba(15, 23, 42, 0.12));
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 100;
+  animation: dropdownIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="dark"] .nav-dropdown-menu {
+  background: #131d31;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown:focus-within .nav-dropdown-menu {
+  display: flex;
+}
+
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink, #0f172a);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+[data-theme="dark"] .dropdown-item {
+  color: #e2e8f0;
+}
+
+.dropdown-item:hover {
+  background: var(--bg-2, #f1f5f9);
+  color: var(--brand, #2563eb);
+}
+
+[data-theme="dark"] .dropdown-item:hover {
+  background: #1e293b;
+}
+
+/* ---------------------------------------------------------------------
+   2. HUB PRINCIPAL (INDEX.HTML) - GRANDS PILIERS DU CLUB
+   --------------------------------------------------------------------- */
+.hub-pillars-section {
+  margin: 32px 0;
+}
+
+.hub-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 22px;
+}
+
+.pillar-card {
+  position: relative;
+  background: var(--card, #ffffff);
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: var(--radius-lg, 20px);
+  padding: 28px 24px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow, 0 4px 16px -2px rgba(15, 23, 42, 0.06));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  transition: transform 0.22s var(--ease, ease), box-shadow 0.22s var(--ease, ease), border-color 0.22s ease;
+}
+
+[data-theme="dark"] .pillar-card {
+  background: #131d31;
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+.pillar-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg, 0 20px 35px -4px rgba(15, 23, 42, 0.12));
+  border-color: var(--brand, #2563eb);
+}
+
+.pillar-glow {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  filter: blur(45px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.pillar-games .pillar-glow { background: #3b82f6; }
+.pillar-learning .pillar-glow { background: #10b981; }
+.pillar-teaching .pillar-glow { background: #8b5cf6; }
+
+.pillar-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill, 9999px);
+  width: fit-content;
+  margin-bottom: 16px;
+}
+
+.pillar-games .pillar-badge { background: rgba(37, 99, 235, 0.1); color: #2563eb; }
+.pillar-learning .pillar-badge { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.pillar-teaching .pillar-badge { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+
+.pillar-icon-box {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 18px;
+}
+
+.pillar-games .pillar-icon-box { background: #eff6ff; color: #2563eb; }
+.pillar-learning .pillar-icon-box { background: #ecfdf5; color: #059669; }
+.pillar-teaching .pillar-icon-box { background: #f5f3ff; color: #7c3aed; }
+
+[data-theme="dark"] .pillar-games .pillar-icon-box { background: rgba(37, 99, 235, 0.2); }
+[data-theme="dark"] .pillar-learning .pillar-icon-box { background: rgba(16, 185, 129, 0.2); }
+[data-theme="dark"] .pillar-teaching .pillar-icon-box { background: rgba(139, 92, 246, 0.2); }
+
+.pillar-title {
+  font-family: var(--font-display, "Plus Jakarta Sans", sans-serif);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--ink, #0f172a);
+  margin: 0 0 10px;
+}
+
+[data-theme="dark"] .pillar-title {
+  color: #f8fafc;
+}
+
+.pillar-desc {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--muted, #64748b);
+  margin: 0 0 20px;
+  flex: 1;
+}
+
+[data-theme="dark"] .pillar-desc {
+  color: #94a3b8;
+}
+
+.pillar-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 22px;
+}
+
+.pillar-tag {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: var(--bg-2, #f1f5f9);
+  color: var(--ink-2, #334155);
+}
+
+[data-theme="dark"] .pillar-tag {
+  background: #1e293b;
+  color: #cbd5e1;
+}
+
+.pillar-footer-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid var(--line, rgba(15, 23, 42, 0.06));
+  font-weight: 700;
+  font-size: 0.94rem;
+  color: var(--brand, #2563eb);
+}
+
+.pillar-arrow {
+  transition: transform 0.16s ease;
+}
+
+.pillar-card:hover .pillar-arrow {
+  transform: translateX(4px);
+}
+
+/* ---------------------------------------------------------------------
+   3. ARCADE DE JEUX DÉDIÉE (GAMES.HTML)
+   --------------------------------------------------------------------- */
+.arcade-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 10px auto 26px;
+}
+
+.arcade-header h1 {
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 900;
+  font-family: var(--font-display, "Plus Jakarta Sans", sans-serif);
+  color: var(--ink, #0f172a);
+  margin-bottom: 8px;
+}
+
+[data-theme="dark"] .arcade-header h1 {
+  color: #ffffff;
+}
+
+.arcade-controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 24px;
+  padding: 14px 18px;
+  background: var(--card, #ffffff);
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: var(--radius, 16px);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(15, 23, 42, 0.04));
+}
+
+[data-theme="dark"] .arcade-controls-bar {
+  background: #131d31;
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+.arcade-tabs-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.arcade-tab-btn {
+  padding: 7px 15px;
+  border: 1px solid transparent;
+  background: var(--bg-2, #f1f5f9);
+  color: var(--ink-2, #334155);
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: var(--radius-pill, 9999px);
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+[data-theme="dark"] .arcade-tab-btn {
+  background: #1e293b;
+  color: #cbd5e1;
+}
+
+.arcade-tab-btn:hover {
+  background: var(--bg-3, #e2e8f0);
+}
+
+[data-theme="dark"] .arcade-tab-btn:hover {
+  background: #334155;
+}
+
+.arcade-tab-btn.active {
+  background: var(--brand, #2563eb);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.arcade-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-2, #f1f5f9);
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: var(--radius-pill, 9999px);
+  padding: 6px 14px;
+  min-width: 240px;
+}
+
+[data-theme="dark"] .arcade-search-box {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.arcade-search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.88rem;
+  color: var(--ink, #0f172a);
+  width: 100%;
+}
+
+[data-theme="dark"] .arcade-search-box input {
+  color: #f8fafc;
+}
+
+.arcade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+  margin-bottom: 40px;
+}
+
+.arcade-card {
+  background: var(--card, #ffffff);
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: var(--radius, 16px);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(15, 23, 42, 0.04));
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .arcade-card {
+  background: #131d31;
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+.arcade-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md, 0 10px 25px -3px rgba(15, 23, 42, 0.08));
+  border-color: var(--brand, #2563eb);
+}
+
+.arcade-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.arcade-card-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--bg-2, #f1f5f9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+[data-theme="dark"] .arcade-card-icon {
+  background: #1e293b;
+}
+
+.arcade-card-mode {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+
+.mode-solo { background: #e0f2fe; color: #0369a1; }
+.mode-group { background: #fef3c7; color: #b45309; }
+.mode-multi { background: #dcfce7; color: #15803d; }
+.mode-tool { background: #f3e8ff; color: #7e22ce; }
+
+[data-theme="dark"] .mode-solo { background: rgba(3, 105, 161, 0.25); color: #38bdf8; }
+[data-theme="dark"] .mode-group { background: rgba(180, 83, 9, 0.25); color: #fbbf24; }
+[data-theme="dark"] .mode-multi { background: rgba(21, 128, 61, 0.25); color: #4ade80; }
+[data-theme="dark"] .mode-tool { background: rgba(126, 34, 206, 0.25); color: #c084fc; }
+
+.arcade-card h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 0 0 6px;
+  color: var(--ink, #0f172a);
+}
+
+[data-theme="dark"] .arcade-card h3 {
+  color: #f8fafc;
+}
+
+.arcade-card p {
+  font-size: 0.88rem;
+  color: var(--muted, #64748b);
+  line-height: 1.45;
+  margin: 0 0 16px;
+  flex: 1;
+}
+
+[data-theme="dark"] .arcade-card p {
+  color: #94a3b8;
+}
+
+.arcade-card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 16px;
+  background: var(--bg-2, #f1f5f9);
+  color: var(--ink, #0f172a);
+  font-weight: 700;
+  font-size: 0.88rem;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  transition: all 0.14s ease;
+  width: 100%;
+}
+
+[data-theme="dark"] .arcade-card-btn {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.arcade-card:hover .arcade-card-btn {
+  background: var(--brand, #2563eb);
+  color: #ffffff;
+  border-color: var(--brand, #2563eb);
+}
+
+/* ---------------------------------------------------------------------
+   4. COIN HISTOIRES INTERACTIVES (READING CORNER IN LEARNING.HTML)
+   --------------------------------------------------------------------- */
+.stories-header-card {
+  background: var(--card, #ffffff);
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: var(--radius-lg, 20px);
+  padding: 26px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(15, 23, 42, 0.04));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+[data-theme="dark"] .stories-header-card {
+  background: #131d31;
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+.stories-header-text h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0 0 6px;
+  color: var(--ink, #0f172a);
+}
+
+[data-theme="dark"] .stories-header-text h2 {
+  color: #f8fafc;
+}
+
+.stories-header-text p {
+  color: var(--muted, #64748b);
+  font-size: 0.92rem;
+  margin: 0;
+  max-width: 600px;
+}
+
+.stories-header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.stories-library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  margin-bottom: 36px;
+}
+
+.story-card {
+  background: var(--card, #ffffff);
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: var(--radius, 16px);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow, 0 4px 16px -2px rgba(15, 23, 42, 0.06));
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+[data-theme="dark"] .story-card {
+  background: #131d31;
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+.story-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg, 0 16px 30px rgba(15, 23, 42, 0.1));
+  border-color: var(--brand, #2563eb);
+}
+
+.story-card-badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.story-level-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill, 9999px);
+  letter-spacing: 0.03em;
+}
+
+.level-a1a2 { background: #e0f2fe; color: #0369a1; }
+.level-b1 { background: #fef3c7; color: #b45309; }
+.level-b2 { background: #dcfce7; color: #15803d; }
+.level-c1 { background: #f3e8ff; color: #7e22ce; }
+
+[data-theme="dark"] .level-a1a2 { background: rgba(3, 105, 161, 0.3); color: #7dd3fc; }
+[data-theme="dark"] .level-b1 { background: rgba(180, 83, 9, 0.3); color: #fde047; }
+[data-theme="dark"] .level-b2 { background: rgba(21, 128, 61, 0.3); color: #86efac; }
+[data-theme="dark"] .level-c1 { background: rgba(126, 34, 206, 0.3); color: #d8b4fe; }
+
+.story-time-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted, #64748b);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.story-cover-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.story-emoji-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--bg-2, #f1f5f9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .story-emoji-box {
+  background: #1e293b;
+}
+
+.story-title-group h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 0 0 4px;
+  color: var(--ink, #0f172a);
+}
+
+[data-theme="dark"] .story-title-group h3 {
+  color: #f8fafc;
+}
+
+.story-title-group small {
+  color: var(--muted, #64748b);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.story-card-summary {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--ink-2, #334155);
+  margin-bottom: 18px;
+  flex: 1;
+}
+
+[data-theme="dark"] .story-card-summary {
+  color: #cbd5e1;
+}
+
+.story-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid var(--line, rgba(15, 23, 42, 0.07));
+}
+
+.story-category-tag {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--brand, #2563eb);
+}
+
+.story-start-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: var(--brand, #2563eb);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-radius: var(--radius-sm, 8px);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+
+.story-start-btn:hover {
+  transform: scale(1.03);
+}
+
+/* ---------------------------------------------------------------------
+   5. LECTEUR D'HISTOIRE INTERACTIF (STORY READER VIEW)
+   --------------------------------------------------------------------- */
+.story-reader-view {
+  background: var(--card, #ffffff);
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: var(--radius-lg, 20px);
+  padding: 32px 36px;
+  box-shadow: var(--shadow, 0 4px 16px -2px rgba(15, 23, 42, 0.06));
+  position: relative;
+}
+
+[data-theme="dark"] .story-reader-view {
+  background: #131d31;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.story-reader-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  margin-bottom: 26px;
+}
+
+.story-reader-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.story-font-controls {
+  display: flex;
+  align-items: center;
+  background: var(--bg-2, #f1f5f9);
+  border-radius: var(--radius-pill, 9999px);
+  padding: 3px;
+}
+
+[data-theme="dark"] .story-font-controls {
+  background: #1e293b;
+}
+
+.btn-font-size {
+  background: transparent;
+  border: none;
+  padding: 5px 11px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--ink-2, #334155);
+  cursor: pointer;
+  border-radius: var(--radius-pill, 9999px);
+}
+
+[data-theme="dark"] .btn-font-size {
+  color: #cbd5e1;
+}
+
+.btn-font-size:hover {
+  background: var(--card, #ffffff);
+  color: var(--brand, #2563eb);
+}
+
+[data-theme="dark"] .btn-font-size:hover {
+  background: #334155;
+}
+
+/* Audio Player Bar */
+.story-audio-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: var(--bg-2, #f1f5f9);
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: var(--radius, 14px);
+  margin-bottom: 26px;
+}
+
+[data-theme="dark"] .story-audio-bar {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.btn-story-audio {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  background: var(--brand, #2563eb);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-pill, 9999px);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.btn-story-audio:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.story-audio-status {
+  font-size: 0.85rem;
+  color: var(--muted, #64748b);
+  flex: 1;
+}
+
+/* Story Typography & Interactive Words */
+.story-body-container {
+  max-width: 780px;
+  margin: 0 auto 40px;
+  font-size: 1.15rem;
+  line-height: 1.85;
+  color: var(--ink, #0f172a);
+}
+
+[data-theme="dark"] .story-body-container {
+  color: #f1f5f9;
+}
+
+.story-paragraph {
+  margin-bottom: 22px;
+}
+
+.story-sentence {
+  border-radius: 4px;
+  transition: background 0.2s ease, padding 0.2s ease;
+}
+
+.story-sentence.active-narration {
+  background: rgba(37, 99, 235, 0.14);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+  color: var(--brand, #2563eb);
+  font-weight: 600;
+}
+
+[data-theme="dark"] .story-sentence.active-narration {
+  background: rgba(59, 130, 246, 0.22);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.22);
+  color: #93c5fd;
+}
+
+/* INTERACTIVE WORD TOKEN */
+.story-word {
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 1px 2px;
+  transition: all 0.12s ease;
+  position: relative;
+  display: inline-block;
+}
+
+.story-word:hover {
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--brand, #2563eb);
+  font-weight: 700;
+  transform: translateY(-1px);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1.5px;
+}
+
+[data-theme="dark"] .story-word:hover {
+  background: rgba(59, 130, 246, 0.25);
+  color: #60a5fa;
+}
+
+.story-word.has-vocab {
+  border-bottom: 1.5px dashed var(--brand, #2563eb);
+}
+
+.story-word.word-active {
+  background: var(--brand, #2563eb) !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+/* MORALE DU CONTE (MORAL OF THE STORY) */
+.story-moral-card {
+  margin: 36px 0 20px;
+  padding: 24px 28px;
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.5) 0%, rgba(253, 230, 138, 0.25) 100%);
+  border: 2px solid #f59e0b;
+  border-radius: var(--radius-lg, 18px);
+  box-shadow: 0 8px 24px -4px rgba(245, 158, 11, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .story-moral-card {
+  background: linear-gradient(135deg, rgba(180, 83, 9, 0.25) 0%, rgba(120, 53, 15, 0.15) 100%);
+  border-color: #d97706;
+}
+
+.moral-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill, 9999px);
+  background: #f59e0b;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+.moral-text-en {
+  font-family: var(--font-display, "Plus Jakarta Sans", sans-serif);
+  font-size: 1.18rem;
+  font-weight: 800;
+  line-height: 1.55;
+  color: #92400e;
+  margin: 0 0 10px;
+}
+
+[data-theme="dark"] .moral-text-en {
+  color: #fde68a;
+}
+
+.moral-text-fr {
+  font-size: 0.96rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--ink-2, #334155);
+  margin: 0;
+  opacity: 0.9;
+}
+
+[data-theme="dark"] .moral-text-fr {
+  color: #cbd5e1;
+}
+
+/* ---------------------------------------------------------------------
+   6. WORD POPOVER (INFOBULLE DE DÉFINITION & PRONONCIATION)
+   --------------------------------------------------------------------- */
+.story-word-popover {
+  position: fixed;
+  z-index: 1000;
+  width: 320px;
+  background: var(--card, #ffffff);
+  border: 1px solid var(--brand, #2563eb);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(37, 99, 235, 0.1);
+  display: none;
+  animation: popoverFade 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
+}
+
+[data-theme="dark"] .story-word-popover {
+  background: #18243c;
+  border-color: #3b82f6;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes popoverFade {
+  from { opacity: 0; transform: translateY(6px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.popover-word-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--ink, #0f172a);
+  font-family: var(--font-display, "Plus Jakarta Sans", sans-serif);
+}
+
+[data-theme="dark"] .popover-word-title {
+  color: #ffffff;
+}
+
+.popover-ipa {
+  font-size: 0.82rem;
+  color: var(--muted, #64748b);
+  font-style: italic;
+  font-family: monospace;
+}
+
+.btn-speak-popover {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #eff6ff;
+  color: var(--brand, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+[data-theme="dark"] .btn-speak-popover {
+  background: #1e293b;
+  color: #60a5fa;
+}
+
+.btn-speak-popover:hover {
+  background: var(--brand, #2563eb);
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.popover-pos-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--bg-2, #f1f5f9);
+  color: var(--muted, #64748b);
+  margin-bottom: 8px;
+}
+
+[data-theme="dark"] .popover-pos-badge {
+  background: #1e293b;
+  color: #94a3b8;
+}
+
+.popover-translation {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #059669;
+  margin-bottom: 8px;
+}
+
+[data-theme="dark"] .popover-translation {
+  color: #34d399;
+}
+
+.popover-tip {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--muted, #64748b);
+  margin-bottom: 12px;
+  border-left: 2px solid var(--brand, #2563eb);
+  padding-left: 8px;
+}
+
+[data-theme="dark"] .popover-tip {
+  color: #94a3b8;
+}
+
+.popover-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+}
+
+.btn-save-word {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: transparent;
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.15));
+  border-radius: var(--radius-pill, 9999px);
+  padding: 4px 10px;
+  color: var(--ink-2, #334155);
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+[data-theme="dark"] .btn-save-word {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+}
+
+.btn-save-word:hover,
+.btn-save-word.saved {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #f59e0b;
+}
+
+[data-theme="dark"] .btn-save-word:hover,
+[data-theme="dark"] .btn-save-word.saved {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fde047;
+}
+
+/* ---------------------------------------------------------------------
+   7. COMPREHENSION QUIZ AT STORY END
+   --------------------------------------------------------------------- */
+.story-quiz-section {
+  background: var(--bg-2, #f1f5f9);
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: var(--radius, 16px);
+  padding: 26px;
+  margin-top: 40px;
+}
+
+[data-theme="dark"] .story-quiz-section {
+  background: #18243c;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.story-quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.story-quiz-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--ink, #0f172a);
+}
+
+[data-theme="dark"] .story-quiz-header h3 {
+  color: #ffffff;
+}
+
+.quiz-q-card {
+  background: var(--card, #ffffff);
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+[data-theme="dark"] .quiz-q-card {
+  background: #131d31;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.quiz-q-title {
+  font-weight: 700;
+  font-size: 0.98rem;
+  margin-bottom: 12px;
+  color: var(--ink, #0f172a);
+}
+
+[data-theme="dark"] .quiz-q-title {
+  color: #f1f5f9;
+}
+
+.quiz-choices-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.quiz-choice-pill {
+  padding: 9px 14px;
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.12));
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: var(--card, #ffffff);
+  color: var(--ink-2, #334155);
+  cursor: pointer;
+  transition: all 0.14s ease;
+  text-align: left;
+}
+
+[data-theme="dark"] .quiz-choice-pill {
+  background: #18243c;
+  color: #cbd5e1;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.quiz-choice-pill:hover:not(.locked) {
+  background: var(--bg-2, #f1f5f9);
+  border-color: var(--brand, #2563eb);
+}
+
+.quiz-choice-pill.correct {
+  background: #dcfce7 !important;
+  color: #15803d !important;
+  border-color: #22c55e !important;
+}
+
+.quiz-choice-pill.wrong {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+  border-color: #ef4444 !important;
+}
+
+.quiz-explanation-box {
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  display: none;
+}
+
+[data-theme="dark"] .quiz-explanation-box {
+  background: rgba(22, 101, 52, 0.2);
+  color: #86efac;
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+/* ---------------------------------------------------------------------
+   8. MODAL CARNET DE VOCABULAIRE ("MES MOTS SAUVEGARDÉS")
+   --------------------------------------------------------------------- */
+.saved-words-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 15, 30, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.saved-words-dialog {
+  background: var(--card, #ffffff);
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.1));
+  border-radius: var(--radius-lg, 20px);
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg, 0 20px 35px -4px rgba(15, 23, 42, 0.15));
+  overflow: hidden;
+}
+
+[data-theme="dark"] .saved-words-dialog {
+  background: #131d31;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.saved-words-header {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.saved-words-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.saved-words-body {
+  padding: 18px 22px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.saved-word-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--bg-2, #f1f5f9);
+  margin-bottom: 8px;
+}
+
+[data-theme="dark"] .saved-word-item {
+  background: #1e293b;
+}
+
+.saved-word-info strong {
+  font-size: 1rem;
+  color: var(--ink, #0f172a);
+}
+
+[data-theme="dark"] .saved-word-info strong {
+  color: #ffffff;
+}
+
+.saved-word-info span {
+  font-size: 0.85rem;
+  color: #059669;
+  margin-left: 8px;
+}
+
+.saved-word-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---------------------------------------------------------------------
+   9. MOBILE RESPONSIVENESS
+   --------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .topbar {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .topbar .logo span {
+    display: none;
+  }
+  .topbar-nav {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    max-width: calc(100vw - 140px);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 4px;
+  }
+  .topbar-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .nav-link {
+    padding: 6px 10px;
+    font-size: 0.84rem;
+  }
+  .story-reader-view {
+    padding: 20px 14px;
+  }
+  .story-word-popover {
+    width: calc(100vw - 32px);
+    left: 16px !important;
+    right: 16px !important;
+    bottom: 20px !important;
+    top: auto !important;
+  }
+}

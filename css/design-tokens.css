@@ -1,0 +1,131 @@
+/* =====================================================================
+   Accra English Club — Premium Design System v2
+   Tokens complets : Light + Dark Mode, animations, effets glass
+   ===================================================================== */
+
+/* ---- Light Mode (Default) ---- */
+:root {
+  color-scheme: light;
+
+  /* Backgrounds */
+  --bg:        #f6f8fc;
+  --bg-2:      #eef2f8;
+  --bg-3:      #e3e9f2;
+  --card:      #ffffff;
+  --card-2:    #f9fafc;
+  --surface:   #ffffff;
+
+  /* Text */
+  --ink:       #0d1526;
+  --ink-2:     #2e3d57;
+  --muted:     #697a99;
+  --muted-2:   #9aaac4;
+
+  /* Borders */
+  --line:        rgba(30, 50, 100, 0.10);
+  --line-strong: rgba(30, 50, 100, 0.18);
+
+  /* Brand */
+  --brand:        #2355e3;
+  --brand-2:      #1740c8;
+  --brand-3:      #0f2d99;
+  --brand-light:  rgba(35, 85, 227, 0.09);
+  --brand-ink:    #ffffff;
+
+  /* Accents */
+  --green:      #0ea371;
+  --green-bg:   rgba(14, 163, 113, 0.09);
+  --red:        #e83a3a;
+  --red-bg:     rgba(232, 58, 58, 0.09);
+  --orange:     #f57c0b;
+  --orange-bg:  rgba(245, 124, 11, 0.09);
+  --purple:     #6d40e7;
+  --purple-bg:  rgba(109, 64, 231, 0.09);
+  --gold:       #c8930a;
+  --teal:       #0598af;
+
+  /* Radius */
+  --r-xs:   6px;
+  --r-sm:   10px;
+  --r:      14px;
+  --r-md:   18px;
+  --r-lg:   24px;
+  --r-xl:   32px;
+  --r-pill: 9999px;
+
+  /* Shadows */
+  --sh-xs:    0 1px 3px rgba(13,21,38,.06);
+  --sh-sm:    0 2px 8px rgba(13,21,38,.06), 0 1px 2px rgba(13,21,38,.04);
+  --sh:       0 4px 20px rgba(13,21,38,.07), 0 2px 6px rgba(13,21,38,.04);
+  --sh-md:    0 8px 28px rgba(13,21,38,.09), 0 4px 10px rgba(13,21,38,.05);
+  --sh-lg:    0 16px 48px rgba(13,21,38,.11), 0 6px 16px rgba(13,21,38,.06);
+  --sh-xl:    0 24px 64px rgba(13,21,38,.14), 0 10px 24px rgba(13,21,38,.07);
+  --sh-brand: 0 6px 24px rgba(35,85,227,.25), 0 2px 8px rgba(35,85,227,.15);
+  --sh-green: 0 6px 24px rgba(14,163,113,.25);
+  --sh-red:   0 6px 24px rgba(232,58,58,.25);
+
+  /* Glass */
+  --glass:      rgba(255,255,255,0.82);
+  --glass-line: rgba(30,50,100,0.12);
+
+  /* Misc */
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  --font: "Inter", "Outfit", system-ui, sans-serif;
+
+  /* Dark toggle */
+  --dm-toggle-bg: var(--bg-3);
+  --dm-toggle-knob: var(--card);
+}
+
+/* ---- Dark Mode ---- */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg:        #0c1220;
+  --bg-2:      #111929;
+  --bg-3:      #182032;
+  --card:      #16202f;
+  --card-2:    #1d2a3e;
+  --surface:   #1d2a3e;
+
+  --ink:       #e8edf8;
+  --ink-2:     #aab7d4;
+  --muted:     #6980a8;
+  --muted-2:   #4c6090;
+
+  --line:        rgba(120,155,220,0.10);
+  --line-strong: rgba(120,155,220,0.18);
+
+  --brand:        #4f80ff;
+  --brand-2:      #3665ef;
+  --brand-3:      #2050d8;
+  --brand-light:  rgba(79,128,255,0.14);
+  --brand-ink:    #ffffff;
+
+  --green:      #2fd49a;
+  --green-bg:   rgba(47,212,154,0.12);
+  --red:        #ff5c5c;
+  --red-bg:     rgba(255,92,92,0.12);
+  --orange:     #ffad3b;
+  --orange-bg:  rgba(255,173,59,0.12);
+  --purple:     #a270ff;
+  --purple-bg:  rgba(162,112,255,0.12);
+  --gold:       #f5c842;
+  --teal:       #22d3ee;
+
+  --sh-xs:    0 1px 3px rgba(0,0,0,.3);
+  --sh-sm:    0 2px 8px rgba(0,0,0,.28), 0 1px 2px rgba(0,0,0,.2);
+  --sh:       0 4px 20px rgba(0,0,0,.32), 0 2px 6px rgba(0,0,0,.2);
+  --sh-md:    0 8px 28px rgba(0,0,0,.4), 0 4px 10px rgba(0,0,0,.24);
+  --sh-lg:    0 16px 48px rgba(0,0,0,.48), 0 6px 16px rgba(0,0,0,.28);
+  --sh-xl:    0 24px 64px rgba(0,0,0,.56), 0 10px 24px rgba(0,0,0,.32);
+  --sh-brand: 0 6px 24px rgba(79,128,255,.35), 0 2px 8px rgba(79,128,255,.2);
+  --sh-green: 0 6px 24px rgba(47,212,154,.3);
+  --sh-red:   0 6px 24px rgba(255,92,92,.3);
+
+  --glass:      rgba(22,32,47,0.88);
+  --glass-line: rgba(120,155,220,0.12);
+
+  --dm-toggle-bg: var(--brand);
+  --dm-toggle-knob: #fff;
+}

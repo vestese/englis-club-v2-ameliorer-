@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Espace d'Apprentissage — Accra English Club</title>
+  <meta name="description" content="Centre d'apprentissage d'anglais du Club Anglais Accra : leçons PDF, exercices de grammaire et prépositions, phrasal verbs, prononciation et vocabulaire." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text y='.85em' font-size='60' x='20' fill='white' font-family='sans-serif' font-weight='bold'>A</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/premium.css" />
+  <link rel="stylesheet" href="css/arcade-and-stories.css" />
+  <script src="js/theme.js"></script>
+</head>
+
+<body>
+  <div class="app">
+    <!-- Topbar avec navigation épurée -->
+    <header class="topbar">
+      <div class="logo" id="logo" title="Accueil" style="cursor:pointer" onclick="location.href='index.html'">
+        <svg class="logo-mark" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="8" fill="#2563eb"/>
+          <text x="7" y="20" font-family="Outfit,sans-serif" font-weight="800" font-size="16" fill="white">A</text>
+        </svg>
+        <span>Accra English Club</span>
+      </div>
+
+      <nav class="topbar-nav" id="topbarNav">
+        <a href="index.html" class="nav-link">Accueil</a>
+        <a href="games.html" class="nav-link">Jeux &amp; Arcade</a>
+        <a href="learning.html" class="nav-link active">Learning Hub</a>
+        <a href="teaching.html" class="nav-link">Teaching &amp; Quiz</a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link" onclick="event.preventDefault()">Club &amp; Outils ▾</a>
+          <div class="nav-dropdown-menu">
+            <a href="games.html?cat=season" class="dropdown-item">🏆 Classement Saison</a>
+            <a href="games.html?cat=manage" class="dropdown-item">✏️ Éditeur de Contenu</a>
+            <a href="https://drive.google.com/drive/folders/1ZJQ3BmKeTyELWlOViCRWl0PoxY_fFWyc" target="_blank" rel="noopener noreferrer" class="dropdown-item">📁 Google Drive</a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="row" style="gap:10px;align-items:center;">
+        <button class="theme-toggle-btn" id="darkModeToggle" title="Basculer Mode Sombre / Clair">
+          <span class="dm-icon">🌙</span>
+          <span class="dm-label">Sombre</span>
+        </button>
+        <button class="btn-back" id="backBtn" onclick="location.href='index.html'">← Retour</button>
+      </div>
+    </header>
+
+    <!-- Hero Header -->
+    <header class="learning-hero">
+      <h1>Espace d'Apprentissage</h1>
+      <p class="section-sub">Lisez des histoires interactives en anglais, consultez et téléversez des cours PDF, entraînez-vous sur la grammaire, les phrasal verbs et la prononciation.</p>
+      
+      <div class="learning-stats" id="learningStats">
+        <div class="stat-pill" title="Histoires bilingues interactives">Histoires : <strong id="statStories">15</strong></div>
+        <div class="stat-pill" title="Cours et fiches PDF">Cours PDF : <strong id="statLessons">0</strong></div>
+        <div class="stat-pill" title="Exercices de grammaire">Exercices : <strong id="statGrammar">70+</strong></div>
+        <div class="stat-pill" title="Phrasal Verbs référencés">Phrasal Verbs : <strong id="statPhrasal">90+</strong></div>
+        <div class="stat-pill" title="Pièges de prononciation">Prononciation : <strong id="statPron">60+</strong></div>
+        <div class="stat-pill" title="Verbes irréguliers">Verbes Irréguliers : <strong id="statIrregular">70+</strong></div>
+        <div class="stat-pill" title="Vocabulaire illustré">Vocabulaire : <strong id="statVocab">950+</strong></div>
+      </div>
+    </header>
+
+    <!-- Barre d'onglets principaux -->
+    <nav class="learning-tabs-nav" id="tabsNav" aria-label="Sections d'apprentissage">
+      <button class="tab-btn active" data-tab="stories">
+        📖 Histoires en Anglais <span class="tab-badge" id="badgeStories">15</span>
+      </button>
+      <button class="tab-btn" data-tab="lessons">
+        Cours &amp; Fiches PDF <span class="tab-badge" id="badgeLessons">0</span>
+      </button>
+      <button class="tab-btn" data-tab="grammar">
+        Exercices &amp; Grammaire <span class="tab-badge" id="badgeGrammar">0</span>
+      </button>
+      <button class="tab-btn" data-tab="phrasal">
+        Phrasal Verbs <span class="tab-badge" id="badgePhrasal">0</span>
+      </button>
+      <button class="tab-btn" data-tab="pron">
+        Prononciation <span class="tab-badge" id="badgePron">0</span>
+      </button>
+      <button class="tab-btn" data-tab="irregular">
+        Verbes Irréguliers <span class="tab-badge" id="badgeIrregular">0</span>
+      </button>
+      <button class="tab-btn" data-tab="vocab">
+        Vocabulaire <span class="tab-badge" id="badgeVocab">0</span>
+      </button>
+    </nav>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 0: HISTOIRES EN ANGLAIS & COIN LECTURE INTERACTIF -->
+    <!-- ========================================================================= -->
+    <section class="tab-panel" id="panel-stories">
+      <!-- En-tête du coin histoires -->
+      <div class="stories-header-card">
+        <div class="stories-header-text">
+          <h2>📖 Histoires en Anglais &amp; Lecture Interactive</h2>
+          <p>
+            Lisez des récits captivants adaptés à votre niveau. Passez le curseur ou cliquez sur n'importe quel mot pour afficher instantanément sa <strong>signification en français</strong> et écouter sa <strong>prononciation audio</strong>.
+          </p>
+        </div>
+        <div class="stories-header-actions">
+          <button class="btn btn-outline" id="btnOpenSavedWords">
+            ⭐ Mon Carnet de Mots (<span id="savedWordsCountBadge">0</span>)
+          </button>
+        </div>
+      </div>
+
+      <!-- VUE 1 : BIBLIOTHÈQUE D'HISTOIRES -->
+      <div id="storiesLibraryView">
+        <div class="learning-controls" style="margin-bottom:22px;">
+          <div class="search-box">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="storySearchInput" placeholder="Rechercher une histoire par titre, thème ou mot-clé..." />
+          </div>
+          <select id="storyLevelFilter" class="filter-select">
+            <option value="">Tous les niveaux</option>
+            <option value="A1">Débutant (A1-A2)</option>
+            <option value="B1">Intermédiaire (B1)</option>
+            <option value="B2">Avancé (B2-C1)</option>
+          </select>
+        </div>
+
+        <div class="stories-library-grid" id="storiesGrid">
+          <!-- Rendu dynamique JS -->
+        </div>
+      </div>
+
+      <!-- VUE 2 : LECTEUR D'HISTOIRE ACTIF (MASQUÉ PAR DÉFAUT) -->
+      <div id="storyReaderView" class="story-reader-view" style="display: none;">
+        <div class="story-reader-nav">
+          <button class="btn btn-ghost" id="btnBackToStories">
+            ← Retour aux histoires
+          </button>
+          <div class="story-title-group" style="text-align:center;">
+            <h2 id="readerStoryTitle" style="font-size:1.45rem;font-weight:900;margin:0 0 4px;">Titre de l'histoire</h2>
+            <small id="readerStorySub" style="color:var(--muted);font-size:0.88rem;">Sous-titre et niveau</small>
+          </div>
+          <div class="story-font-controls">
+            <button class="btn-font-size" id="btnFontMinus" title="Diminuer la police">A-</button>
+            <button class="btn-font-size" id="btnFontPlus" title="Agrandir la police">A+</button>
+          </div>
+        </div>
+
+        <!-- Barre de lecture audio complète -->
+        <div class="story-audio-bar">
+          <button class="btn-story-audio" id="btnPlayStoryAudio">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Écouter l'histoire complète
+          </button>
+          <button class="btn btn-ghost btn-sm" id="btnStopStoryAudio" title="Arrêter l'audio">
+            ⏹️ Arrêter
+          </button>
+          <div class="story-audio-status" id="narrationStatusText">
+            Cliquez sur un mot pour sa signification ou lancez l'écoute globale.
+          </div>
+          <div class="row" style="gap:6px;align-items:center;">
+            <label for="storySpeedSelect" style="font-size:0.82rem;font-weight:700;color:var(--muted);">Vitesse :</label>
+            <select id="storySpeedSelect" class="filter-select-sm" style="padding:4px 8px;">
+              <option value="0.75">0.75x</option>
+              <option value="0.9" selected>0.9x</option>
+              <option value="1.0">1.0x</option>
+              <option value="1.2">1.2x</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Corps du texte interactif -->
+        <div class="story-body-container" id="storyBodyText">
+          <!-- Paragraphes découpés en mots interactifs via JS -->
+        </div>
+
+        <!-- Défi Mini-Quiz de compréhension -->
+        <div id="storyQuizContainer">
+          <!-- Rendu dynamique JS -->
+        </div>
+
+        <!-- Glossaire des mots clés de l'histoire -->
+        <div class="starter-sheets-card" style="margin-top:36px;">
+          <div class="starter-header">
+            <span class="starter-badge">Vocabulaire Clé de l'Histoire</span>
+            <h3>Mots et expressions à retenir</h3>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:16px;" id="storyGlossaryGrid">
+            <!-- Rendu dynamique JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 1: COURS & FICHES PDF -->
+    <!-- ========================================================================= -->
+    <section class="tab-panel" id="panel-lessons" style="display: none;">
+      <!-- Google Drive Connection Banner -->
+      <div class="gdrive-banner-card">
+        <div class="gdrive-banner-info">
+          <div class="gdrive-badge-row">
+            <span class="gdrive-live-badge">Google Drive Connecté</span>
+            <span class="gdrive-folder-tag">Dossier : Cours d'Anglais Accra</span>
+          </div>
+          <h4>Bibliothèque de Cours Google Drive</h4>
+          <p>Les cours et documents PDF partagés dans votre Google Drive sont synchronisés automatiquement et directement téléchargeables ou consultables.</p>
+        </div>
+        <div class="gdrive-banner-actions">
+          <button class="btn btn-outline btn-sm" id="btnSyncGDrive" title="Forcer la synchronisation avec Google Drive">
+            Actualiser Google Drive
+          </button>
+          <a href="https://drive.google.com/drive/folders/1ZJQ3BmKeTyELWlOViCRWl0PoxY_fFWyc" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+            Ouvrir le Drive ↗
+          </a>
+        </div>
+      </div>
+      <div id="gdriveNotice" class="gdrive-notice-card" style="display:none;"></div>
+
+      <!-- Section Téléversement & Liste des cours -->
+      <div class="lessons-layout">
+        <!-- Carte de Téléversement -->
+        <div class="upload-card">
+          <h3>Ajouter un cours local (PDF)</h3>
+          <p>Téléversez une fiche de cours ou un document PDF pour les membres du club.</p>
+          
+          <form id="uploadForm" class="upload-form-group">
+            <div>
+              <label for="lessonTitle">Titre du document :</label>
+              <input type="text" id="lessonTitle" name="title" placeholder="Ex: Les Prépositions de Lieu et de Temps" required />
+            </div>
+
+            <div class="form-row-2col">
+              <div>
+                <label for="lessonCat">Catégorie :</label>
+                <select id="lessonCat" class="filter-select-sm">
+                  <option value="Grammaire">Grammaire</option>
+                  <option value="Prépositions">Prépositions</option>
+                  <option value="Phrasal Verbs">Phrasal Verbs</option>
+                  <option value="Prononciation">Prononciation</option>
+                  <option value="Vocabulaire">Vocabulaire</option>
+                  <option value="Business English">Business English</option>
+                  <option value="Conversation">Conversation</option>
+                  <option value="Général" selected>Général</option>
+                </select>
+              </div>
+              <div>
+                <label for="lessonLevel">Niveau :</label>
+                <select id="lessonLevel" class="filter-select-sm">
+                  <option value="Tous niveaux" selected>Tous niveaux</option>
+                  <option value="Débutant (A1-A2)">Débutant (A1-A2)</option>
+                  <option value="Intermédiaire (B1-B2)">Intermédiaire (B1-B2)</option>
+                  <option value="Avancé (C1)">Avancé (C1)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="drop-zone" id="dropZone">
+              <input type="file" id="lessonFile" name="file" accept="application/pdf" class="file-input-hidden" required />
+              <div class="drop-zone-content">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--muted);margin-bottom:8px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span class="drop-text" id="dropText">Glissez-déposez votre fichier PDF ici ou <strong>cliquez pour parcourir</strong></span>
+                <span class="drop-subtext">Format PDF uniquement (max. 25 Mo)</span>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="uploadSubmitBtn">
+              Téléverser le cours PDF
+            </button>
+          </form>
+          <div class="upload-status" id="uploadStatus"></div>
+        </div>
+
+        <!-- Carte Liste des cours PDF -->
+        <div class="lessons-list-card">
+          <div class="lessons-list-header">
+            <div>
+              <h3>Bibliothèque des Cours &amp; Documents</h3>
+              <p class="lessons-sub-header" id="lessonsSubHeader">Chargement des cours depuis Google Drive et les archives...</p>
+            </div>
+            <div class="lessons-controls">
+              <div class="search-box-sm">
+                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="lessonsSearch" placeholder="Rechercher un cours..." />
+              </div>
+              <select id="lessonsFilterSource" class="filter-select-sm">
+                <option value="">Toutes les sources</option>
+                <option value="gdrive">Google Drive Officiel</option>
+                <option value="local">Téléversements Locaux</option>
+              </select>
+              <select id="lessonsFilterCat" class="filter-select-sm">
+                <option value="">Toutes les catégories</option>
+                <option value="Grammaire">Grammaire</option>
+                <option value="Prépositions">Prépositions</option>
+                <option value="Phrasal Verbs">Phrasal Verbs</option>
+                <option value="Prononciation">Prononciation</option>
+                <option value="Vocabulaire">Vocabulaire</option>
+                <option value="Business English">Business English</option>
+                <option value="Général">Général</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="lessons-grid" id="lessonsGrid">
+            <!-- Rendu dynamique JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Section Fiches Mémo Téléchargeables Incluses -->
+      <div class="starter-sheets-card">
+        <div class="starter-header">
+          <span class="starter-badge">Fiches de Révision Officielles</span>
+          <h3>Fiches Pratiques &amp; Synthèses à Télécharger</h3>
+          <p>Guides de révision synthétiques conçus pour le Club Anglais Accra. Téléchargeables ou consultables en 1 clic.</p>
+        </div>
+        <div class="starter-sheets-grid" id="starterSheetsGrid">
+          <!-- Rendu dynamique JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 2: EXERCICES & GRAMMAIRE CATÉGORISÉS -->
+    <!-- ========================================================================= -->
+    <section class="tab-panel" id="panel-grammar" style="display: none;">
+      <!-- Barre d'outils et de filtres Grammaire -->
+      <div class="grammar-header-card">
+        <div class="grammar-categories-bar" id="grammarCatPills">
+          <button class="cat-pill active" data-cat="">Tous les exercices</button>
+          <button class="cat-pill" data-cat="prepositions">Prépositions (in, on, at, by...)</button>
+          <button class="cat-pill" data-cat="phrasal verbs">Phrasal Verbs en contexte</button>
+          <button class="cat-pill" data-cat="tenses">Temps &amp; Conjugaison</button>
+          <button class="cat-pill" data-cat="modal verbs">Verbes Modaux</button>
+          <button class="cat-pill" data-cat="articles">Articles &amp; Quantificateurs</button>
+        </div>
+
+        <div class="grammar-mode-bar">
+          <div class="grammar-mode-toggles">
+            <button class="mode-btn active" id="modePracticeBtn">
+              Mode Entraînement (Explications directes)
+            </button>
+            <button class="mode-btn" id="modeQuizBtn">
+              Mode Défi Chrono (10 questions)
+            </button>
+          </div>
+          <div class="grammar-actions">
+            <span class="grammar-counter-text" id="grammarCountText">Chargement...</span>
+            <button class="btn btn-ghost btn-sm" id="resetGrammarBtn">Réinitialiser</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Container des exercices en mode Entraînement -->
+      <div class="grammar-container" id="grammarContainer">
+        <!-- Rendu dynamique JS -->
+      </div>
+
+      <!-- Container du Quiz Chronométré (masqué par défaut) -->
+      <div class="grammar-quiz-view" id="grammarQuizView" style="display: none;">
+        <div class="quiz-hud">
+          <div class="quiz-hud-item">
+            <span>Question :</span> <strong id="quizProgress">1 / 10</strong>
+          </div>
+          <div class="quiz-hud-item">
+            <span>Chrono :</span> <strong id="quizTimer" class="quiz-timer">30s</strong>
+          </div>
+          <div class="quiz-hud-item">
+            <span>Score :</span> <strong id="quizScore">0 pts</strong>
+          </div>
+        </div>
+        
+        <div class="quiz-card" id="quizCard">
+          <div class="quiz-cat-tag" id="quizCatTag">Catégorie</div>
+          <h2 class="quiz-sentence" id="quizSentence">Phrase avec trou ___</h2>
+          <div class="quiz-options" id="quizOptions"></div>
+          <div class="quiz-feedback" id="quizFeedback"></div>
+        </div>
+
+        <div class="quiz-footer">
+          <button class="btn btn-ghost" id="quitQuizBtn">Abandonner le quiz</button>
+          <button class="btn btn-primary" id="nextQuizBtn" style="display:none;">Question suivante →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 3: PHRASAL VERBS HUB -->
+    <!-- ========================================================================= -->
+    <section class="tab-panel" id="panel-phrasal" style="display: none;">
+      <div class="learning-controls">
+        <div class="search-box">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="phrasalSearch" placeholder="Rechercher un Phrasal Verb (ex: give up, look after, carry on)..." />
+        </div>
+        <select id="phrasalParticleFilter" class="filter-select">
+          <option value="">Toutes les particules</option>
+          <option value="up">Particule 'UP' (give up, set up, look up...)</option>
+          <option value="out">Particule 'OUT' (find out, hang out, run out...)</option>
+          <option value="on">Particule 'ON' (turn on, put on, carry on...)</option>
+          <option value="off">Particule 'OFF' (turn off, take off, call off...)</option>
+          <option value="in">Particule 'IN' (check in, fill in, give in...)</option>
+          <option value="after">Particule 'AFTER' (look after, take after...)</option>
+          <option value="down">Particule 'DOWN' (break down, turn down...)</option>
+          <option value="away">Particule 'AWAY' (run away, pass away...)</option>
+        </select>
+        <button class="btn btn-ghost" id="phrasalRandomAudioBtn" title="Écouter un verbe au hasard">Verbe aléatoire</button>
+      </div>
+
+      <div class="phrasal-grid" id="phrasalGrid">
+        <!-- Rendu dynamique JS -->
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 4: PRONONCIATION & PIÈGES PHONÉTIQUES -->
+    <!-- ========================================================================= -->
+    <section class="tab-panel" id="panel-pron" style="display: none;">
+      <div class="learning-controls">
+        <div class="search-box">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="pronSearch" placeholder="Rechercher un mot, un son ou une astuce phonétique..." />
+        </div>
+        <select id="pronTrapFilter" class="filter-select">
+          <option value="">Tous les pièges phonétiques</option>
+          <option value="silent letter">Lettres muettes (Knife, Island, Doubt...)</option>
+          <option value="-ough">Le cauchemar -OUGH (Though, Through, Tough...)</option>
+          <option value="th sound">Sons TH : /θ/ vs /ð/ (Think, This, Weather...)</option>
+          <option value="stress">Accent tonique &amp; Schwa (Photograph, Hotel...)</option>
+          <option value="reduction">Syllabes réduites (Comfortable, Vegetable...)</option>
+          <option value="false friend">Faux amis &amp; Prononciations trompeuses</option>
+        </select>
+        <div class="audio-speed-control">
+          <label for="audioRateSelect" style="font-size:0.85rem; font-weight:700; color:var(--muted)">Vitesse audio :</label>
+          <select id="audioRateSelect" class="filter-select-sm">
+            <option value="0.75">Lente (0.75x)</option>
+            <option value="0.9" selected>Normale (0.9x)</option>
+            <option value="1.0">Rapide (1.0x)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pron-grid" id="pronGrid">
+        <!-- Rendu dynamique JS -->
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 5: VERBES IRRÉGULIERS -->
+    <!-- ========================================================================= -->
+    <section class="tab-panel" id="panel-irregular" style="display: none;">
+      <div class="learning-controls irregular-header-bar">
+        <div class="search-box">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="irregularSearch" placeholder="Rechercher un verbe (ex: go, eat, break, write)..." />
+        </div>
+        <label class="test-mode-toggle" title="Activez pour cacher les formes passées et tester votre mémoire">
+          <input type="checkbox" id="testModeCheck" />
+          <span>Mode Auto-Évaluation (Formes cachées)</span>
+        </label>
+      </div>
+
+      <div class="irregular-grid" id="irregularGrid">
+        <!-- Rendu dynamique JS -->
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 6: VOCABULAIRE THÉMATIQUE -->
+    <!-- ========================================================================= -->
+    <section class="tab-panel" id="panel-vocab" style="display: none;">
+      <div class="learning-controls">
+        <div class="search-box">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="vocabSearch" placeholder="Rechercher un mot en anglais ou en français..." />
+        </div>
+        <select id="vocabCatFilter" class="filter-select">
+          <option value="">Toutes les catégories de vocabulaire</option>
+        </select>
+        <select id="vocabLevelFilter" class="filter-select">
+          <option value="">Tous les niveaux</option>
+          <option value="beginner">Débutant (A1)</option>
+          <option value="easy">Facile (A2)</option>
+          <option value="medium">Intermédiaire (B1)</option>
+          <option value="hard">Avancé (B2-C1)</option>
+        </select>
+      </div>
+
+      <div class="vocab-grid" id="vocabGrid">
+        <!-- Rendu dynamique JS -->
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- MODAL : VISIONNEUSE PDF INTÉGRÉE -->
+    <!-- ========================================================================= -->
+    <div class="pdf-modal-backdrop" id="pdfModal" style="display: none;">
+      <div class="pdf-modal-container">
+        <div class="pdf-modal-header">
+          <div class="pdf-modal-title-box">
+            <h3 id="pdfModalTitle">Titre du document</h3>
+          </div>
+          <div class="pdf-modal-actions">
+            <a href="#" id="pdfModalDownloadBtn" class="btn btn-sm btn-ghost" download>Télécharger</a>
+            <button class="btn btn-sm btn-ghost" id="pdfModalCloseBtn">Fermer</button>
+          </div>
+        </div>
+        <div class="pdf-modal-body" id="pdfModalBody">
+          <iframe id="pdfViewerFrame" class="pdf-viewer-frame" title="Aperçu PDF"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODAL : RÉSULTATS DU QUIZ DE GRAMMAIRE -->
+    <!-- ========================================================================= -->
+    <div class="quiz-modal-backdrop" id="quizResultModal" style="display: none;">
+      <div class="quiz-modal-card">
+        <div class="quiz-modal-emoji" id="quizResultEmoji" style="font-size:1rem;display:none"></div>
+        <h2 id="quizResultTitle">Félicitations !</h2>
+        <p class="quiz-result-sub" id="quizResultSub">Vous avez terminé le défi de grammaire.</p>
+        
+        <div class="quiz-score-badge">
+          <span class="score-num" id="quizFinalScore">8/10</span>
+          <span class="score-label" id="quizScoreLabel">80% de réussite</span>
+        </div>
+
+        <div class="quiz-result-actions">
+          <button class="btn btn-primary" id="quizRetryBtn">Recommencer une série</button>
+          <button class="btn btn-ghost" id="quizBackPracticeBtn">Retour aux exercices</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- INFOBULLE FLOTTANTE SUR LE MOT (WORD POPOVER) -->
+    <div id="storyWordPopover" class="story-word-popover">
+      <div class="popover-header">
+        <div>
+          <div class="popover-word-title" id="popoverWord">Word</div>
+          <div class="popover-ipa" id="popoverIpa">/wɜːd/</div>
+        </div>
+        <button class="btn-speak-popover" id="popoverSpeakBtn" title="Écouter la prononciation">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        </button>
+      </div>
+      <span class="popover-pos-badge" id="popoverPos">Nom</span>
+      <div class="popover-translation" id="popoverTranslation">Traduction</div>
+      <div class="popover-tip" id="popoverTip">Définition ou exemple contextuel</div>
+      <div class="popover-actions">
+        <button class="btn-save-word" id="popoverSaveBtn">
+          ☆ Sauvegarder ce mot
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL DU CARNET DE VOCABULAIRE ("MES MOTS SAUVEGARDÉS") -->
+    <div class="saved-words-modal" id="savedWordsModal" style="display:none;">
+      <div class="saved-words-dialog">
+        <div class="saved-words-header">
+          <h3>⭐ Mon Carnet de Mots Sauvegardés</h3>
+          <button class="btn btn-ghost btn-sm" id="btnCloseSavedWordsModal" style="font-size:1.1rem;">✕</button>
+        </div>
+        <div class="saved-words-body" id="savedWordsList">
+          <!-- Rendu dynamique JS -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="content/content.js"></script>
+  <script src="content/en_fr_dictionary.js"></script>
+  <script src="content/stories.js"></script>
+  <script src="js/stories.js"></script>
+  <script src="js/learning.js"></script>
+</body>
+
+</html>

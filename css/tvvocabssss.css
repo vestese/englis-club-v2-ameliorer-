@@ -1,0 +1,363 @@
+/* =====================================================================
+   TV Vocab — Game Show Studio Theme & Animations
+   ===================================================================== */
+:root {
+  --tvv-bg-dark: #0a0d18;
+  --tvv-card-bg: linear-gradient(145deg, #131929 0%, #0d121f 100%);
+  --tvv-border-glow: rgba(234, 179, 74, 0.35);
+  --tvv-gold: #f59e0b;
+  --tvv-gold-light: #fbbf24;
+  --tvv-cyan: #06b6d4;
+  --tvv-red: #ef4444;
+  --tvv-green: #10b981;
+  --tvv-text: #f8fafc;
+  --tvv-muted: #94a3b8;
+}
+
+/* TV Game Show Studio Container */
+.tvv-card {
+  position: relative;
+  background: var(--tvv-card-bg);
+  border: 2px solid rgba(234, 179, 74, 0.25);
+  box-shadow: 
+    0 0 30px rgba(0, 0, 0, 0.8),
+    0 0 15px rgba(234, 179, 74, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.tvv-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #f59e0b, #ef4444, #06b6d4, #10b981, #f59e0b);
+  background-size: 200% 100%;
+  animation: tvvHeaderGlow 4s linear infinite;
+}
+
+@keyframes tvvHeaderGlow {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+/* Header & Turn Banner */
+.tvv-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.turn-banner {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--tvv-text);
+  letter-spacing: -0.01em;
+}
+
+.turn-banner .team {
+  color: var(--tvv-gold);
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+/* Prompt Title Header */
+.tvv-prompt-box {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 4px solid var(--tvv-gold);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.tvv-prompt-box h3 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.35;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* TV Game Show Answers Board Grid */
+.tv-answers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+  justify-content: center;
+  margin: 20px 0;
+  perspective: 1000px;
+}
+
+/* Answer Tile Item */
+.tv-answer {
+  position: relative;
+  min-height: 72px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+  user-select: none;
+}
+
+/* Hidden / Locked Tile State */
+.tv-answer.hidden {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  color: var(--tvv-muted);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+}
+
+.tv-answer.hidden:hover {
+  border-color: rgba(245, 158, 11, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), 0 0 10px rgba(245, 158, 11, 0.15);
+}
+
+.tv-answer.hidden .tv-num-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--tvv-gold);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.tv-answer.hidden .tv-lock-icon {
+  font-size: 1.1rem;
+  opacity: 0.6;
+}
+
+/* Revealed / Flip Tile State */
+.tv-answer.revealed {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(59, 130, 246, 0.25) 100%);
+  border: 2px solid var(--tvv-cyan);
+  color: #ffffff;
+  box-shadow: 
+    0 10px 25px rgba(6, 182, 212, 0.3),
+    0 0 15px rgba(6, 182, 212, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px) scale(1.02);
+  animation: tvvRevealFlip 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes tvvRevealFlip {
+  0% {
+    transform: rotateX(90deg) scale(0.9);
+    opacity: 0.3;
+  }
+  100% {
+    transform: rotateX(0deg) scale(1.02);
+    opacity: 1;
+  }
+}
+
+.tv-answer.revealed .tv-ans-text {
+  font-size: 1.15rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.tv-answer.revealed .tv-pts-badge {
+  background: var(--tvv-gold);
+  color: #000000;
+  font-size: 0.82rem;
+  font-weight: 900;
+  padding: 4px 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Round Points & Fault Stats Bar */
+.tvv-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 12px 18px;
+  margin-top: 20px;
+}
+
+.round-points {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.round-points-val {
+  color: var(--tvv-gold);
+  font-size: 1.4rem;
+  font-weight: 900;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+.faults-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.team-fault {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--tvv-muted);
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.25s ease;
+}
+
+.team-fault.active {
+  color: #ffffff;
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25);
+}
+
+/* Strikes Counter (Big Red X Badges) */
+.tvv-x-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.tvv-x-boxes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.tvv-x {
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.2);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tvv-x.show {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border: 2px solid #fca5a5;
+  color: #ffffff;
+  box-shadow: 
+    0 8px 20px rgba(239, 68, 68, 0.5),
+    0 0 15px rgba(239, 68, 68, 0.3);
+  transform: scale(1.15) rotate(-3deg);
+  animation: tvvStrikePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes tvvStrikePop {
+  0% { transform: scale(0.4) rotate(15deg); opacity: 0; }
+  50% { transform: scale(1.3) rotate(-8deg); }
+  100% { transform: scale(1.15) rotate(-3deg); opacity: 1; }
+}
+
+/* STEAL / VOL DE POINTS Mode Banner */
+.tvv-steal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #ffffff;
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.25), rgba(245, 158, 11, 0.25), rgba(239, 68, 68, 0.25));
+  background-size: 200% 100%;
+  border: 2px solid #ef4444;
+  padding: 14px 20px;
+  border-radius: 12px;
+  margin-top: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  animation: stealPulse 1.5s infinite linear;
+}
+
+@keyframes stealPulse {
+  0% {
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+    border-color: #ef4444;
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(245, 158, 11, 0.6);
+    border-color: #f59e0b;
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+    border-color: #ef4444;
+  }
+}
+
+/* Action Controls Bar */
+.tvv-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.tvv-input {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(234, 179, 74, 0.4) !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tvv-input:focus {
+  border-color: var(--tvv-gold) !important;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.4) !important;
+}
+
+/* Responsive adjust */
+@media (max-width: 768px) {
+  .tv-answers {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+  }
+  .tv-answer {
+    min-height: 60px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+  .turn-banner {
+    font-size: 1.15rem;
+  }
+  .tvv-prompt-box h3 {
+    font-size: 1.2rem;
+  }
+}
+

@@ -1,0 +1,477 @@
+/* =====================================================================
+   Accra English Club — Premium Design System & Dark Mode
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ─────────────────────────────────────────────
+   1. TOKENS — LIGHT THEME (Default)
+───────────────────────────────────────────── */
+:root {
+  color-scheme: light;
+
+  --bg: #f8fafc;
+  --bg-2: #f1f5f9;
+  --bg-3: #e2e8f0;
+  --card: #ffffff;
+  --card-2: #f8fafc;
+  --surface: #ffffff;
+
+  --ink: #0f172a;
+  --ink-2: #334155;
+  --muted: #64748b;
+  --muted-2: #94a3b8;
+
+  --line: rgba(15, 23, 42, 0.08);
+  --line-strong: rgba(15, 23, 42, 0.16);
+
+  --brand: #2563eb;
+  --brand-2: #1d4ed8;
+  --brand-light: rgba(37, 99, 235, 0.08);
+  --brand-gold: #d97706;
+
+  --green: #10b981;
+  --green-bg: rgba(16, 185, 129, 0.08);
+  --red: #ef4444;
+  --red-bg: rgba(239, 68, 68, 0.08);
+  --orange: #f97316;
+  --orange-bg: rgba(249, 115, 22, 0.08);
+  --purple: #8b5cf6;
+  --purple-bg: rgba(139, 92, 246, 0.08);
+
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+  --shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  --shadow-md: 0 10px 25px -3px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 20px 35px -4px rgba(15, 23, 42, 0.10), 0 8px 16px -4px rgba(15, 23, 42, 0.05);
+
+  --glass: rgba(255, 255, 255, 0.85);
+  --glass-line: rgba(226, 232, 240, 0.85);
+
+  --font: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─────────────────────────────────────────────
+   2. TOKENS — DARK THEME
+───────────────────────────────────────────── */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #090d16;
+  --bg-2: #0f172a;
+  --bg-3: #1e293b;
+  --card: #131d31;
+  --card-2: #18243c;
+  --surface: #131d31;
+
+  --ink: #f8fafc;
+  --ink-2: #cbd5e1;
+  --muted: #94a3b8;
+  --muted-2: #64748b;
+
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+
+  --brand: #3b82f6;
+  --brand-2: #2563eb;
+  --brand-light: rgba(59, 130, 246, 0.15);
+  --brand-gold: #fbbf24;
+
+  --green: #34d399;
+  --green-bg: rgba(52, 211, 153, 0.12);
+  --red: #f87171;
+  --red-bg: rgba(248, 113, 113, 0.12);
+  --orange: #fb923c;
+  --orange-bg: rgba(251, 146, 60, 0.12);
+  --purple: #a78bfa;
+  --purple-bg: rgba(167, 139, 250, 0.12);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 10px 25px -3px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 20px 35px -4px rgba(0, 0, 0, 0.7);
+
+  --glass: rgba(15, 23, 42, 0.85);
+  --glass-line: rgba(255, 255, 255, 0.1);
+}
+
+/* ─────────────────────────────────────────────
+   3. GLOBAL BASE STYLES & RESETS
+───────────────────────────────────────────── */
+body {
+  background-color: var(--bg) !important;
+  color: var(--ink) !important;
+  font-family: var(--font) !important;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+[data-theme="dark"] body {
+  background-image: 
+    radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.06) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(167, 139, 250, 0.05) 0px, transparent 50%) !important;
+}
+
+/* ─────────────────────────────────────────────
+   4. TOPBAR & THEME TOGGLE
+───────────────────────────────────────────── */
+.topbar {
+  background: var(--glass) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--glass-line) !important;
+  box-shadow: var(--shadow) !important;
+  border-radius: var(--radius-lg) !important;
+}
+
+.topbar .logo {
+  color: var(--ink) !important;
+  font-weight: 800 !important;
+}
+
+.topbar .logo span {
+  color: var(--ink) !important;
+}
+
+.toplink {
+  color: var(--muted) !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-pill) !important;
+  transition: all 0.2s var(--ease) !important;
+}
+
+.toplink:hover {
+  color: var(--brand) !important;
+  background: var(--brand-light) !important;
+}
+
+.toplink-active {
+  color: var(--brand) !important;
+  background: var(--brand-light) !important;
+}
+
+/* Dark Mode Button */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--card-2);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle-btn:hover {
+  background: var(--bg-3);
+  border-color: var(--brand);
+  color: var(--brand);
+  transform: translateY(-1px);
+}
+
+.btn-back {
+  background: var(--card) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--line) !important;
+}
+
+.btn-back:hover {
+  background: var(--brand-light) !important;
+  border-color: var(--brand) !important;
+  color: var(--brand) !important;
+}
+
+/* ─────────────────────────────────────────────
+   5. BUTTONS & CONTROLS
+───────────────────────────────────────────── */
+.btn {
+  font-family: var(--font) !important;
+  font-weight: 700 !important;
+  border-radius: var(--radius) !important;
+  transition: all 0.2s var(--ease) !important;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25) !important;
+  border: none !important;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35) !important;
+}
+
+.btn-ghost {
+  background: var(--card) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--line) !important;
+}
+
+.btn-ghost:hover {
+  background: var(--bg-2) !important;
+  border-color: var(--line-strong) !important;
+  color: var(--ink) !important;
+}
+
+.btn-outline {
+  background: transparent !important;
+  color: var(--brand) !important;
+  border: 1.5px solid var(--brand) !important;
+}
+
+.btn-outline:hover {
+  background: var(--brand) !important;
+  color: #ffffff !important;
+}
+
+/* ─────────────────────────────────────────────
+   6. CARDS, FORMS & INPUTS (DARK & LIGHT)
+───────────────────────────────────────────── */
+.card,
+.menu-card,
+.choice,
+.play-card,
+.upload-card,
+.lessons-list-card,
+.starter-sheets-card,
+.gdrive-banner-card,
+.grammar-header-card,
+.teacher-config-card,
+.teacher-questions-wrapper,
+.teacher-live-control-card,
+.connected-students-card,
+.class-analytics-card,
+.gform-container,
+.gform-card,
+.dash-stat-card,
+.quiz-card,
+.inspect-modal-card {
+  background: var(--card) !important;
+  border-color: var(--line) !important;
+  color: var(--ink) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.menu-card:hover,
+.choice:hover,
+.dash-stat-card:hover {
+  border-color: var(--brand) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Inputs, Textareas, Selects */
+input[type="text"],
+input[type="email"],
+input[type="search"],
+select,
+textarea,
+.t-input,
+.t-select,
+.gform-input,
+.gform-title-input,
+.gform-desc-input,
+.filter-select,
+.filter-select-sm {
+  background: var(--bg-2) !important;
+  color: var(--ink) !important;
+  border: 1.5px solid var(--line) !important;
+  border-radius: var(--radius-sm) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+.t-input:focus,
+.gform-input:focus,
+.gform-title-input:focus,
+.gform-desc-input:focus {
+  border-color: var(--brand) !important;
+  box-shadow: 0 0 0 3px var(--brand-light) !important;
+  outline: none !important;
+}
+
+/* Search Box */
+.search-box,
+.search-box-sm {
+  background: var(--bg-2) !important;
+  border: 1.5px solid var(--line) !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+.search-box input,
+.search-box-sm input {
+  background: transparent !important;
+  color: var(--ink) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ─────────────────────────────────────────────
+   7. NAVIGATION TABS
+───────────────────────────────────────────── */
+.learning-tabs-nav,
+.teaching-role-tabs {
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 6px !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.tab-btn,
+.role-tab-btn {
+  background: transparent !important;
+  color: var(--muted) !important;
+  border-radius: var(--radius) !important;
+  border: none !important;
+  font-weight: 600 !important;
+  transition: all 0.2s var(--ease) !important;
+}
+
+.tab-btn:hover,
+.role-tab-btn:hover {
+  background: var(--bg-2) !important;
+  color: var(--ink) !important;
+}
+
+.tab-btn.active,
+.role-tab-btn.active {
+  background: var(--brand) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+}
+
+.tab-badge {
+  background: var(--brand-light) !important;
+  color: var(--brand) !important;
+}
+
+.tab-btn.active .tab-badge {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+/* ─────────────────────────────────────────────
+   8. CLEAN & MODERN DOCUMENTS SECTION (LESSONS)
+───────────────────────────────────────────── */
+.gdrive-banner-card {
+  border-left: 4px solid var(--brand) !important;
+  border-radius: var(--radius) !important;
+}
+
+.gdrive-live-badge {
+  background: var(--green-bg) !important;
+  color: var(--green) !important;
+  border: 1px solid rgba(16, 185, 129, 0.25) !important;
+}
+
+.drop-zone {
+  border: 2px dashed var(--line-strong) !important;
+  background: var(--bg) !important;
+  border-radius: var(--radius) !important;
+  transition: all 0.2s var(--ease) !important;
+}
+
+.drop-zone:hover,
+.drop-zone.drag-over {
+  border-color: var(--brand) !important;
+  background: var(--brand-light) !important;
+}
+
+.lesson-card {
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s ease, border-color 0.2s ease !important;
+}
+
+.lesson-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-md) !important;
+  border-color: var(--brand) !important;
+}
+
+.lesson-card-source.gdrive {
+  background: var(--brand-light) !important;
+  color: var(--brand) !important;
+}
+
+.lesson-card-source.local {
+  background: var(--orange-bg) !important;
+  color: var(--orange) !important;
+}
+
+.lesson-tag {
+  background: var(--bg-2) !important;
+  color: var(--muted) !important;
+  border: 1px solid var(--line) !important;
+}
+
+/* ─────────────────────────────────────────────
+   9. TABLES & ANALYTICS
+───────────────────────────────────────────── */
+.report-table th {
+  background: var(--card-2) !important;
+  color: var(--muted) !important;
+  border-bottom: 1px solid var(--line) !important;
+}
+
+.report-table td {
+  border-bottom: 1px solid var(--line) !important;
+  color: var(--ink) !important;
+}
+
+.report-table tr:hover td {
+  background: var(--bg-2) !important;
+}
+
+.dash-stat-num {
+  color: var(--brand) !important;
+  font-family: var(--font-display) !important;
+}
+
+.session-status-badge.status-active {
+  background: var(--green-bg) !important;
+  color: var(--green) !important;
+  border: 1px solid rgba(16, 185, 129, 0.25) !important;
+}
+
+/* ─────────────────────────────────────────────
+   10. MODALS & OVERLAYS
+───────────────────────────────────────────── */
+.pdf-modal-backdrop,
+.quiz-modal-backdrop,
+.inspect-modal-overlay {
+  background: rgba(10, 15, 30, 0.75) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+.pdf-modal-container,
+.quiz-modal-card,
+.inspect-modal-card {
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.pdf-modal-header,
+.inspect-modal-header {
+  background: var(--card-2) !important;
+  border-bottom: 1px solid var(--line) !important;
+}

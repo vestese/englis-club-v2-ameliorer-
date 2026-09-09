@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accra English Club — English Games</title>
+  <meta name="description" content="English learning games for the club: in groups (The Big Challenge) or solo." />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="logo" id="logo" title="Home" style="cursor:pointer">
+        <span class="flag">🇬🇭</span> <span>Accra English Club</span>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn-back" id="backBtn" style="visibility:hidden">← Back</button>
+    </div>
+
+    <div id="screen"><!-- les écrans sont rendus ici --></div>
+  </div>
+
+  <!-- Socket.IO Client (served by qserver or CDN fallback) -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>if (typeof io === 'undefined') { document.write('<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"><\/script>'); }</script>
+  <!-- Contenu des jeux (modifiable) -->
+  <script src="content/content.js"></script>
+  <script src="content/description_data.js"></script>
+  <!-- Logique de l'application -->
+  <script src="js/util.js"></script>
+  <script src="js/solo.js"></script>
+  <script src="js/group.js"></script>
+  <script src="js/multiplayer.js"></script>
+  <script src="js/meeting.js"></script>
+  <script src="js/editor.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>

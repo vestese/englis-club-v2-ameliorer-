@@ -1,0 +1,33 @@
+﻿# === Secrets & credentials (NEVER push these) ===
+google_service_account.json
+
+# === Large data files (not needed on Render) ===
+dictionary-en.json
+vocabulaire_anglais.db
+
+# === Python cache ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# === Virtual environments ===
+venv/
+.venv/
+env/
+.env
+
+# === Runtime / temp files ===
+qserver_data.json
+uploads/*
+!uploads/.gitkeep
+
+# === IDE / OS ===
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# === Logs ===
+*.log

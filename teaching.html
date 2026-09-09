@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Évaluations &amp; Mode Teaching — Accra English Club</title>
+  <meta name="description" content="Plateforme d'évaluations et formulaires d'anglais du Club Anglais Accra : créez vos questionnaires, inscrivez les élèves avec nom et email, calculez automatiquement les notes et analysez les erreurs." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text y='.85em' font-size='60' x='20' fill='white' font-family='sans-serif' font-weight='bold'>A</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/premium.css" />
+  <link rel="stylesheet" href="css/arcade-and-stories.css" />
+  <script src="js/theme.js"></script>
+</head>
+
+<body>
+  <div class="app">
+    <!-- Topbar épurée unifiée -->
+    <header class="topbar">
+      <div class="logo" id="logo" title="Accueil" style="cursor:pointer" onclick="location.href='index.html'">
+        <svg class="logo-mark" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="8" fill="#2563eb"/>
+          <text x="7" y="20" font-family="Outfit,sans-serif" font-weight="800" font-size="16" fill="white">A</text>
+        </svg>
+        <span>Accra English Club</span>
+      </div>
+
+      <nav class="topbar-nav" id="topbarNav">
+        <a href="index.html" class="nav-link">Accueil</a>
+        <a href="games.html" class="nav-link">Jeux &amp; Arcade</a>
+        <a href="learning.html" class="nav-link">Learning Hub <span class="nav-badge-new">Histoires</span></a>
+        <a href="teaching.html" class="nav-link active">Teaching &amp; Quiz</a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link" onclick="event.preventDefault()">Club &amp; Outils ▾</a>
+          <div class="nav-dropdown-menu">
+            <a href="games.html?cat=season" class="dropdown-item">🏆 Classement Saison</a>
+            <a href="games.html?cat=manage" class="dropdown-item">✏️ Éditeur de Contenu</a>
+            <a href="https://drive.google.com/drive/folders/1ZJQ3BmKeTyELWlOViCRWl0PoxY_fFWyc" target="_blank" rel="noopener noreferrer" class="dropdown-item">📁 Google Drive</a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="row" style="gap:10px;align-items:center;">
+        <button class="theme-toggle-btn" id="darkModeToggle" title="Basculer Mode Sombre / Clair">
+          <span class="dm-icon">🌙</span>
+          <span class="dm-label">Sombre</span>
+        </button>
+        <button class="btn-back" id="backBtn" onclick="location.href='index.html'">← Retour</button>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="teaching-app-wrap">
+      <!-- Role Switcher Tabs -->
+      <div class="teaching-role-tabs">
+        <button class="role-tab-btn active" id="tabTeacherBtn" onclick="CAA.teaching.showTeacherSetup()">
+          Créateur de Formulaire (Professeur)
+        </button>
+        <button class="role-tab-btn" id="tabStudentBtn" onclick="CAA.teaching.showStudentJoin()">
+          Passer l'Évaluation (Élève)
+        </button>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- 1. TEACHER / FORM CREATOR FLOW -->
+      <!-- ========================================================================= -->
+
+      <!-- TEACHER VIEW 1: FORM BUILDER -->
+      <section class="teaching-panel" id="teacherSetupView">
+        <div class="gform-header-card">
+          <div class="gform-accent-bar"></div>
+          <div class="gform-header-body">
+            <div class="form-group-gform">
+              <label for="sessionTitleInput" class="gform-label">Titre de l'évaluation / Formulaire :</label>
+              <input type="text" id="sessionTitleInput" class="gform-title-input" value="English Mastery Evaluation — Gerund, Prepositions &amp; Tenses" placeholder="Titre du formulaire..." />
+            </div>
+            <div class="form-group-gform mt-sm">
+              <label for="sessionDescInput" class="gform-label">Description &amp; Consignes pour les élèves :</label>
+              <textarea id="sessionDescInput" class="gform-desc-input" rows="2" placeholder="Consignes de l'évaluation...">Veuillez renseigner votre nom complet et votre adresse e-mail. Répondez avec attention à chaque question. Le calcul de votre note et l'analyse de vos erreurs seront générés instantanément.</textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="teacher-setup-grid">
+          <!-- Left Column: Settings -->
+          <div class="teacher-config-card">
+            <h3>Paramètres de l'Évaluation</h3>
+            
+            <div class="form-group-t">
+              <label for="teacherNameInput">Formateur / Enseignant :</label>
+              <input type="text" id="teacherNameInput" class="t-input" value="Professeur Steve" placeholder="Ex: M. Mensah" />
+            </div>
+
+            <div class="form-group-t">
+              <label for="timePerQSelect">Durée allouée à l'évaluation :</label>
+              <select id="timePerQSelect" class="t-select">
+                <option value="0" selected>Temps libre / Sans limite (Chrono indicatif)</option>
+                <option value="10">Durée fixée — 10 minutes</option>
+                <option value="15">Durée fixée — 15 minutes</option>
+                <option value="20">Durée fixée — 20 minutes</option>
+                <option value="30">Durée fixée — 30 minutes</option>
+                <option value="45">Durée fixée — 45 minutes</option>
+                <option value="60">Durée fixée — 1 heure</option>
+              </select>
+            </div>
+
+            <div class="gform-actions-box">
+              <button class="btn btn-primary btn-block btn-lg" onclick="CAA.teaching.createTeacherRoom()">
+                Lancer &amp; Ouvrir l'Évaluation
+              </button>
+              <button class="btn btn-outline btn-block mt-sm" onclick="CAA.teaching.previewAsStudent()">
+                Tester comme un élève
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Column: Questions List Builder -->
+          <div class="teacher-questions-wrapper">
+            <div class="questions-header-bar">
+              <div class="q-header-left">
+                <h3>Questions du Formulaire <span class="badge-counter" id="teacherQCountBadge">0 questions</span></h3>
+              </div>
+              <div class="q-header-actions">
+                <button class="btn btn-primary btn-sm" onclick="CAA.teaching.addEmptyQuestion()">+ Ajouter une question</button>
+              </div>
+            </div>
+
+            <div class="teacher-questions-list" id="teacherQuestionsContainer">
+              <!-- Dynamically populated by js/teaching.js -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TEACHER VIEW 2: LIVE SUPERVISION & DASHBOARD -->
+      <section class="teaching-panel" id="teacherLobbyView" style="display:none;">
+        
+        <!-- Live Header Control Card -->
+        <div class="teacher-live-control-card">
+          <div class="control-header-row">
+            <div>
+              <span class="session-status-badge status-active" id="teacherSessionStatusBadge">En cours (Ouvert aux réponses)</span>
+              <h2 id="teacherLobbyTitle" class="mt-xs">Titre de l'évaluation</h2>
+              <p class="lobby-meta"><strong>Formateur :</strong> <span id="teacherLobbyTeacherName">Professeur</span> &nbsp;·&nbsp; <span id="teacherLobbyQCount">0</span> questions</p>
+            </div>
+            
+            <div class="timer-control-box">
+              <div class="timer-badge-text" id="teacherLiveTimerDisplay">Temps écoulé : 00:00</div>
+              <div class="timer-mini-track"><div class="timer-mini-fill" id="teacherTimerProgressFill" style="width:0%;"></div></div>
+            </div>
+
+            <div class="control-actions-col">
+              <button class="btn btn-danger" onclick="CAA.teaching.closeTeacherEvaluation()">
+                Mettre fin à l'évaluation (Clôturer)
+              </button>
+            </div>
+          </div>
+
+          <!-- Share Link Box -->
+          <div class="share-url-box mt-md">
+            <div class="share-box-top">
+              <label class="gform-field-label">Lien direct d'accès pour les élèves (ou Code : <strong id="teacherRoomCodeDisplay">TEA101</strong>) :</label>
+              <button class="btn btn-sm btn-outline" onclick="CAA.teaching.copyRoomCode()">Copier le code court</button>
+            </div>
+            <div class="share-url-row">
+              <input type="text" id="teacherShareUrlInput" class="t-input share-input" readonly />
+              <button class="btn btn-primary" onclick="CAA.teaching.copyShareUrl()">Copier le lien direct</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Stats Cards -->
+        <div class="dashboard-stats-grid mt-lg">
+          <div class="dash-stat-card">
+            <span class="dash-stat-num" id="statSubCount">0</span>
+            <span class="dash-stat-label">Copies reçues</span>
+          </div>
+          <div class="dash-stat-card">
+            <span class="dash-stat-num" id="statAvgPct">-</span>
+            <span class="dash-stat-label">Moyenne de la classe</span>
+          </div>
+          <div class="dash-stat-card">
+            <span class="dash-stat-num" id="statSuccessRate">-</span>
+            <span class="dash-stat-label">Taux de réussite (≥ 50%)</span>
+          </div>
+        </div>
+
+        <!-- Class Mistakes & Hardest Questions Analysis -->
+        <div class="class-analytics-card mt-lg">
+          <div class="c-students-header">
+            <h3>Diagnostic des Erreurs de la Classe (Questions les plus échouées)</h3>
+            <p class="gform-field-sub">Identifiez immédiatement les notions grammaticales posant le plus de difficultés pour cibler vos explications.</p>
+          </div>
+          <div class="class-analytics-list mt-sm" id="classMistakesAnalyticsList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Live Submissions Table -->
+        <div class="connected-students-card mt-lg">
+          <div class="c-students-header flex-between">
+            <div>
+              <h3>Feuilles de Copies &amp; Notes Individuelles <span class="badge-counter" id="teacherSubmissionsCountBadge">0 copie(s)</span></h3>
+              <p class="gform-field-sub">Cliquez sur "Voir la copie" pour consulter le détail exact des réponses et erreurs d'un élève.</p>
+            </div>
+            <div class="header-tools-actions">
+              <button class="btn btn-outline btn-sm" onclick="CAA.teaching.exportGradesCSV()">Exporter en CSV (Excel)</button>
+              <button class="btn btn-primary btn-sm" onclick="window.print()">Imprimer le relevé</button>
+            </div>
+          </div>
+
+          <div class="table-responsive mt-sm">
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nom &amp; Prénom</th>
+                  <th>Adresse E-mail</th>
+                  <th>Note / Score</th>
+                  <th>Pourcentage</th>
+                  <th style="text-align:right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="teacherSubmissionsTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ========================================================================= -->
+      <!-- 2. STUDENT / GOOGLE FORMS REGISTRATION & QUIZ FLOW -->
+      <!-- ========================================================================= -->
+
+      <!-- STUDENT VIEW 1: REGISTRATION (NAME + EMAIL) -->
+      <section class="teaching-panel" id="studentJoinView" style="display:none;">
+        <div class="gform-container">
+          <div class="gform-accent-bar"></div>
+          
+          <div class="gform-header-body">
+            <h2 id="studentFormDisplayTitle">Évaluation d'Anglais — Inscription &amp; Formulaire</h2>
+            <p class="gform-sub" id="studentFormDisplayDesc">Renseignez vos informations ci-dessous pour accéder au questionnaire. Toutes vos réponses seront corrigées automatiquement avec l'analyse détaillée des erreurs.</p>
+          </div>
+
+          <form onsubmit="event.preventDefault(); CAA.teaching.joinStudentRoom();" class="gform-body">
+            <!-- Registration Section: Name & Email -->
+            <div class="gform-card">
+              <div class="gform-field-header">
+                <label for="studentJoinName" class="gform-field-title">Nom complet (Nom &amp; Prénom) <span class="required-star">*</span></label>
+                <span class="gform-field-sub">Indiquez votre identité officielle pour l'attribution de la note</span>
+              </div>
+              <input type="text" id="studentJoinName" class="gform-input" placeholder="Votre nom complet" required />
+            </div>
+
+            <div class="gform-card">
+              <div class="gform-field-header">
+                <label for="studentJoinEmail" class="gform-field-title">Adresse e-mail <span class="required-star">*</span></label>
+                <span class="gform-field-sub">Votre bilan d'évaluation sera rattaché à cette adresse e-mail</span>
+              </div>
+              <input type="email" id="studentJoinEmail" class="gform-input" placeholder="nom.prenom@exemple.com" required />
+            </div>
+
+            <div class="gform-card">
+              <div class="gform-field-header">
+                <label for="studentJoinCode" class="gform-field-title">Code de l'évaluation (Optionnel)</label>
+                <span class="gform-field-sub">Laissez vide pour l'évaluation standard ou saisissez le code fourni par l'enseignant</span>
+              </div>
+              <input type="text" id="studentJoinCode" class="gform-input" placeholder="Ex: TEA101 (ou laisser vide)" autocomplete="off" />
+            </div>
+
+            <div class="gform-submit-row">
+              <button type="submit" class="btn btn-primary btn-lg">
+                Ouvrir le formulaire d'évaluation →
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- STUDENT VIEW 2: FULL GOOGLE FORM QUESTIONNAIRE (CONTINUOUS FORM) -->
+      <section class="teaching-panel" id="studentFormView" style="display:none;">
+        <div class="gform-container">
+          <div class="gform-accent-bar"></div>
+          
+          <div class="gform-header-body">
+            <h2 id="sFormActiveTitle">Évaluation d'Anglais</h2>
+            <p class="gform-sub" id="sFormActiveDesc">Répondez à toutes les questions obligatoires ci-dessous puis cliquez sur "Soumettre le formulaire".</p>
+            
+            <div class="gform-user-pill mt-sm">
+              <span>Élève : <strong id="sFormUserDisplay">Nom</strong> &nbsp;|&nbsp; <span id="sFormEmailDisplay">email</span></span>
+            </div>
+
+            <!-- Real-time Progress Bar -->
+            <div class="gform-progress-wrap mt-md">
+              <div class="gform-progress-label">
+                <span id="sFormProgressText">0 / 0 question(s) répondue(s) (0%)</span>
+              </div>
+              <div class="gform-progress-track">
+                <div class="gform-progress-fill" id="sFormProgressBar" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <form id="studentFullGForm" onsubmit="event.preventDefault(); CAA.teaching.submitContinuousForm();" class="gform-questions-flow">
+            <div id="studentFormQuestionsList">
+              <!-- Dynamically populated question cards -->
+            </div>
+
+            <div class="gform-submit-row">
+              <button type="submit" class="btn btn-primary btn-lg" id="submitFormBtn">
+                Soumettre le formulaire &amp; Calculer les résultats
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- STUDENT VIEW 3: AUTOMATIC RESULTS & DETAILED MISTAKES BREAKDOWN -->
+      <section class="teaching-panel" id="studentFinalReportView" style="display:none;">
+        <div class="gform-container">
+          <!-- Summary Header Card -->
+          <div class="gform-accent-bar" id="reportAccentBar"></div>
+          
+          <div class="gform-header-body">
+            <h2>Résultats &amp; Bilan Officiel de l'Évaluation</h2>
+            <div class="gform-meta-row mt-sm">
+              <div><strong>Élève :</strong> <span id="sReportStudentName">Nom de l'élève</span></div>
+              <div><strong>E-mail :</strong> <span id="sReportStudentEmail">email@exemple.com</span></div>
+            </div>
+
+            <div class="gform-score-hero mt-md">
+              <div class="gform-score-box">
+                <span class="gform-score-number" id="sReportScoreBig">0 / 0</span>
+                <span class="gform-score-pct" id="sReportPct">0%</span>
+              </div>
+              <div class="gform-score-verdict" id="sReportVerdict">
+                <strong>Calcul automatique des résultats terminé.</strong>
+                <p id="sReportSub">Retrouvez ci-dessous le détail de chaque question avec vos erreurs et les règles grammaticales associées.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Éléments Faussés / Questions Incorrectes -->
+          <div class="gform-mistakes-section" id="mistakesSectionWrap">
+            <div class="gform-section-title text-danger">
+              <h3>Questions Incorrectes (Éléments à Revoir)</h3>
+              <p class="gform-field-sub">Examen des erreurs commises et des explications pédagogiques.</p>
+            </div>
+
+            <div class="gform-mistakes-list" id="sReportMistakesList">
+              <!-- Dynamically rendered wrong questions -->
+            </div>
+          </div>
+
+          <!-- Section: Toutes les Réponses Détaillées (Full Google Form Review) -->
+          <div class="gform-all-answers-section">
+            <div class="gform-section-title">
+              <h3>Toutes vos réponses au formulaire</h3>
+              <p class="gform-field-sub">Récapitulatif complet de l'évaluation.</p>
+            </div>
+
+            <div class="gform-all-list" id="sReportAllList">
+              <!-- Dynamically rendered all questions -->
+            </div>
+          </div>
+
+          <div class="gform-report-actions">
+            <button class="btn btn-primary btn-lg" onclick="CAA.teaching.downloadStudentReport()">
+              Imprimer / Télécharger mon Relevé (PDF)
+            </button>
+            <button class="btn btn-ghost" onclick="CAA.teaching.showStudentJoin()">
+              Refaire l'évaluation
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- MODAL: TEACHER INSPECT STUDENT COPY -->
+    <div class="inspect-modal-overlay" id="teacherStudentInspectModal" style="display:none;" onclick="if(event.target === this) CAA.teaching.closeInspectModal()">
+      <div class="inspect-modal-card">
+        <div class="inspect-modal-header">
+          <div>
+            <h3 id="modalStudentName">Nom de l'élève</h3>
+            <p class="inspect-student-meta">
+              <span id="modalStudentEmail">email@exemple.com</span> &nbsp;·&nbsp;
+              Note : <strong id="modalStudentScore">0 / 0 (0%)</strong>
+            </p>
+          </div>
+          <button class="btn-action btn-close-modal" onclick="CAA.teaching.closeInspectModal()">✕</button>
+        </div>
+
+        <div class="inspect-modal-body" id="modalStudentAnswersList">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div class="inspect-modal-footer">
+          <button class="btn btn-primary" onclick="CAA.teaching.closeInspectModal()">Fermer</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="/socket.io/socket.io.js" onerror="this.onerror=null;this.src='https://cdn.socket.io/4.7.5/socket.io.min.js';"></script>
+  <script src="js/teaching.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      CAA.teaching.init();
+    });
+  </script>
+</body>
+
+</html>
