@@ -583,20 +583,51 @@ CAA.util = (function () {
       return wordValidationCache.get(clean);
     }
 
-    // 1. Verification rapide locale contre le contenu JavaScript (content.js)
+    // 1. Vérification rapide locale contre le contenu JavaScript (content.js)
     const C = window.CAA && window.CAA.content ? window.CAA.content : {};
+
+    // 1a. Vocabulaire principal
     const vocab = C.vocabulary || [];
     if (vocab.some((v) => v && v.en && v.en.toLowerCase() === clean)) {
       wordValidationCache.set(clean, true);
       return true;
     }
+
+    // 1b. Mots d'anagramme
     const anagrams = C.anagramWords || [];
     if (anagrams.some((w) => typeof w === "string" && w.toLowerCase() === clean)) {
       wordValidationCache.set(clean, true);
       return true;
     }
 
-    // 2. Verification via le serveur qserver (vocabulaire_anglais.db)
+    // 1c. Formes de verbes irréguliers (base, passé, participe)
+    const irregulars = C.irregularVerbs || [];
+    for (const v of irregulars) {
+      if (!v) continue;
+      const forms = [v.verb, v.past, v.participle];
+      for (const f of forms) {
+        if (!f) continue;
+        // gérer les formes composites comme "was/were", "burnt/burned"
+        const parts = String(f).toLowerCase().split(/[/,\s]+/);
+        if (parts.some((p) => p.trim() === clean)) {
+          wordValidationCache.set(clean, true);
+          return true;
+        }
+      }
+    }
+
+    // 1d. Mots individuels des phrasal verbs (ex: "give", "up", "look", "after")
+    const phrasals = C.phrasalVerbs || [];
+    for (const pv of phrasals) {
+      if (!pv || !pv.verb) continue;
+      const words = String(pv.verb).toLowerCase().split(/\s+/);
+      if (words.some((w) => w === clean)) {
+        wordValidationCache.set(clean, true);
+        return true;
+      }
+    }
+
+    // 2. Vérification via le serveur qserver (vocabulaire_anglais.db)
     try {
       const res = await fetch("/api/validate-word", {
         method: "POST",
@@ -614,8 +645,10 @@ CAA.util = (function () {
       // qserver non joignable (mode 100% hors-ligne/fichier local)
     }
 
-    // 3. Fallback heuristique hors-ligne: voyelle obligatoire (A, E, I, O, U, Y)
-    const isValidHeuristic = /[aeiouy]/.test(clean);
+    // 3. Fallback heuristique hors-ligne: voyelle + longueur minimale + pas de triplet de lettres
+    const hasVowel = /[aeiouy]/.test(clean);
+    const noTriple = !/(.)\1\1/.test(clean); // pas "aaa", "zzz"...
+    const isValidHeuristic = clean.length >= 2 && hasVowel && noTriple;
     wordValidationCache.set(clean, isValidHeuristic);
     return isValidHeuristic;
   }
