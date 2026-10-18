@@ -29,6 +29,81 @@ def get_db_connection():
         return None
 
 
+def _extract_js_array_string(text, var_name):
+    """Extrait la chaîne d'un tableau JS [ ... ] en équilibrant les crochets."""
+    import re
+    pattern = r'\b' + re.escape(var_name) + r'\s*[:=]\s*\['
+    m = re.search(pattern, text)
+    if not m:
+        return None
+    start = m.end() - 1
+    depth = 0
+    in_string = False
+    quote_char = ''
+    escape = False
+    in_line_comment = False
+    in_block_comment = False
+    n = len(text)
+    i = start
+    while i < n:
+        ch = text[i]
+        if in_line_comment:
+            if ch == '\n':
+                in_line_comment = False
+        elif in_block_comment:
+            if ch == '*' and i + 1 < n and text[i + 1] == '/':
+                in_block_comment = False
+                i += 1
+        elif in_string:
+            if escape:
+                escape = False
+            elif ch == '\\':
+                escape = True
+            elif ch == quote_char:
+                in_string = False
+        else:
+            if ch == '/' and i + 1 < n and text[i + 1] == '/':
+                in_line_comment = True
+                i += 1
+            elif ch == '/' and i + 1 < n and text[i + 1] == '*':
+                in_block_comment = True
+                i += 1
+            elif ch in ('"', "'", '`'):
+                in_string = True
+                quote_char = ch
+            elif ch == '[':
+                depth += 1
+            elif ch == ']':
+                depth -= 1
+                if depth == 0:
+                    return text[start:i + 1]
+        i += 1
+    return None
+
+
+def _parse_js_object_string(raw_js):
+    """Nettoie une chaîne de tableau ou objet JS pour la convertir en structure Python."""
+    if not raw_js:
+        return None
+    import re, json
+    # Retirer les commentaires de fin de ligne et blocs
+    cleaned = re.sub(r'//[^\n]*', '', raw_js)
+    cleaned = re.sub(r'/\*.*?\*/', '', cleaned, flags=re.DOTALL)
+    # Remplacer les clés non-quotées: { verb: "..." } -> { "verb": "..." }
+    cleaned = re.sub(r'([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)\s*:', r'\1"\2":', cleaned)
+    # Retirer les virgules pendantes avant ] ou }
+    cleaned = re.sub(r',\s*([}\]])', r'\1', cleaned)
+    try:
+        return json.loads(cleaned)
+    except Exception:
+        try:
+            import ast
+            py_code = cleaned.replace('true', 'True').replace('false', 'False').replace('null', 'None')
+            return ast.literal_eval(py_code)
+        except Exception:
+            return None
+
+
 def _get_all_valid_words():
     global _ALL_WORDS_SET
     if _ALL_WORDS_SET is not None:
@@ -36,38 +111,64 @@ def _get_all_valid_words():
 
     words = set()
     conn = get_db_connection()
-    if not conn:
-        _ALL_WORDS_SET = words
-        return words
+    if conn:
+        try:
+            c = conn.cursor()
+            tables = [r[0] for r in c.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()]
+            for tbl in tables:
+                cols_info = c.execute(f"PRAGMA table_info('{tbl}');").fetchall()
+                cols = [col[1].lower() for col in cols_info]
+                target_col = None
+                for candidate in ['word', 'mot', 'english', 'en', 'vocabulary', 'term', 'name']:
+                    if candidate in cols:
+                        target_col = candidate
+                        break
+                if not target_col and cols:
+                    target_col = cols[0]
 
+                if target_col:
+                    safe_col = target_col.replace('"', '')
+                    rows = c.execute(f'SELECT "{safe_col}" FROM "{tbl}"').fetchall()
+                    for r in rows:
+                        if r[0] and isinstance(r[0], str):
+                            clean_w = r[0].strip().lower()
+                            if clean_w.isalpha():
+                                words.add(clean_w)
+            conn.close()
+        except Exception as e:
+            print(f"Warning loading word database: {e}")
+            if conn:
+                try: conn.close()
+                except Exception: pass
+
+    # Inclure également les mots issus de content.js
     try:
-        c = conn.cursor()
-        tables = [r[0] for r in c.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()]
-        for tbl in tables:
-            cols_info = c.execute(f"PRAGMA table_info('{tbl}');").fetchall()
-            cols = [col[1].lower() for col in cols_info]
-            target_col = None
-            for candidate in ['word', 'mot', 'english', 'en', 'vocabulary', 'term', 'name']:
-                if candidate in cols:
-                    target_col = candidate
-                    break
-            if not target_col and cols:
-                target_col = cols[0]
-
-            if target_col:
-                safe_col = target_col.replace('"', '')
-                rows = c.execute(f'SELECT "{safe_col}" FROM "{tbl}"').fetchall()
-                for r in rows:
-                    if r[0] and isinstance(r[0], str):
-                        clean_w = r[0].strip().lower()
-                        if clean_w.isalpha():
-                            words.add(clean_w)
-        conn.close()
+        content_file = BASE_DIR / 'content' / 'content.js'
+        if content_file.exists():
+            text = content_file.read_text(encoding='utf-8')
+            # Anagram words
+            for w in get_anagram_words():
+                if w and isinstance(w, str):
+                    words.add(w.strip().lower())
+            # Irregular verbs (formes verb, past, participle)
+            for v in get_irregular_verbs():
+                for f in ('verb', 'past', 'participle'):
+                    val = v.get(f)
+                    if val and isinstance(val, str):
+                        for subw in val.replace('/', ' ').split():
+                            subclean = subw.strip().lower()
+                            if subclean.isalpha():
+                                words.add(subclean)
+            # Phrasal verbs
+            for pv in get_phrasal_verbs():
+                v = pv.get('verb')
+                if v and isinstance(v, str):
+                    for subw in v.split():
+                        subclean = subw.strip().lower()
+                        if subclean.isalpha():
+                            words.add(subclean)
     except Exception as e:
-        print(f"Warning loading word database: {e}")
-        if conn:
-            try: conn.close()
-            except Exception: pass
+        print(f"[Dictionary] Error enriching words from content.js: {e}")
 
     _ALL_WORDS_SET = words
     return _ALL_WORDS_SET
@@ -85,10 +186,10 @@ def validate_word(word: str) -> bool:
         return _CACHE[clean]
 
     valid_words = _get_all_valid_words()
-    if valid_words:
+    if valid_words and len(valid_words) > 100:
         is_valid = clean in valid_words
     else:
-        # Fallback offline si pas de base
+        # Fallback offline si pas de base chargée
         is_valid = bool(len(clean) >= 2 and any(c in 'aeiouy' for c in clean))
 
     _CACHE[clean] = is_valid
@@ -114,16 +215,15 @@ def get_anagram_words():
     content_file = BASE_DIR / 'content' / 'content.js'
     if content_file.exists():
         try:
-            with content_file.open('r', encoding='utf-8') as f:
-                text = f.read()
-            import re
-            m = re.search(r'anagramWords\s*:\s*\[(.*?)\]', text, re.DOTALL)
-            if m:
-                raw_items = re.findall(r'"([^"]+)"', m.group(1))
-                if raw_items:
-                    res = [w.upper() for w in raw_items if w.isalpha()]
-                    _CONTENT_CACHE['anagramWords'] = res
-                    return res
+            text = content_file.read_text(encoding='utf-8')
+            raw = _extract_js_array_string(text, 'anagramWords')
+            if raw:
+                parsed = _parse_js_object_string(raw)
+                if parsed and isinstance(parsed, list):
+                    res = [w.upper() for w in parsed if isinstance(w, str) and w.isalpha()]
+                    if res:
+                        _CONTENT_CACHE['anagramWords'] = res
+                        return res
         except Exception:
             pass
     fallback = ["HELLO", "WATER", "HOUSE", "APPLE", "GREEN", "SISTER", "SCHOOL", "LION", "BOOK", "BREAD", "MOTHER", "THREE", "TABLE", "CHAIR", "MUSIC", "MONEY", "HAPPY", "FAMILY", "FRIEND", "GARDEN"]
@@ -141,20 +241,14 @@ def load_content_js_array(var_name):
         return None
     try:
         text = content_file.read_text(encoding='utf-8')
-        import re, json
-        # Match var_name: [ ... ]
-        pattern = r'\b' + re.escape(var_name) + r'\s*:\s*(\[.*?\])\s*,'
-        m = re.search(pattern, text, re.DOTALL)
-        if m:
-            raw = m.group(1)
-            # convert JS object literal to JSON
-            raw = re.sub(r'([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)\s*:', r'\1"\2":', raw)
-            raw = re.sub(r',\s*([}\]])', r'\1', raw)
-            parsed = json.loads(raw)
-            _CONTENT_CACHE[var_name] = parsed
-            return parsed
-    except Exception:
-        pass
+        raw = _extract_js_array_string(text, var_name)
+        if raw:
+            parsed = _parse_js_object_string(raw)
+            if parsed and isinstance(parsed, list):
+                _CONTENT_CACHE[var_name] = parsed
+                return parsed
+    except Exception as e:
+        print(f"[Dictionary] load_content_js_array({var_name}) failed: {e}")
     return None
 
 
@@ -240,19 +334,14 @@ def get_description_questions():
     """Read description game questions from content/description_data.js.
     Falls back to a small inline set if the file is missing or unparseable.
     """
-    import re, json as _json
     js_file = BASE_DIR / 'content' / 'description_data.js'
     if js_file.exists():
         try:
             text = js_file.read_text(encoding='utf-8')
-            # Extract the array between [ ... ];
-            m = re.search(r'descriptionGame\s*=\s*(\[.*?\])\s*;', text, re.DOTALL)
-            if m:
-                raw = m.group(1)
-                raw = re.sub(r'([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)\s*:', r'\1"\2":', raw)
-                raw = re.sub(r',\s*([}\]])', r'\1', raw)
-                questions = _json.loads(raw)
-                if questions:
+            raw = _extract_js_array_string(text, 'descriptionGame')
+            if raw:
+                questions = _parse_js_object_string(raw)
+                if questions and isinstance(questions, list):
                     return questions
         except Exception:
             pass
