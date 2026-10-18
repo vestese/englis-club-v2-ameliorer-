@@ -1911,5 +1911,5 @@ CAA.solo = (function () {
     renderTurn();
   }
 
-  return { menu };
+  return { menu, start };
 })();
