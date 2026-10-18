@@ -928,12 +928,24 @@ CAA.multiplayer = (function () {
       }
     } else if (gameKey === 'irregular') {
       card.appendChild(h('div', { class: 'topic-tag' }, ['🔁 Irregular Verbs']));
-      card.appendChild(h('div', { class: 'wheel-challenge mt' }, ['Verb: ' + (gameInst.verb || 'Go') + ' (' + (gameInst.fr || '') + ')']));
-      card.appendChild(h('p', { class: 'section-sub mt' }, ['Type the ' + (gameInst.targetForm || 'Past Simple') + ' form:']));
+      card.appendChild(h('div', { class: 'wheel-challenge mt' }, [
+        'Verb: ', h('b', { style: 'color:var(--brand);' }, [gameInst.verb || 'Go']),
+        gameInst.fr ? h('span', { style: 'opacity:0.7;margin-left:6px;' }, ['(' + gameInst.fr + ')']) : null
+      ]));
+      card.appendChild(h('p', { class: 'section-sub mt' }, ['What is the ', h('b', {}, [gameInst.targetForm || 'Past Simple']), '?']));
+      if (gameInst.options && gameInst.options.length && !isHost && canPlay) {
+        const choicePills = h('div', { class: 'pill-group mt-lg' });
+        gameInst.options.forEach((opt) => {
+          choicePills.appendChild(h('button', { class: 'pill active', onclick: () => submitAnswer(opt) }, [opt]));
+        });
+        card.appendChild(choicePills);
+      }
     } else if (gameKey === 'phrasal') {
       card.appendChild(h('div', { class: 'topic-tag' }, ['🔗 Phrasal Verbs']));
-      card.appendChild(h('div', { class: 'wheel-challenge mt' }, ['Verb: ' + (gameInst.verb || 'give up') + ' (' + (gameInst.fr || '') + ')']));
-      if (gameInst.options && !isHost && canPlay) {
+      card.appendChild(h('div', { class: 'wheel-challenge mt', style: 'font-size:2rem;font-weight:800;color:var(--brand);' }, [gameInst.verb || 'give up']));
+      card.appendChild(h('button', { class: 'btn btn-ghost mt', style: 'font-size:0.95rem;', onclick: () => U().speak(gameInst.verb) }, ['🔊 Listen']));
+      card.appendChild(h('p', { class: 'section-sub mt' }, ['What does this phrasal verb mean?']));
+      if (gameInst.options && gameInst.options.length && !isHost && canPlay) {
         const choicePills = h('div', { class: 'pill-group mt-lg' });
         gameInst.options.forEach((opt) => {
           choicePills.appendChild(h('button', { class: 'pill active', onclick: () => submitAnswer(opt) }, [opt]));
