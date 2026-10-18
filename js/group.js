@@ -5182,6 +5182,6 @@ CAA.group = (function () {
     U().store.set("season", season);
   }
 
-  return { menu, setup, spellingBeeSetup, pronounceSetup, anagramSetup, grammarSetup, wordChainSetup, wheelSetup, charadesSetup, wordFromWordSetup, wordBuilderSetup, alphabetRaceSetup, objectDescSetup, descriptionGameSetup, podium, start };
+  return { menu, setup, spellingBeeSetup, pronounceSetup, anagramSetup, grammarSetup, irregularSetup, phrasalSetup, tvVocabSetup, wordChainSetup, wheelSetup, charadesSetup, wordFromWordSetup, wordBuilderSetup, alphabetRaceSetup, objectDescSetup, descriptionGameSetup, podium, start };
 })();
 
