@@ -142,9 +142,12 @@ CAA.teaching = (function () {
 
     const urlParams = new URLSearchParams(window.location.search);
     const codeParam = urlParams.get('code') || urlParams.get('form');
+    const roleParam = urlParams.get('role') || urlParams.get('tab');
+    const isQuestionnaire = window.location.pathname.toLowerCase().includes('questionnaire') ||
+                            roleParam === 'student' || roleParam === 'questionnaire';
 
-    if (codeParam) {
-      showStudentJoin(codeParam.toUpperCase().trim());
+    if (codeParam || isQuestionnaire) {
+      showStudentJoin((codeParam || '').toUpperCase().trim());
     } else {
       loadSavedTeacherDraft();
       showTeacherSetup();
