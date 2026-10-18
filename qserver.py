@@ -181,10 +181,10 @@ def public_room_view(room):
         gi = dict(copy['gameInstance'])
         gi.pop('_solution', None)
         # Do not leak French translations or hints in multiplayer public view
-        gi.pop('fr', None)
+        # keep fr for irregular/phrasal
         gi.pop('frHint', None)
         # For phrasal/irregular/mystery games ensure no french meaning exposed
-        if gi.get('type') in ('phrasal', 'irregular', 'mystery'):
+        if gi.get('type') == 'mysteryObject':
             gi.pop('fr', None)
         copy['gameInstance'] = gi
     # include lightweight player scores for client-side UI
@@ -229,8 +229,113 @@ def is_host(room, player_id):
 
 
 # ---------------------------------------------------------------------------
-# Routes HTTP (statique + API de compatibilité)
+# Helpers de construction des payloads de jeu
 # ---------------------------------------------------------------------------
+
+def build_phrasal_payload(pv, all_verbs, lang='fr'):
+    """Construit le payload MCQ pour un phrasal verb.
+    pv      = dict avec cles 'verb', 'meaning', 'fr'
+    all_verbs = liste complete pour piocher des distracteurs
+    lang    = 'fr' => reponses en francais | autre => anglais
+    """
+    answer_field = 'fr' if lang == 'fr' else 'meaning'
+    correct = str(pv.get(answer_field) or pv.get('meaning') or pv.get('fr') or 'to give up').strip()
+
+    distractors = []
+    for v in (all_verbs or []):
+        if not v or v.get('verb') == pv.get('verb'):
+            continue
+        val = str(v.get(answer_field) or '').strip()
+        if val and val != correct and val not in distractors:
+            distractors.append(val)
+    random.shuffle(distractors)
+
+    options = [correct] + distractors[:4]
+
+    if len(options) < 5:
+        for v in (all_verbs or []):
+            if not v:
+                continue
+            for field in ('meaning', 'fr'):
+                val = str(v.get(field) or '').strip()
+                if val and val not in options:
+                    options.append(val)
+                    if len(options) >= 5:
+                        break
+            if len(options) >= 5:
+                break
+
+    while len(options) < 5:
+        options.append(correct)
+
+    random.shuffle(options)
+
+    return {
+        'verb': pv.get('verb', 'give up'),
+        'fr': pv.get('fr', ''),
+        'meaning': pv.get('meaning', ''),
+        'options': options,
+        '_solution': correct,
+        'lang': lang,
+    }
+
+
+def build_irregular_payload(v, all_verbs):
+    """Construit le payload MCQ pour un verbe irregulier.
+    v         = dict avec cles 'verb', 'past', 'participle', 'fr'
+    all_verbs = liste complete pour piocher des distracteurs
+    """
+    target_form, answer_field = random.choice([
+        ('Past Simple', 'past'),
+        ('Past Participle', 'participle'),
+    ])
+    correct = str(v.get(answer_field) or v.get('past') or 'went').strip()
+
+    distractors = []
+    for other in (all_verbs or []):
+        if not other or other.get('verb') == v.get('verb'):
+            continue
+        val = str(other.get(answer_field) or '').strip()
+        if val and val.lower() != correct.lower() and val not in distractors:
+            distractors.append(val)
+    random.shuffle(distractors)
+
+    options = [correct] + distractors[:4]
+
+    if len(options) < 5:
+        for other in (all_verbs or []):
+            if not other:
+                continue
+            for field in ('past', 'participle'):
+                val = str(other.get(field) or '').strip()
+                if val and val not in options:
+                    options.append(val)
+                    if len(options) >= 5:
+                        break
+            if len(options) >= 5:
+                break
+
+    while len(options) < 5:
+        options.append(correct)
+
+    random.shuffle(options)
+
+    return {
+        'verb': v.get('verb', 'go'),
+        'fr': v.get('fr', ''),
+        'past': v.get('past', ''),
+        'participle': v.get('participle', ''),
+        'targetForm': target_form,
+        'options': options,
+        '_solution': correct,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Routes HTTP (statique + API)
+# ---------------------------------------------------------------------------
+
+
 @app.route('/')
 def index():
     return send_from_directory(str(BASE_DIR), 'index.html')
@@ -538,6 +643,81 @@ def on_select_game(payload):
     broadcast_room_update(code)
 
 
+def build_phrasal_payload(pv, verbs, lang='fr'):
+    """Génère l'instance de question Phrasal Verbs avec distracteurs garantis et support bilingue."""
+    field = 'fr' if str(lang).lower() == 'fr' else 'meaning'
+    correct = pv.get(field) or pv.get('meaning') or pv.get('fr') or ''
+    distractors = []
+    for v in (verbs or []):
+        val = v.get(field)
+        if val and val != correct and val not in distractors:
+            distractors.append(val)
+    random.shuffle(distractors)
+    options = [correct] + distractors[:3]
+    if len(options) < 4:
+        for v in (verbs or []):
+            for f in ('meaning', 'fr'):
+                val = v.get(f)
+                if val and val not in options:
+                    options.append(val)
+                    if len(options) >= 4:
+                        break
+    random.shuffle(options)
+    return {
+        'verb': pv.get('verb', ''),
+        'options': options,
+        '_solution': correct,
+        'fr': pv.get('fr', ''),
+        'meaning': pv.get('meaning', ''),
+        'lang': lang
+    }
+
+
+def build_irregular_payload(v, verbs):
+    """Génère l'instance Irregular Verbs avec choix Past Simple / Participle et options QCM."""
+    target_form = random.choice(['Past Simple', 'Past Participle'])
+    solution = v.get('past', '') if target_form == 'Past Simple' else v.get('participle', '')
+    field = 'past' if target_form == 'Past Simple' else 'participle'
+    distractors = []
+    for other in (verbs or []):
+        val = other.get(field)
+        if val and val != solution and val not in distractors:
+            distractors.append(val)
+    random.shuffle(distractors)
+    options = [solution] + distractors[:3]
+    random.shuffle(options)
+    return {
+        'verb': v.get('verb', ''),
+        'options': options,
+        '_solution': solution,
+        'past': v.get('past', ''),
+        'participle': v.get('participle', ''),
+        'fr': v.get('fr', ''),
+        'meaning': v.get('meaning', ''),
+        'targetForm': target_form
+    }
+
+
+def is_irregular_answer_valid(word_input, solution, game_inst=None):
+    """Vérification souple des verbes irréguliers (gère les variantes was/were, burnt/burned)."""
+    if not word_input:
+        return False
+    import re
+    clean = str(word_input).strip().lower()
+    sol = str(solution or '').strip().lower()
+    if clean == sol:
+        return True
+    variants = [x.strip() for x in re.split(r'[/,]', sol) if x.strip()]
+    if clean in variants:
+        return True
+    if game_inst:
+        for f in ('past', 'participle', '_solution'):
+            val = str(game_inst.get(f, '')).lower()
+            if clean == val or clean in [x.strip() for x in re.split(r'[/,]', val) if x.strip()]:
+                return True
+    return False
+
+
 @socketio.on('start_game')
 def on_start_game(payload):
     payload = payload or {}
@@ -647,62 +827,28 @@ def on_start_game(payload):
 
         elif game_key == 'irregular':
             verbs = dictionary.get_irregular_verbs()
-            v = random.choice(verbs)
-            game_instance['verb'] = v['verb']
-            game_instance['_solution'] = v['past']
-            game_instance['fr'] = v['fr']
-            game_instance['targetForm'] = 'Past Simple'
+            v = random.choice(verbs) if verbs else {'verb': 'Go', 'past': 'went', 'participle': 'gone', 'fr': 'Aller'}
+            irr = build_irregular_payload(v, verbs)
+            game_instance.update(irr)
+            game_instance['usedWords'] = []
+            game_instance['seenWords'] = [str(irr.get('verb', '')).lower()]
+            game_instance['turnSec'] = int(merged_opts.get('turnSec') or 15)
+            pass
+            pass
+            pass
+            pass
 
         elif game_key == 'phrasal':
             verbs = dictionary.get_phrasal_verbs()
             # allow host to choose language for meanings (fr / en)
             lang = str(merged_opts.get('lang') or '').lower()
-            field = 'fr' if lang == 'fr' else 'meaning'
-
-            # pick an item (fallback safe default if DB is empty)
-            if verbs:
-                pv = random.choice(verbs)
-            else:
-                pv = {'verb': 'give up', 'meaning': 'stop trying', 'fr': 'abandonner'}
-
-            correct = pv.get(field) or pv.get('meaning') or pv.get('fr') or ''
-
-            # Collect distractors from the same field first
-            distractors = []
-            for v in (verbs or []):
-                val = v.get(field)
-                if val and val != correct and val not in distractors:
-                    distractors.append(val)
-            random.shuffle(distractors)
-
-            options = [correct]
-            # take up to 4 distractors
-            options += distractors[:4]
-
-            # If not enough, pull from other fields (meaning/fr) across pool
-            if len(options) < 5:
-                other_vals = []
-                for v in (verbs or []):
-                    for f in ('meaning', 'fr'):
-                        val = v.get(f)
-                        if val and val not in options and val not in other_vals:
-                            other_vals.append(val)
-                options += other_vals[:(5 - len(options))]
-
-            # Ensure exactly 5 options (pad with correct as last-resort)
-            while len(options) < 5:
-                options.append(correct)
-
-            random.shuffle(options)
-
-            game_instance['verb'] = pv.get('verb')
-            game_instance['options'] = options
-            game_instance['_solution'] = correct
-            game_instance['fr'] = pv.get('fr')
-            # track seen items to avoid immediate repeats in multiplayer
+            pv = random.choice(verbs) if verbs else {'verb': 'give up', 'meaning': 'Stop trying or quit', 'fr': 'Abandonner'}
+            ph_data = build_phrasal_payload(pv, verbs, lang=lang)
+            game_instance.update(ph_data)
             game_instance['usedWords'] = []
-            game_instance['seenWords'] = [str(game_instance.get('_solution', '')).lower()]
-            game_instance['turnSec'] = int(merged_opts.get('turnSec') or 12)
+            game_instance['seenWords'] = [str(ph_data.get('verb', '')).lower()]
+            game_instance['turnSec'] = int(merged_opts.get('turnSec') or 15)
+
 
         elif game_key == 'pronunciation':
             words = dictionary.get_pedagogical_words(min_len=5, count=10)
@@ -821,18 +967,15 @@ def rotate_next_question(room, game_key, game_inst):
         })
     elif game_key == 'irregular':
         verbs = dictionary.get_irregular_verbs()
-        remaining = [v for v in verbs if v['past'].lower() not in already_seen and v['verb'].lower() not in already_seen]
+        remaining = [v for v in verbs if v.get('verb', '').lower() not in already_seen]
         if not remaining:
             already_seen = []
             remaining = verbs
         v = random.choice(remaining) if remaining else verbs[0]
-        already_seen.append(v['past'].lower())
-        already_seen.append(v['verb'].lower())
+        already_seen.append(v.get('verb', '').lower())
+        irr = build_irregular_payload(v, verbs)
         game_inst.update({
-            'verb': v['verb'],
-            '_solution': v['past'],
-            'fr': v.get('fr', ''),
-            'targetForm': 'Past Simple',
+            **irr,
             'usedWords': [],
             'seenWords': already_seen
         })
@@ -1158,24 +1301,21 @@ def on_submit_answer(payload):
 
         # --- Phrasal: after a correct answer, advance to a new phrasal item and broadcast
         if is_correct and game_key == 'phrasal':
-            # pick a new phrasal verb not recently used
+            # pick a new phrasal verb not recently used, rebuild proper MCQ options
             verbs = dictionary.get_phrasal_verbs()
-            already = set(game_inst.get('seenWords', []))
-            remaining = [v for v in verbs if str(v.get('meaning','')).lower() not in already]
+            lang = str(game_inst.get('lang', 'fr'))
+            already = set(str(s).lower() for s in game_inst.get('seenWords', []))
+            remaining = [v for v in verbs if str(v.get('verb', '')).lower() not in already]
             if not remaining:
                 already = set()
                 remaining = verbs
             pv = random.choice(remaining) if remaining else (verbs[0] if verbs else None)
             if pv:
-                game_inst.update({
-                    'verb': pv['verb'],
-                    'options': pv.get('options', []),
-                    '_solution': pv.get('meaning'),
-                    'fr': pv.get('fr')
-                })
-                already.add(str(game_inst.get('_solution','')).lower())
-                game_inst['seenWords'] = list(already)
-                game_inst['usedWords'] = []
+                ph_data = build_phrasal_payload(pv, verbs, lang=lang)
+                already.add(str(pv.get('verb', '')).lower())
+                ph_data['seenWords'] = list(already)
+                ph_data['usedWords'] = []
+                game_inst.update(ph_data)
                 room['gameInstance'] = game_inst
                 room['roundStartedAt'] = now_ts()
                 gi_pub = dict(game_inst)
