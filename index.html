@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Accra English Club — English Games</title>
-  <meta name="description" content="English learning games for the club: in groups (The Big Challenge) or solo." />
+  <title>Accra English Club — Plateforme Officielle de Jeux &amp; Apprentissage</title>
+  <meta name="description" content="Plateforme officielle du Club Anglais Accra : jeux solo, défis en équipes grand écran, multijoueur live, learning hub et espace questionnaires." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text y='.85em' font-size='60' x='20' fill='white' font-family='sans-serif' font-weight='bold'>A</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,7 +18,7 @@
 
 <body>
   <div class="app">
-    <!-- Topbar unifiée épurée -->
+    <!-- Topbar unifiée épurée et harmonique -->
     <header class="topbar">
       <div class="logo" id="logo" title="Accueil" style="cursor:pointer">
         <svg class="logo-mark" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -30,24 +30,23 @@
 
       <nav class="topbar-nav" id="topbarNav">
         <a href="index.html" class="nav-link active">Accueil</a>
-        <a href="games.html" class="nav-link">Jeux &amp; Arcade</a>
-        <a href="learning.html" class="nav-link">Learning Hub <span class="nav-badge-new">Histoires</span></a>
-        <a href="teaching.html" class="nav-link">Teaching &amp; Quiz</a>
+        <a href="games.html?cat=solo" class="nav-link">👤 Solo</a>
+        <a href="games.html?cat=group" class="nav-link">👥 Équipes</a>
+        <a href="games.html?cat=multi" class="nav-link">🌐 Multijoueur</a>
+        <a href="learning.html" class="nav-link">📖 Learning</a>
+        <a href="teaching.html" class="nav-link">🎓 Teaching</a>
+        <a href="questionnaire.html" class="nav-link">📝 Questionnaire</a>
         <div class="nav-dropdown">
-          <a href="#" class="nav-link" onclick="event.preventDefault()">Club &amp; Outils ▾</a>
+          <a href="#" class="nav-link" onclick="event.preventDefault()">Club ▾</a>
           <div class="nav-dropdown-menu">
             <a href="games.html?cat=season" class="dropdown-item">🏆 Classement Saison</a>
-            <a href="games.html?cat=manage" class="dropdown-item">✏️ Éditeur de Contenu</a>
+            <a href="games.html?cat=tools" class="dropdown-item">✏️ Éditeur de Contenu</a>
             <a href="https://drive.google.com/drive/folders/1ZJQ3BmKeTyELWlOViCRWl0PoxY_fFWyc" target="_blank" rel="noopener noreferrer" class="dropdown-item">📁 Google Drive</a>
           </div>
         </div>
       </nav>
 
       <div class="row" style="gap:10px;align-items:center;">
-        <button class="theme-toggle-btn" id="darkModeToggle" title="Basculer Mode Sombre / Clair">
-          <span class="dm-icon">🌙</span>
-          <span class="dm-label">Sombre</span>
-        </button>
         <button class="btn-back" id="backBtn" style="visibility:hidden">← Retour</button>
       </div>
     </header>
@@ -55,9 +54,9 @@
     <div id="screen"><!-- les écrans sont rendus ici --></div>
   </div>
 
-  <!-- Socket.IO Client (chargement propre sans blocage du parseur) -->
+  <!-- Socket.IO Client -->
   <script src="/socket.io/socket.io.js" onerror="this.onerror=null;this.src='https://cdn.socket.io/4.7.5/socket.io.min.js';"></script>
-  <!-- Contenu des jeux (modifiable) -->
+  <!-- Contenu des jeux -->
   <script src="content/content.js"></script>
   <script src="content/description_data.js"></script>
   <!-- Logique de l'application -->
