@@ -37,83 +37,159 @@ CAA.app = (function () {
         ])
       ]));
 
-      // --- SECTION DES 3 GRANDS PILIERS ---
+      // --- SECTION DES 6 PILIERS STRUCTURÉS PAR TYPE ---
       const pillarsWrap = h("div", { class: "hub-pillars-section" });
       const pillarsGrid = h("div", { class: "hub-pillars-grid" });
 
-      // Pilier 1 : Arcade & Jeux
-      const cardGames = h("a", { class: "pillar-card pillar-games", href: "games.html" });
-      cardGames.innerHTML = `
+      // 1. Mode Solo
+      const cardSolo = h("a", { class: "pillar-card pillar-solo", href: "games.html?cat=solo" });
+      cardSolo.innerHTML = `
         <div class="pillar-glow"></div>
         <div>
-          <span class="pillar-badge">Arcade · 27 Jeux Inclus</span>
-          <div class="pillar-icon-box">🎮</div>
-          <h2 class="pillar-title">Jeux &amp; Arcade du Club</h2>
+          <span class="pillar-badge">Mode Solo · 9 Jeux</span>
+          <div class="pillar-icon-box">👤</div>
+          <h2 class="pillar-title">Jeux Solo</h2>
           <p class="pillar-desc">
-            Tous les jeux réunis dans un espace dédié : entraînement solo minuté (Word Match, Spelling Bee...), défis de groupe sur grand écran TV (The Big Challenge, TV Vocab...) et parties multijoueurs connectées.
+            Entraînez-vous individuellement à votre rythme : Word Match, Spelling Bee, Verbes Irréguliers, Phrasal Verbs et Anagrams avec chrono, bonus et jokers.
           </p>
           <div class="pillar-tags-row">
-            <span class="pillar-tag">👤 9 Jeux Solo</span>
-            <span class="pillar-tag">👥 16 Jeux Groupe TV</span>
-            <span class="pillar-tag">🌐 Multijoueur Live</span>
-            <span class="pillar-tag">🏆 Meeting Mode</span>
+            <span class="pillar-tag">🧩 Word Match</span>
+            <span class="pillar-tag">🐝 Spelling Bee</span>
+            <span class="pillar-tag">⚡ Verbes Irréguliers</span>
+            <span class="pillar-tag">🎯 Phrasal Verbs</span>
           </div>
         </div>
         <div class="pillar-footer-action">
-          <span>Accéder à l'Arcade complète</span>
+          <span>Ouvrir les jeux Solo</span>
           <span class="pillar-arrow">→</span>
         </div>
       `;
-      pillarsGrid.appendChild(cardGames);
+      pillarsGrid.appendChild(cardSolo);
 
-      // Pilier 2 : Learning Hub & Histoires
+      // 2. Mode Équipes & TV
+      const cardGroup = h("a", { class: "pillar-card pillar-group", href: "games.html?cat=group" });
+      cardGroup.innerHTML = `
+        <div class="pillar-glow"></div>
+        <div>
+          <span class="pillar-badge">Équipes &amp; TV · 16 Jeux</span>
+          <div class="pillar-icon-box">👥</div>
+          <h2 class="pillar-title">Jeux d'Équipes &amp; TV</h2>
+          <p class="pillar-desc">
+            Animez vos séances de club sur grand écran avec The Big Challenge, duels d'équipes en direct, buzzer, vol de points, mimes, roue des défis et TV Vocab.
+          </p>
+          <div class="pillar-tags-row">
+            <span class="pillar-tag">🏆 The Big Challenge</span>
+            <span class="pillar-tag">📺 TV Vocab</span>
+            <span class="pillar-tag">🎡 Spin the Wheel</span>
+            <span class="pillar-tag">🎭 Charades &amp; Mimes</span>
+          </div>
+        </div>
+        <div class="pillar-footer-action">
+          <span>Lancer les jeux d'équipes</span>
+          <span class="pillar-arrow">→</span>
+        </div>
+      `;
+      pillarsGrid.appendChild(cardGroup);
+
+      // 3. Mode Multijoueur
+      const cardMulti = h("a", { class: "pillar-card pillar-multi", href: "games.html?cat=multi" });
+      cardMulti.innerHTML = `
+        <div class="pillar-glow"></div>
+        <div>
+          <span class="pillar-badge">Multijoueur · Live PIN</span>
+          <div class="pillar-icon-box">🌐</div>
+          <h2 class="pillar-title">Multijoueur &amp; Live</h2>
+          <p class="pillar-desc">
+            Connectez les smartphones des participants en temps réel via un code PIN de salle, lancez des duels interactifs ou pilotez la séance Meeting complète.
+          </p>
+          <div class="pillar-tags-row">
+            <span class="pillar-tag">📱 Code PIN Mobile</span>
+            <span class="pillar-tag">⚔️ Duels Live</span>
+            <span class="pillar-tag">📅 Meeting Mode</span>
+            <span class="pillar-tag">🥇 Podium Instantané</span>
+          </div>
+        </div>
+        <div class="pillar-footer-action">
+          <span>Accéder au Multijoueur</span>
+          <span class="pillar-arrow">→</span>
+        </div>
+      `;
+      pillarsGrid.appendChild(cardMulti);
+
+      // 4. Mode Learning
       const cardLearning = h("a", { class: "pillar-card pillar-learning", href: "learning.html" });
       cardLearning.innerHTML = `
         <div class="pillar-glow"></div>
         <div>
-          <span class="pillar-badge">Nouveau · Coin Histoires</span>
+          <span class="pillar-badge">Learning Hub · Histoires &amp; PDF</span>
           <div class="pillar-icon-box">📖</div>
-          <h2 class="pillar-title">Learning Hub &amp; Histoires</h2>
+          <h2 class="pillar-title">Learning Hub</h2>
           <p class="pillar-desc">
-            Découvrez notre nouveau coin d'histoires en anglais avec définitions et prononciation au survol de chaque mot, cours PDF synchronisés Google Drive, entraînement de grammaire et carnet de vocabulaire.
+            Lisez 15 histoires bilingues interactives avec audio et infobulles, téléchargez les fiches PDF synchronisées Google Drive, et révisez grammaire et vocabulaire.
           </p>
           <div class="pillar-tags-row">
-            <span class="pillar-tag">📖 Histoires Interactives</span>
+            <span class="pillar-tag">📖 Histoires Bilingues</span>
             <span class="pillar-tag">📁 Fiches PDF Drive</span>
-            <span class="pillar-tag">✍️ Grammaire &amp; Quiz</span>
+            <span class="pillar-tag">✍️ Règles Grammaire</span>
             <span class="pillar-tag">⭐ Carnet Personnel</span>
           </div>
         </div>
         <div class="pillar-footer-action">
-          <span>Ouvrir les histoires &amp; cours</span>
+          <span>Ouvrir l'espace Learning</span>
           <span class="pillar-arrow">→</span>
         </div>
       `;
       pillarsGrid.appendChild(cardLearning);
 
-      // Pilier 3 : Teaching & Évaluations Live
+      // 5. Mode Teaching
       const cardTeaching = h("a", { class: "pillar-card pillar-teaching", href: "teaching.html" });
       cardTeaching.innerHTML = `
         <div class="pillar-glow"></div>
         <div>
-          <span class="pillar-badge">Espace Enseignant &amp; Élèves</span>
+          <span class="pillar-badge">Teaching · Espace Enseignant</span>
           <div class="pillar-icon-box">🎓</div>
-          <h2 class="pillar-title">Teaching &amp; Quiz en Direct</h2>
+          <h2 class="pillar-title">Mode Teaching</h2>
           <p class="pillar-desc">
-            Créez vos questionnaires personnalisés ou choisissez parmi la banque officielle. Lancez des évaluations en temps réel, suivez les réponses des élèves et générez des bilans d'erreurs pédagogiques.
+            Concevez vos formulaires d'évaluation sur mesure ou piochez dans la banque officielle. Suivez la réception des copies en temps réel et analysez les résultats.
           </p>
           <div class="pillar-tags-row">
             <span class="pillar-tag">📝 Créateur de Formulaires</span>
             <span class="pillar-tag">⏱️ Sessions Minutées</span>
-            <span class="pillar-tag">📊 Correction Automatique</span>
+            <span class="pillar-tag">📊 Suivi Live des Copies</span>
+            <span class="pillar-tag">🔍 Bilan d'Erreurs</span>
           </div>
         </div>
         <div class="pillar-footer-action">
-          <span>Accéder à l'espace Teaching</span>
+          <span>Accéder à l'espace Enseignant</span>
           <span class="pillar-arrow">→</span>
         </div>
       `;
       pillarsGrid.appendChild(cardTeaching);
+
+      // 6. Mode Questionnaire
+      const cardQuestionnaire = h("a", { class: "pillar-card pillar-questionnaire", href: "questionnaire.html" });
+      cardQuestionnaire.innerHTML = `
+        <div class="pillar-glow"></div>
+        <div>
+          <span class="pillar-badge">Questionnaires · Espace Élèves</span>
+          <div class="pillar-icon-box">📝</div>
+          <h2 class="pillar-title">Questionnaires &amp; Quiz</h2>
+          <p class="pillar-desc">
+            Passez une évaluation en ligne : renseignez votre identité, répondez au questionnaire interactif et recevez instantanément votre note et l'analyse de vos fautes.
+          </p>
+          <div class="pillar-tags-row">
+            <span class="pillar-tag">✍️ Formulaire Élève</span>
+            <span class="pillar-tag">🚀 Correction Instantanée</span>
+            <span class="pillar-tag">💯 Calcul de Note /20</span>
+            <span class="pillar-tag">💡 Explications Pédagogiques</span>
+          </div>
+        </div>
+        <div class="pillar-footer-action">
+          <span>Passer un Questionnaire</span>
+          <span class="pillar-arrow">→</span>
+        </div>
+      `;
+      pillarsGrid.appendChild(cardQuestionnaire);
 
       pillarsWrap.appendChild(pillarsGrid);
       scr.appendChild(pillarsWrap);
