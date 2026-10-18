@@ -18,9 +18,9 @@
 
 <body>
   <div class="app">
-    <!-- Topbar unifiée épurée -->
+    <!-- Topbar unifiée épurée et harmonique -->
     <header class="topbar">
-      <div class="logo" id="logo" title="Accueil" onclick="location.href='index.html'">
+      <div class="logo" id="logo" title="Accueil" onclick="location.href='index.html'" style="cursor:pointer">
         <svg class="logo-mark" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="28" height="28" rx="8" fill="#2563eb"/>
           <text x="7" y="20" font-family="Outfit,sans-serif" font-weight="800" font-size="16" fill="white">A</text>
@@ -30,24 +30,23 @@
 
       <nav class="topbar-nav" id="topbarNav">
         <a href="index.html" class="nav-link">Accueil</a>
-        <a href="games.html" class="nav-link active">Jeux &amp; Arcade</a>
-        <a href="learning.html" class="nav-link">Learning Hub <span class="nav-badge-new">Histoires</span></a>
-        <a href="teaching.html" class="nav-link">Teaching &amp; Quiz</a>
+        <a href="games.html?cat=solo" class="nav-link" id="navSolo">👤 Solo</a>
+        <a href="games.html?cat=group" class="nav-link" id="navGroup">👥 Équipes</a>
+        <a href="games.html?cat=multi" class="nav-link" id="navMulti">🌐 Multijoueur</a>
+        <a href="learning.html" class="nav-link">📖 Learning</a>
+        <a href="teaching.html" class="nav-link">🎓 Teaching</a>
+        <a href="questionnaire.html" class="nav-link">📝 Questionnaire</a>
         <div class="nav-dropdown">
-          <a href="#" class="nav-link" onclick="event.preventDefault()">Club &amp; Outils ▾</a>
+          <a href="#" class="nav-link" onclick="event.preventDefault()">Club ▾</a>
           <div class="nav-dropdown-menu">
             <a href="games.html?cat=season" class="dropdown-item">🏆 Classement Saison</a>
-            <a href="games.html?cat=manage" class="dropdown-item">✏️ Éditeur de Contenu</a>
+            <a href="games.html?cat=tools" class="dropdown-item">✏️ Éditeur de Contenu</a>
             <a href="https://drive.google.com/drive/folders/1ZJQ3BmKeTyELWlOViCRWl0PoxY_fFWyc" target="_blank" rel="noopener noreferrer" class="dropdown-item">📁 Google Drive</a>
           </div>
         </div>
       </nav>
 
       <div class="row" style="gap:10px;align-items:center;">
-        <button class="theme-toggle-btn" id="darkModeToggle" title="Basculer Mode Sombre / Clair">
-          <span class="dm-icon">🌙</span>
-          <span class="dm-label">Sombre</span>
-        </button>
         <button class="btn-back" id="backBtn" style="visibility:hidden">← Retour</button>
       </div>
     </header>
@@ -55,9 +54,9 @@
     <!-- Zone principale de l'Arcade -->
     <main id="arcadeMainWrap">
       <div class="arcade-header">
-        <h1>Arcade &amp; Jeux du Club</h1>
+        <h1>Catalogue des Jeux &amp; Activités</h1>
         <p class="section-sub">
-          Tous les jeux du club en un seul endroit : entraînement individuel, défis en équipe sur grand écran TV, séances complètes et multijoueur en direct.
+          Retrouvez chaque type d'activité dans son menu dédié : entraînement solo, défis d'équipes sur écran TV, multijoueur live, apprentissage, questionnaires et espace enseignant.
         </p>
       </div>
 
@@ -65,10 +64,13 @@
       <div class="arcade-controls-bar">
         <div class="arcade-tabs-pills" id="arcadeTabs">
           <button class="arcade-tab-btn active" data-cat="all">Tous les jeux (<span id="countAll">27</span>)</button>
-          <button class="arcade-tab-btn" data-cat="solo">Solo (<span id="countSolo">9</span>)</button>
-          <button class="arcade-tab-btn" data-cat="group">Groupe &amp; TV (<span id="countGroup">16</span>)</button>
-          <button class="arcade-tab-btn" data-cat="multi">Multijoueur &amp; Live (2)</button>
-          <button class="arcade-tab-btn" data-cat="tools">Outils &amp; Saison (2)</button>
+          <button class="arcade-tab-btn" data-cat="solo">👤 Solo (<span id="countSolo">9</span>)</button>
+          <button class="arcade-tab-btn" data-cat="group">👥 Équipes &amp; TV (<span id="countGroup">16</span>)</button>
+          <button class="arcade-tab-btn" data-cat="multi">🌐 Multijoueur (2)</button>
+          <button class="arcade-tab-btn" data-cat="questionnaire">📝 Questionnaire</button>
+          <button class="arcade-tab-btn" data-cat="teaching">🎓 Teaching</button>
+          <button class="arcade-tab-btn" data-cat="learning">📖 Learning</button>
+          <button class="arcade-tab-btn" data-cat="tools">🏆 Outils &amp; Saison</button>
         </div>
 
         <div class="arcade-search-box">
@@ -399,6 +401,82 @@
           icon: "✏️",
           desc: "Ajoutez vos propres questions, mots de vocabulaire ou thèmes sans toucher au code.",
           action: () => CAA.editor.menu()
+        },
+
+        // --- QUESTIONNAIRES & EVALUATIONS ---
+        {
+          id: "questionnaire-main",
+          title: "Questionnaire & Évaluation Élèves",
+          cat: "questionnaire",
+          modeLabel: "Questionnaire",
+          modeCls: "mode-quiz",
+          icon: "📝",
+          desc: "Renseignez votre nom et email, répondez au formulaire d'évaluation avec calcul instantané de la note et explications des erreurs.",
+          action: () => location.href = "questionnaire.html"
+        },
+        {
+          id: "questionnaire-code",
+          title: "Rejoindre une Évaluation par Code",
+          cat: "questionnaire",
+          modeLabel: "Code Session",
+          modeCls: "mode-quiz",
+          icon: "🔑",
+          desc: "Accédez à une session spécifique programmée par votre enseignant via un code d'évaluation.",
+          action: () => location.href = "questionnaire.html"
+        },
+
+        // --- TEACHING & PROFESSEUR ---
+        {
+          id: "teaching-creator",
+          title: "Créateur de Formulaires & Quiz",
+          cat: "teaching",
+          modeLabel: "Professeur",
+          modeCls: "mode-teaching",
+          icon: "🎓",
+          desc: "Créez vos questionnaires d'anglais sur mesure, définissez le chrono et lancez une évaluation en direct.",
+          action: () => location.href = "teaching.html"
+        },
+        {
+          id: "teaching-live",
+          title: "Supervision Live & Résultats",
+          cat: "teaching",
+          modeLabel: "Professeur",
+          modeCls: "mode-teaching",
+          icon: "📊",
+          desc: "Suivez en direct les copies soumises par les élèves, la moyenne de classe et les bilans d'erreurs.",
+          action: () => location.href = "teaching.html"
+        },
+
+        // --- LEARNING HUB ---
+        {
+          id: "learning-stories-item",
+          title: "Coin Histoires Interactives",
+          cat: "learning",
+          modeLabel: "Learning",
+          modeCls: "mode-learning",
+          icon: "📖",
+          desc: "15 histoires bilingues en anglais avec audio phrase par phrase et définitions au survol.",
+          action: () => location.href = "learning.html?tab=stories"
+        },
+        {
+          id: "learning-lessons-item",
+          title: "Fiches de Cours PDF Drive",
+          cat: "learning",
+          modeLabel: "Learning",
+          modeCls: "mode-learning",
+          icon: "📁",
+          desc: "Consultez et téléchargez les leçons officielles synchronisées avec Google Drive.",
+          action: () => location.href = "learning.html?tab=lessons"
+        },
+        {
+          id: "learning-grammar-item",
+          title: "Exercices de Grammaire & Prépositions",
+          cat: "learning",
+          modeLabel: "Learning",
+          modeCls: "mode-learning",
+          icon: "✍️",
+          desc: "Entraînez-vous sur les règles fondamentales, gérondif, prépositions et tournures idiomatiques.",
+          action: () => location.href = "learning.html?tab=grammar"
         }
       ];
 
@@ -432,17 +510,22 @@
           return;
         }
 
-        grid.innerHTML = filtered.map(game => `
-          <div class="arcade-card" onclick="CAA.launchGame('${game.id}')">
-            <div class="arcade-card-top">
-              <div class="arcade-card-icon">${game.icon}</div>
-              <span class="arcade-card-mode ${game.modeCls}">${game.modeLabel}</span>
+        grid.innerHTML = filtered.map(game => {
+          const btnText = (game.cat === 'teaching' || game.cat === 'learning' || game.cat === 'questionnaire')
+            ? "Accéder à l'espace →"
+            : "Lancer le jeu →";
+          return `
+            <div class="arcade-card" onclick="CAA.launchGame('${game.id}')">
+              <div class="arcade-card-top">
+                <div class="arcade-card-icon">${game.icon}</div>
+                <span class="arcade-card-mode ${game.modeCls}">${game.modeLabel}</span>
+              </div>
+              <h3>${game.title}</h3>
+              <p>${game.desc}</p>
+              <button class="arcade-card-btn">${btnText}</button>
             </div>
-            <h3>${game.title}</h3>
-            <p>${game.desc}</p>
-            <button class="arcade-card-btn">Lancer le jeu →</button>
-          </div>
-        `).join("");
+          `;
+        }).join("");
       }
 
       window.CAA = window.CAA || {};
@@ -506,9 +589,19 @@
         const params = new URLSearchParams(window.location.search);
         const urlCat = params.get("cat");
         if (urlCat) {
+          if (urlCat === "solo") {
+            const el = document.getElementById("navSolo");
+            if (el) el.classList.add("active");
+          } else if (urlCat === "group") {
+            const el = document.getElementById("navGroup");
+            if (el) el.classList.add("active");
+          } else if (urlCat === "multi") {
+            const el = document.getElementById("navMulti");
+            if (el) el.classList.add("active");
+          }
           if (urlCat === "season") {
             setTimeout(() => CAA.launchGame("season"), 100);
-          } else if (urlCat === "manage") {
+          } else if (urlCat === "manage" || urlCat === "editor") {
             setTimeout(() => CAA.launchGame("editor"), 100);
           } else {
             const matchBtn = document.querySelector(`.arcade-tab-btn[data-cat="${urlCat}"]`);
