@@ -58,63 +58,12 @@
 }
 
 /* ─────────────────────────────────────────────
-   2. TOKENS — DARK THEME
-───────────────────────────────────────────── */
-[data-theme="dark"] {
-  color-scheme: dark;
-
-  --bg: #090d16;
-  --bg-2: #0f172a;
-  --bg-3: #1e293b;
-  --card: #131d31;
-  --card-2: #18243c;
-  --surface: #131d31;
-
-  --ink: #f8fafc;
-  --ink-2: #cbd5e1;
-  --muted: #94a3b8;
-  --muted-2: #64748b;
-
-  --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(255, 255, 255, 0.16);
-
-  --brand: #3b82f6;
-  --brand-2: #2563eb;
-  --brand-light: rgba(59, 130, 246, 0.15);
-  --brand-gold: #fbbf24;
-
-  --green: #34d399;
-  --green-bg: rgba(52, 211, 153, 0.12);
-  --red: #f87171;
-  --red-bg: rgba(248, 113, 113, 0.12);
-  --orange: #fb923c;
-  --orange-bg: rgba(251, 146, 60, 0.12);
-  --purple: #a78bfa;
-  --purple-bg: rgba(167, 139, 250, 0.12);
-
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-  --shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 10px 25px -3px rgba(0, 0, 0, 0.6);
-  --shadow-lg: 0 20px 35px -4px rgba(0, 0, 0, 0.7);
-
-  --glass: rgba(15, 23, 42, 0.85);
-  --glass-line: rgba(255, 255, 255, 0.1);
-}
-
-/* ─────────────────────────────────────────────
    3. GLOBAL BASE STYLES & RESETS
 ───────────────────────────────────────────── */
 body {
   background-color: var(--bg) !important;
   color: var(--ink) !important;
   font-family: var(--font) !important;
-  transition: background-color 0.25s ease, color 0.25s ease;
-}
-
-[data-theme="dark"] body {
-  background-image: 
-    radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.06) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(167, 139, 250, 0.05) 0px, transparent 50%) !important;
 }
 
 /* ─────────────────────────────────────────────
