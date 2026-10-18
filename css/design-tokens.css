@@ -1,131 +1,93 @@
 /* =====================================================================
-   Accra English Club — Premium Design System v2
-   Tokens complets : Light + Dark Mode, animations, effets glass
+   Accra English Club — Unified Design Tokens
+   Thème unique professionnel, épuré, harmonique et moderne
    ===================================================================== */
 
-/* ---- Light Mode (Default) ---- */
 :root {
   color-scheme: light;
 
   /* Backgrounds */
-  --bg:        #f6f8fc;
-  --bg-2:      #eef2f8;
-  --bg-3:      #e3e9f2;
+  --bg:        #f8fafc;
+  --bg-2:      #f1f5f9;
+  --bg-3:      #e2e8f0;
   --card:      #ffffff;
-  --card-2:    #f9fafc;
+  --card-2:    #f8fafc;
   --surface:   #ffffff;
 
-  /* Text */
-  --ink:       #0d1526;
-  --ink-2:     #2e3d57;
-  --muted:     #697a99;
-  --muted-2:   #9aaac4;
+  /* Text & Typography */
+  --ink:       #0f172a;
+  --ink-2:     #334155;
+  --muted:     #64748b;
+  --muted-2:   #94a3b8;
 
   /* Borders */
-  --line:        rgba(30, 50, 100, 0.10);
-  --line-strong: rgba(30, 50, 100, 0.18);
+  --line:        rgba(15, 23, 42, 0.08);
+  --line-strong: rgba(15, 23, 42, 0.16);
 
-  /* Brand */
-  --brand:        #2355e3;
-  --brand-2:      #1740c8;
-  --brand-3:      #0f2d99;
-  --brand-light:  rgba(35, 85, 227, 0.09);
+  /* Primary Brand (Electric Royal Blue) */
+  --brand:        #2563eb;
+  --brand-2:      #1d4ed8;
+  --brand-3:      #1e40af;
+  --brand-light:  rgba(37, 99, 235, 0.08);
   --brand-ink:    #ffffff;
+  --brand-gold:   #d97706;
 
   /* Accents */
-  --green:      #0ea371;
-  --green-bg:   rgba(14, 163, 113, 0.09);
-  --red:        #e83a3a;
-  --red-bg:     rgba(232, 58, 58, 0.09);
-  --orange:     #f57c0b;
-  --orange-bg:  rgba(245, 124, 11, 0.09);
-  --purple:     #6d40e7;
-  --purple-bg:  rgba(109, 64, 231, 0.09);
-  --gold:       #c8930a;
-  --teal:       #0598af;
+  --green:      #059669;
+  --green-bg:   rgba(5, 150, 105, 0.08);
+  --green-ink:  #065f46;
+
+  --red:        #dc2626;
+  --red-bg:     rgba(220, 38, 38, 0.08);
+  --red-ink:    #991b1b;
+
+  --orange:     #ea580c;
+  --orange-bg:  rgba(234, 88, 12, 0.08);
+
+  --purple:     #7c3aed;
+  --purple-bg:  rgba(124, 58, 237, 0.08);
+
+  --gold:       #d97706;
+  --teal:       #0d9488;
+  --blue:       #0284c7;
 
   /* Radius */
   --r-xs:   6px;
   --r-sm:   10px;
   --r:      14px;
   --r-md:   18px;
-  --r-lg:   24px;
-  --r-xl:   32px;
+  --r-lg:   22px;
+  --r-xl:   30px;
   --r-pill: 9999px;
 
+  --radius-sm:   10px;
+  --radius:      16px;
+  --radius-lg:   22px;
+  --radius-pill: 9999px;
+
   /* Shadows */
-  --sh-xs:    0 1px 3px rgba(13,21,38,.06);
-  --sh-sm:    0 2px 8px rgba(13,21,38,.06), 0 1px 2px rgba(13,21,38,.04);
-  --sh:       0 4px 20px rgba(13,21,38,.07), 0 2px 6px rgba(13,21,38,.04);
-  --sh-md:    0 8px 28px rgba(13,21,38,.09), 0 4px 10px rgba(13,21,38,.05);
-  --sh-lg:    0 16px 48px rgba(13,21,38,.11), 0 6px 16px rgba(13,21,38,.06);
-  --sh-xl:    0 24px 64px rgba(13,21,38,.14), 0 10px 24px rgba(13,21,38,.07);
-  --sh-brand: 0 6px 24px rgba(35,85,227,.25), 0 2px 8px rgba(35,85,227,.15);
-  --sh-green: 0 6px 24px rgba(14,163,113,.25);
-  --sh-red:   0 6px 24px rgba(232,58,58,.25);
+  --sh-xs:    0 1px 2px rgba(15, 23, 42, 0.05);
+  --sh-sm:    0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --sh:       0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  --sh-md:    0 10px 25px -3px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+  --sh-lg:    0 20px 35px -4px rgba(15, 23, 42, 0.10), 0 8px 16px -4px rgba(15, 23, 42, 0.05);
+  --sh-xl:    0 25px 50px -12px rgba(15, 23, 42, 0.15);
+  --sh-brand: 0 8px 24px -4px rgba(37, 99, 235, 0.25);
+  --sh-green: 0 8px 24px -4px rgba(5, 150, 105, 0.25);
+  --sh-red:   0 8px 24px -4px rgba(220, 38, 38, 0.25);
 
-  /* Glass */
-  --glass:      rgba(255,255,255,0.82);
-  --glass-line: rgba(30,50,100,0.12);
+  --shadow-sm:    var(--sh-sm);
+  --shadow:       var(--sh);
+  --shadow-lg:    var(--sh-lg);
+  --shadow-hover: var(--sh-xl);
+  --glow-brand:   0 0 0 1px rgba(37, 99, 235, 0.2), 0 8px 24px rgba(37, 99, 235, 0.18);
 
-  /* Misc */
-  --ease: cubic-bezier(.22, 1, .36, 1);
-  --font: "Inter", "Outfit", system-ui, sans-serif;
+  /* Glassmorphism */
+  --glass:      rgba(255, 255, 255, 0.92);
+  --glass-line: rgba(226, 232, 240, 0.85);
 
-  /* Dark toggle */
-  --dm-toggle-bg: var(--bg-3);
-  --dm-toggle-knob: var(--card);
-}
-
-/* ---- Dark Mode ---- */
-[data-theme="dark"] {
-  color-scheme: dark;
-
-  --bg:        #0c1220;
-  --bg-2:      #111929;
-  --bg-3:      #182032;
-  --card:      #16202f;
-  --card-2:    #1d2a3e;
-  --surface:   #1d2a3e;
-
-  --ink:       #e8edf8;
-  --ink-2:     #aab7d4;
-  --muted:     #6980a8;
-  --muted-2:   #4c6090;
-
-  --line:        rgba(120,155,220,0.10);
-  --line-strong: rgba(120,155,220,0.18);
-
-  --brand:        #4f80ff;
-  --brand-2:      #3665ef;
-  --brand-3:      #2050d8;
-  --brand-light:  rgba(79,128,255,0.14);
-  --brand-ink:    #ffffff;
-
-  --green:      #2fd49a;
-  --green-bg:   rgba(47,212,154,0.12);
-  --red:        #ff5c5c;
-  --red-bg:     rgba(255,92,92,0.12);
-  --orange:     #ffad3b;
-  --orange-bg:  rgba(255,173,59,0.12);
-  --purple:     #a270ff;
-  --purple-bg:  rgba(162,112,255,0.12);
-  --gold:       #f5c842;
-  --teal:       #22d3ee;
-
-  --sh-xs:    0 1px 3px rgba(0,0,0,.3);
-  --sh-sm:    0 2px 8px rgba(0,0,0,.28), 0 1px 2px rgba(0,0,0,.2);
-  --sh:       0 4px 20px rgba(0,0,0,.32), 0 2px 6px rgba(0,0,0,.2);
-  --sh-md:    0 8px 28px rgba(0,0,0,.4), 0 4px 10px rgba(0,0,0,.24);
-  --sh-lg:    0 16px 48px rgba(0,0,0,.48), 0 6px 16px rgba(0,0,0,.28);
-  --sh-xl:    0 24px 64px rgba(0,0,0,.56), 0 10px 24px rgba(0,0,0,.32);
-  --sh-brand: 0 6px 24px rgba(79,128,255,.35), 0 2px 8px rgba(79,128,255,.2);
-  --sh-green: 0 6px 24px rgba(47,212,154,.3);
-  --sh-red:   0 6px 24px rgba(255,92,92,.3);
-
-  --glass:      rgba(22,32,47,0.88);
-  --glass-line: rgba(120,155,220,0.12);
-
-  --dm-toggle-bg: var(--brand);
-  --dm-toggle-knob: #fff;
+  /* Animation & Fonts */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --font: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
