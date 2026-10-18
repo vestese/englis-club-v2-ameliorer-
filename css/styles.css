@@ -70,50 +70,7 @@
   --dm-track: var(--line-strong);
 }
 
-/* ===== DARK MODE ===== */
-[data-theme="dark"] {
-  color-scheme: dark;
 
-  --bg:      #0b1220;
-  --bg-2:    #111929;
-  --bg-3:    #192030;
-  --card:    #16202f;
-  --card-2:  #1d2a3e;
-
-  --ink:     #e6ecf8;
-  --ink-2:   #a8bad4;
-  --muted:   #6880a8;
-  --muted-2: #4b6090;
-
-  --line:        rgba(100,140,210,0.12);
-  --line-strong: rgba(100,140,210,0.20);
-
-  --brand:       #4f7eff;
-  --brand-2:     #3563ef;
-  --brand-ink:   #ffffff;
-  --brand-gold:  #f5c541;
-
-  --green:    #29d4a0;
-  --green-ink:#065f46;
-  --red:      #ff5858;
-  --red-ink:  #fca5a5;
-  --blue:     #22b8f0;
-  --purple:   #a270ff;
-  --orange:   #ffad3b;
-
-  --shadow-sm:    0 1px 4px rgba(0,0,0,.32);
-  --shadow:       0 4px 16px rgba(0,0,0,.36), 0 2px 6px rgba(0,0,0,.22);
-  --shadow-lg:    0 12px 36px rgba(0,0,0,.45), 0 4px 12px rgba(0,0,0,.28);
-  --shadow-hover: 0 20px 48px rgba(0,0,0,.55), 0 8px 18px rgba(0,0,0,.32);
-  --glow-brand:   0 0 0 1px rgba(79,126,255,.25), 0 8px 28px rgba(79,126,255,.28);
-
-  --glass:      rgba(22,32,47,0.90);
-  --glass-line: rgba(80,120,200,0.14);
-
-  --dm-bg: var(--brand);
-  --dm-knob: #ffffff;
-  --dm-track: rgba(79,126,255,0.4);
-}
 
 /* Liseré signature épuré & élégant sous les titres */
 .hero h1::after,
