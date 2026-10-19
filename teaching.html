@@ -5,11 +5,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Évaluations &amp; Mode Teaching — Accra English Club</title>
-  <meta name="description" content="Plateforme d'évaluations et formulaires d'anglais du Club Anglais Accra : créez vos questionnaires, inscrivez les élèves avec nom et email, calculez automatiquement les notes et analysez les erreurs." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text y='.85em' font-size='60' x='20' fill='white' font-family='sans-serif' font-weight='bold'>A</text></svg>" />
+  <meta name="description"
+    content="Plateforme d'évaluations et formulaires d'anglais du Club Anglais Accra : créez vos questionnaires, inscrivez les élèves avec nom et email, calculez automatiquement les notes et analysez les erreurs." />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text y='.85em' font-size='60' x='20' fill='white' font-family='sans-serif' font-weight='bold'>A</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/premium.css" />
   <link rel="stylesheet" href="css/arcade-and-stories.css" />
@@ -21,8 +25,9 @@
     <!-- Topbar épurée unifiée et harmonique -->
     <header class="topbar">
       <div class="logo" id="logo" title="Accueil" style="cursor:pointer" onclick="location.href='index.html'">
-        <svg class="logo-mark" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="28" height="28" rx="8" fill="#2563eb"/>
+        <svg class="logo-mark" width="28" height="28" viewBox="0 0 28 28" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="8" fill="#2563eb" />
           <text x="7" y="20" font-family="Outfit,sans-serif" font-weight="800" font-size="16" fill="white">A</text>
         </svg>
         <span>Accra English Club</span>
@@ -41,13 +46,21 @@
           <div class="nav-dropdown-menu">
             <a href="games.html?cat=season" class="dropdown-item">🏆 Classement Saison</a>
             <a href="games.html?cat=tools" class="dropdown-item">✏️ Éditeur de Contenu</a>
-            <a href="https://drive.google.com/drive/folders/1ZJQ3BmKeTyELWlOViCRWl0PoxY_fFWyc" target="_blank" rel="noopener noreferrer" class="dropdown-item">📁 Google Drive</a>
+            <a href="https://drive.google.com/drive/folders/1ZJQ3BmKeTyELWlOViCRWl0PoxY_fFWyc" target="_blank"
+              rel="noopener noreferrer" class="dropdown-item">📁 Google Drive</a>
           </div>
         </div>
       </nav>
 
       <div class="row" style="gap:10px;align-items:center;">
         <button class="btn-back" id="backBtn" onclick="location.href='index.html'">← Retour</button>
+        <button class="topbar-more-btn" id="topbarMoreBtn" aria-label="Menu" title="Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="5" r="2.2" />
+            <circle cx="12" cy="12" r="2.2" />
+            <circle cx="12" cy="19" r="2.2" />
+          </svg>
+        </button>
       </div>
     </header>
 
@@ -74,11 +87,14 @@
           <div class="gform-header-body">
             <div class="form-group-gform">
               <label for="sessionTitleInput" class="gform-label">Titre de l'évaluation / Formulaire :</label>
-              <input type="text" id="sessionTitleInput" class="gform-title-input" value="English Mastery Evaluation — Gerund, Prepositions &amp; Tenses" placeholder="Titre du formulaire..." />
+              <input type="text" id="sessionTitleInput" class="gform-title-input"
+                value="English Mastery Evaluation — Gerund, Prepositions &amp; Tenses"
+                placeholder="Titre du formulaire..." />
             </div>
             <div class="form-group-gform mt-sm">
               <label for="sessionDescInput" class="gform-label">Description &amp; Consignes pour les élèves :</label>
-              <textarea id="sessionDescInput" class="gform-desc-input" rows="2" placeholder="Consignes de l'évaluation...">Veuillez renseigner votre nom complet et votre adresse e-mail. Répondez avec attention à chaque question. Le calcul de votre note et l'analyse de vos erreurs seront générés instantanément.</textarea>
+              <textarea id="sessionDescInput" class="gform-desc-input" rows="2"
+                placeholder="Consignes de l'évaluation...">Veuillez renseigner votre nom complet et votre adresse e-mail. Répondez avec attention à chaque question. Le calcul de votre note et l'analyse de vos erreurs seront générés instantanément.</textarea>
             </div>
           </div>
         </div>
@@ -87,10 +103,11 @@
           <!-- Left Column: Settings -->
           <div class="teacher-config-card">
             <h3>Paramètres de l'Évaluation</h3>
-            
+
             <div class="form-group-t">
               <label for="teacherNameInput">Formateur / Enseignant :</label>
-              <input type="text" id="teacherNameInput" class="t-input" value="Professeur Steve" placeholder="Ex: M. Mensah" />
+              <input type="text" id="teacherNameInput" class="t-input" value="Professeur Steve"
+                placeholder="Ex: M. Mensah" />
             </div>
 
             <div class="form-group-t">
@@ -123,7 +140,8 @@
                 <h3>Questions du Formulaire <span class="badge-counter" id="teacherQCountBadge">0 questions</span></h3>
               </div>
               <div class="q-header-actions">
-                <button class="btn btn-primary btn-sm" onclick="CAA.teaching.addEmptyQuestion()">+ Ajouter une question</button>
+                <button class="btn btn-primary btn-sm" onclick="CAA.teaching.addEmptyQuestion()">+ Ajouter une
+                  question</button>
               </div>
             </div>
 
@@ -136,19 +154,23 @@
 
       <!-- TEACHER VIEW 2: LIVE SUPERVISION & DASHBOARD -->
       <section class="teaching-panel" id="teacherLobbyView" style="display:none;">
-        
+
         <!-- Live Header Control Card -->
         <div class="teacher-live-control-card">
           <div class="control-header-row">
             <div>
-              <span class="session-status-badge status-active" id="teacherSessionStatusBadge">En cours (Ouvert aux réponses)</span>
+              <span class="session-status-badge status-active" id="teacherSessionStatusBadge">En cours (Ouvert aux
+                réponses)</span>
               <h2 id="teacherLobbyTitle" class="mt-xs">Titre de l'évaluation</h2>
-              <p class="lobby-meta"><strong>Formateur :</strong> <span id="teacherLobbyTeacherName">Professeur</span> &nbsp;·&nbsp; <span id="teacherLobbyQCount">0</span> questions</p>
+              <p class="lobby-meta"><strong>Formateur :</strong> <span id="teacherLobbyTeacherName">Professeur</span>
+                &nbsp;·&nbsp; <span id="teacherLobbyQCount">0</span> questions</p>
             </div>
-            
+
             <div class="timer-control-box">
               <div class="timer-badge-text" id="teacherLiveTimerDisplay">Temps écoulé : 00:00</div>
-              <div class="timer-mini-track"><div class="timer-mini-fill" id="teacherTimerProgressFill" style="width:0%;"></div></div>
+              <div class="timer-mini-track">
+                <div class="timer-mini-fill" id="teacherTimerProgressFill" style="width:0%;"></div>
+              </div>
             </div>
 
             <div class="control-actions-col">
@@ -161,7 +183,8 @@
           <!-- Share Link Box -->
           <div class="share-url-box mt-md">
             <div class="share-box-top">
-              <label class="gform-field-label">Lien direct d'accès pour les élèves (ou Code : <strong id="teacherRoomCodeDisplay">TEA101</strong>) :</label>
+              <label class="gform-field-label">Lien direct d'accès pour les élèves (ou Code : <strong
+                  id="teacherRoomCodeDisplay">TEA101</strong>) :</label>
               <button class="btn btn-sm btn-outline" onclick="CAA.teaching.copyRoomCode()">Copier le code court</button>
             </div>
             <div class="share-url-row">
@@ -191,7 +214,8 @@
         <div class="class-analytics-card mt-lg">
           <div class="c-students-header">
             <h3>Diagnostic des Erreurs de la Classe (Questions les plus échouées)</h3>
-            <p class="gform-field-sub">Identifiez immédiatement les notions grammaticales posant le plus de difficultés pour cibler vos explications.</p>
+            <p class="gform-field-sub">Identifiez immédiatement les notions grammaticales posant le plus de difficultés
+              pour cibler vos explications.</p>
           </div>
           <div class="class-analytics-list mt-sm" id="classMistakesAnalyticsList">
             <!-- Dynamically populated -->
@@ -202,11 +226,14 @@
         <div class="connected-students-card mt-lg">
           <div class="c-students-header flex-between">
             <div>
-              <h3>Feuilles de Copies &amp; Notes Individuelles <span class="badge-counter" id="teacherSubmissionsCountBadge">0 copie(s)</span></h3>
-              <p class="gform-field-sub">Cliquez sur "Voir la copie" pour consulter le détail exact des réponses et erreurs d'un élève.</p>
+              <h3>Feuilles de Copies &amp; Notes Individuelles <span class="badge-counter"
+                  id="teacherSubmissionsCountBadge">0 copie(s)</span></h3>
+              <p class="gform-field-sub">Cliquez sur "Voir la copie" pour consulter le détail exact des réponses et
+                erreurs d'un élève.</p>
             </div>
             <div class="header-tools-actions">
-              <button class="btn btn-outline btn-sm" onclick="CAA.teaching.exportGradesCSV()">Exporter en CSV (Excel)</button>
+              <button class="btn btn-outline btn-sm" onclick="CAA.teaching.exportGradesCSV()">Exporter en CSV
+                (Excel)</button>
               <button class="btn btn-primary btn-sm" onclick="window.print()">Imprimer le relevé</button>
             </div>
           </div>
@@ -240,17 +267,20 @@
       <section class="teaching-panel" id="studentJoinView" style="display:none;">
         <div class="gform-container">
           <div class="gform-accent-bar"></div>
-          
+
           <div class="gform-header-body">
             <h2 id="studentFormDisplayTitle">Évaluation d'Anglais — Inscription &amp; Formulaire</h2>
-            <p class="gform-sub" id="studentFormDisplayDesc">Renseignez vos informations ci-dessous pour accéder au questionnaire. Toutes vos réponses seront corrigées automatiquement avec l'analyse détaillée des erreurs.</p>
+            <p class="gform-sub" id="studentFormDisplayDesc">Renseignez vos informations ci-dessous pour accéder au
+              questionnaire. Toutes vos réponses seront corrigées automatiquement avec l'analyse détaillée des erreurs.
+            </p>
           </div>
 
           <form onsubmit="event.preventDefault(); CAA.teaching.joinStudentRoom();" class="gform-body">
             <!-- Registration Section: Name & Email -->
             <div class="gform-card">
               <div class="gform-field-header">
-                <label for="studentJoinName" class="gform-field-title">Nom complet (Nom &amp; Prénom) <span class="required-star">*</span></label>
+                <label for="studentJoinName" class="gform-field-title">Nom complet (Nom &amp; Prénom) <span
+                    class="required-star">*</span></label>
                 <span class="gform-field-sub">Indiquez votre identité officielle pour l'attribution de la note</span>
               </div>
               <input type="text" id="studentJoinName" class="gform-input" placeholder="Votre nom complet" required />
@@ -258,18 +288,22 @@
 
             <div class="gform-card">
               <div class="gform-field-header">
-                <label for="studentJoinEmail" class="gform-field-title">Adresse e-mail <span class="required-star">*</span></label>
+                <label for="studentJoinEmail" class="gform-field-title">Adresse e-mail <span
+                    class="required-star">*</span></label>
                 <span class="gform-field-sub">Votre bilan d'évaluation sera rattaché à cette adresse e-mail</span>
               </div>
-              <input type="email" id="studentJoinEmail" class="gform-input" placeholder="nom.prenom@exemple.com" required />
+              <input type="email" id="studentJoinEmail" class="gform-input" placeholder="nom.prenom@exemple.com"
+                required />
             </div>
 
             <div class="gform-card">
               <div class="gform-field-header">
                 <label for="studentJoinCode" class="gform-field-title">Code de l'évaluation (Optionnel)</label>
-                <span class="gform-field-sub">Laissez vide pour l'évaluation standard ou saisissez le code fourni par l'enseignant</span>
+                <span class="gform-field-sub">Laissez vide pour l'évaluation standard ou saisissez le code fourni par
+                  l'enseignant</span>
               </div>
-              <input type="text" id="studentJoinCode" class="gform-input" placeholder="Ex: TEA101 (ou laisser vide)" autocomplete="off" />
+              <input type="text" id="studentJoinCode" class="gform-input" placeholder="Ex: TEA101 (ou laisser vide)"
+                autocomplete="off" />
             </div>
 
             <div class="gform-submit-row">
@@ -285,13 +319,15 @@
       <section class="teaching-panel" id="studentFormView" style="display:none;">
         <div class="gform-container">
           <div class="gform-accent-bar"></div>
-          
+
           <div class="gform-header-body">
             <h2 id="sFormActiveTitle">Évaluation d'Anglais</h2>
-            <p class="gform-sub" id="sFormActiveDesc">Répondez à toutes les questions obligatoires ci-dessous puis cliquez sur "Soumettre le formulaire".</p>
-            
+            <p class="gform-sub" id="sFormActiveDesc">Répondez à toutes les questions obligatoires ci-dessous puis
+              cliquez sur "Soumettre le formulaire".</p>
+
             <div class="gform-user-pill mt-sm">
-              <span>Élève : <strong id="sFormUserDisplay">Nom</strong> &nbsp;|&nbsp; <span id="sFormEmailDisplay">email</span></span>
+              <span>Élève : <strong id="sFormUserDisplay">Nom</strong> &nbsp;|&nbsp; <span
+                  id="sFormEmailDisplay">email</span></span>
             </div>
 
             <!-- Real-time Progress Bar -->
@@ -305,7 +341,8 @@
             </div>
           </div>
 
-          <form id="studentFullGForm" onsubmit="event.preventDefault(); CAA.teaching.submitContinuousForm();" class="gform-questions-flow">
+          <form id="studentFullGForm" onsubmit="event.preventDefault(); CAA.teaching.submitContinuousForm();"
+            class="gform-questions-flow">
             <div id="studentFormQuestionsList">
               <!-- Dynamically populated question cards -->
             </div>
@@ -324,7 +361,7 @@
         <div class="gform-container">
           <!-- Summary Header Card -->
           <div class="gform-accent-bar" id="reportAccentBar"></div>
-          
+
           <div class="gform-header-body">
             <h2>Résultats &amp; Bilan Officiel de l'Évaluation</h2>
             <div class="gform-meta-row mt-sm">
@@ -339,7 +376,8 @@
               </div>
               <div class="gform-score-verdict" id="sReportVerdict">
                 <strong>Calcul automatique des résultats terminé.</strong>
-                <p id="sReportSub">Retrouvez ci-dessous le détail de chaque question avec vos erreurs et les règles grammaticales associées.</p>
+                <p id="sReportSub">Retrouvez ci-dessous le détail de chaque question avec vos erreurs et les règles
+                  grammaticales associées.</p>
               </div>
             </div>
           </div>
@@ -382,7 +420,8 @@
     </main>
 
     <!-- MODAL: TEACHER INSPECT STUDENT COPY -->
-    <div class="inspect-modal-overlay" id="teacherStudentInspectModal" style="display:none;" onclick="if(event.target === this) CAA.teaching.closeInspectModal()">
+    <div class="inspect-modal-overlay" id="teacherStudentInspectModal" style="display:none;"
+      onclick="if(event.target === this) CAA.teaching.closeInspectModal()">
       <div class="inspect-modal-card">
         <div class="inspect-modal-header">
           <div>
@@ -408,7 +447,8 @@
   </div>
 
   <!-- Scripts -->
-  <script src="/socket.io/socket.io.js" onerror="this.onerror=null;this.src='https://cdn.socket.io/4.7.5/socket.io.min.js';"></script>
+  <script src="/socket.io/socket.io.js"
+    onerror="this.onerror=null;this.src='https://cdn.socket.io/4.7.5/socket.io.min.js';"></script>
   <script src="js/teaching.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
