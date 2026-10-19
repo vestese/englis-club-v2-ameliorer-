@@ -4578,13 +4578,14 @@ canvas.confetti {
 
 .solo-play-card {
   position: relative;
-  background: linear-gradient(165deg, rgba(36, 27, 60, 0.92) 0%, rgba(24, 17, 42, 0.96) 100%);
-  border: 1.5px solid var(--line);
-  box-shadow: var(--shadow-lg);
-  border-radius: var(--radius);
-  padding: 28px 24px;
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.04) !important;
+  border-radius: 20px;
+  padding: clamp(20px, 4vw, 36px);
   text-align: center;
   overflow: hidden;
+  color: #0f172a !important;
 }
 
 .solo-play-card::before {
@@ -4593,8 +4594,8 @@ canvas.confetti {
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--brand), var(--brand-2), var(--green));
+  height: 4px;
+  background: linear-gradient(90deg, #2563eb, #3b82f6, #10b981);
 }
 
 .solo-card-header {
@@ -4604,27 +4605,36 @@ canvas.confetti {
   gap: 12px;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .solo-score-hud {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
-  background: rgba(16, 24, 47, 0.75);
-  border: 1px solid var(--line);
-  border-radius: 14px;
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 16px;
   padding: 12px 18px;
   margin-bottom: 20px;
   font-weight: 800;
   font-size: 0.95rem;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  color: #0f172a !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+}
+
+.solo-score-hud span {
+  color: #0f172a !important;
+}
+
+.solo-score-hud b {
+  color: #0f172a !important;
 }
 
 .solo-score-hud .pts {
-  color: var(--brand);
+  color: #2563eb !important;
   font-size: 1.25rem;
   font-weight: 900;
 }
@@ -4632,118 +4642,153 @@ canvas.confetti {
 /* ---------- Solo Configuration Card ---------- */
 .solo-config-card {
   max-width: 620px;
+  width: 100%;
   margin: 0 auto;
-  background: linear-gradient(165deg, rgba(16, 24, 47, 0.94) 0%, rgba(10, 17, 40, 0.98) 100%);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 30px 26px;
-  box-shadow: var(--shadow-lg);
-  text-align: left;
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 20px !important;
+  padding: clamp(20px, 4vw, 32px) clamp(16px, 3.5vw, 28px) !important;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.04) !important;
+  text-align: left !important;
+  color: #0f172a !important;
 }
 
+.solo-config-card .config-section,
 .config-section {
   margin-bottom: 22px;
   padding-bottom: 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1.5px solid #f1f5f9;
 }
 
+.solo-config-card .config-section:last-child,
 .config-section:last-child {
   border-bottom: none;
   margin-bottom: 10px;
   padding-bottom: 0;
 }
 
+.solo-config-card .config-label,
 .config-label {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--ink);
+  font-weight: 800;
+  color: #0f172a !important;
   margin-bottom: 12px;
 }
 
+.solo-config-card .config-label small,
 .config-label small {
   font-weight: 500;
-  color: var(--muted);
+  color: #64748b !important;
   font-size: 0.85rem;
 }
 
+.solo-config-card .config-pills,
 .config-pills {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
+.solo-config-card .config-pill,
 .config-pill {
-  flex: 1 1 auto;
-  min-width: 110px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  background: var(--card-2);
-  border: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 0.92rem;
+  flex: 1 1 calc(50% - 10px);
+  min-width: 120px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+  color: #1e293b !important;
+  font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
   text-align: center;
-  transition: all 0.18s var(--ease);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 3px;
 }
 
+.solo-config-card .config-pill .pill-sub,
 .config-pill .pill-sub {
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   font-weight: 500;
-  opacity: 0.8;
+  color: #64748b !important;
+  opacity: 1;
 }
 
+.solo-config-card .config-pill:hover,
 .config-pill:hover {
   transform: translateY(-2px);
-  border-color: rgba(234, 179, 74, 0.6);
-  color: var(--ink);
+  border-color: #3b82f6 !important;
+  background: #ffffff !important;
+  color: #1d4ed8 !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
 }
 
+.solo-config-card .config-pill.active,
 .config-pill.active {
-  background: rgba(234, 179, 74, 0.16);
-  border-color: var(--brand);
-  color: var(--brand);
-  box-shadow: 0 4px 16px rgba(234, 179, 74, 0.22);
+  background: #eff6ff !important;
+  border-color: #2563eb !important;
+  color: #1d4ed8 !important;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.18) !important;
+}
+
+.solo-config-card .config-pill.active .pill-sub,
+.config-pill.active .pill-sub {
+  color: #2563eb !important;
+  font-weight: 600;
 }
 
 /* Toggle switch custom */
+.solo-config-card .config-toggle-row,
 .config-toggle-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 8px 4px;
+  padding: 10px 10px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  margin-bottom: 8px;
+  transition: background 0.15s ease;
 }
 
+.solo-config-card .config-toggle-row:hover,
+.config-toggle-row:hover {
+  background: #f1f5f9;
+}
+
+.solo-config-card .config-toggle-text,
 .config-toggle-text {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
+.solo-config-card .config-toggle-text strong,
 .config-toggle-text strong {
-  font-size: 0.95rem;
-  color: var(--ink);
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #0f172a !important;
 }
 
+.solo-config-card .config-toggle-text span,
 .config-toggle-text span {
   font-size: 0.82rem;
-  color: var(--muted);
+  color: #64748b !important;
 }
 
 /* Switch toggle */
 .toggle-switch {
   position: relative;
   display: inline-block;
-  width: 48px;
-  height: 26px;
+  width: 50px;
+  height: 28px;
   flex-shrink: 0;
 }
 
@@ -4760,8 +4805,8 @@ canvas.confetti {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--card-2);
-  border: 1px solid var(--line);
+  background-color: #cbd5e1 !important;
+  border: 1.5px solid #94a3b8 !important;
   transition: .24s;
   border-radius: 34px;
 }
@@ -4769,23 +4814,24 @@ canvas.confetti {
 .toggle-slider:before {
   position: absolute;
   content: "";
-  height: 18px;
-  width: 18px;
+  height: 20px;
+  width: 20px;
   left: 3px;
-  bottom: 3px;
-  background-color: var(--muted);
+  bottom: 2.5px;
+  background-color: #ffffff !important;
   transition: .24s;
   border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .toggle-switch input:checked+.toggle-slider {
-  background-color: var(--brand);
-  border-color: var(--brand);
+  background-color: #2563eb !important;
+  border-color: #1d4ed8 !important;
 }
 
 .toggle-switch input:checked+.toggle-slider:before {
-  transform: translateX(22px);
-  background-color: var(--brand-ink);
+  transform: translateX(20px);
+  background-color: #ffffff !important;
 }
 
 /* ---------- Streak & Bonus Badges ---------- */
