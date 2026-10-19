@@ -155,6 +155,193 @@
   background: #1e293b;
 }
 
+/* --- Bouton 3 Points (Mobile Menu Trigger) --- */
+.topbar-more-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  color: #0f172a;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+  flex-shrink: 0;
+}
+
+.topbar-more-btn:hover {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+.topbar-more-btn:active {
+  transform: scale(0.95);
+}
+
+/* --- Tiroir / Menu Déroulant Mobile Plein Écran Ergonomique --- */
+.mobile-nav-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0.24s ease;
+}
+
+.mobile-nav-drawer.open {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.mobile-nav-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.24s ease;
+}
+
+.mobile-nav-drawer.open .mobile-nav-backdrop {
+  opacity: 1;
+}
+
+.mobile-nav-panel {
+  position: relative;
+  z-index: 10;
+  width: calc(100% - 24px);
+  max-width: 440px;
+  margin-top: 14px;
+  max-height: calc(100vh - 28px);
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 24px;
+  box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.28), 0 8px 16px rgba(15, 23, 42, 0.08);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-20px) scale(0.96);
+  opacity: 0;
+  transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.24s ease;
+  overflow: hidden;
+}
+
+.mobile-nav-drawer.open .mobile-nav-panel {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.mobile-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1.5px solid #f1f5f9;
+  margin-bottom: 12px;
+}
+
+.mobile-nav-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display, "Plus Jakarta Sans", sans-serif);
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #0f172a;
+}
+
+.mobile-nav-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.mobile-nav-close:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #b91c1c;
+}
+
+.mobile-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  padding-right: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #1e293b;
+  text-decoration: none;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.16s ease;
+}
+
+.mobile-nav-link .nav-ic {
+  font-size: 1.25rem;
+  width: 28px;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.mobile-nav-link:hover {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #2563eb;
+  transform: translateX(3px);
+}
+
+.mobile-nav-link.active {
+  background: #eff6ff !important;
+  border-color: #bfdbfe !important;
+  color: #2563eb !important;
+  font-weight: 800;
+}
+
+.mobile-nav-divider {
+  height: 1px;
+  background: #f1f5f9;
+  margin: 8px 4px;
+}
+
+.mobile-nav-section-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  padding: 6px 14px 2px;
+}
+
 /* ---------------------------------------------------------------------
    2. HUB PRINCIPAL (INDEX.HTML) - GRANDS PILIERS DU CLUB
    --------------------------------------------------------------------- */
@@ -1354,40 +1541,264 @@
 }
 
 /* ---------------------------------------------------------------------
-   9. MOBILE RESPONSIVENESS
+   9. MOBILE & MULTI-SCREEN RESPONSIVENESS (SMARTPHONE, TABLETTE, DESKTOP)
    --------------------------------------------------------------------- */
+
+/* --- Tablette et Mobile (< 900px) --- */
+@media (max-width: 900px) {
+  .arcade-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .hub-pillars-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+}
+
+/* --- Téléphones et Écrans Mobiles (<= 768px) --- */
 @media (max-width: 768px) {
+  /* Topbar Mobile */
   .topbar {
-    padding: 8px 12px;
+    padding: 8px 14px;
+    margin: 6px 0 16px;
+    top: 6px;
+    border-radius: 16px;
+  }
+
+  .topbar .logo {
+    font-size: 1.05rem;
     gap: 8px;
   }
+
   .topbar .logo span {
-    display: none;
+    display: inline-block;
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
+
+  /* Remplacement de la barre de liens par le bouton 3 points */
   .topbar-nav {
+    display: none !important;
+  }
+
+  .topbar-more-btn {
+    display: inline-flex !important;
+  }
+
+  .btn-back {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+
+  /* Arcade Controls Bar */
+  .arcade-controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .arcade-tabs-pills {
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
-    max-width: calc(100vw - 140px);
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    gap: 4px;
+    gap: 6px;
+    padding-bottom: 4px;
+    width: 100%;
   }
-  .topbar-nav::-webkit-scrollbar {
+
+  .arcade-tabs-pills::-webkit-scrollbar {
     display: none;
   }
-  .nav-link {
-    padding: 6px 10px;
-    font-size: 0.84rem;
+
+  .arcade-tab-btn {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    font-size: 0.86rem;
   }
+
+  .arcade-search-box {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .arcade-search-box input {
+    font-size: 0.92rem;
+    padding: 10px 12px 10px 38px;
+  }
+
+  /* Grille des jeux sur mobile */
+  .arcade-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .arcade-card {
+    padding: 18px 16px;
+  }
+
+  /* Solo Config Card sur mobile */
+  .solo-config-card {
+    padding: 20px 16px !important;
+    border-radius: 18px !important;
+  }
+
+  .solo-config-card .config-pills {
+    gap: 8px;
+  }
+
+  .solo-config-card .config-pill {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 120px;
+    padding: 10px 10px;
+  }
+
+  .solo-config-card .config-toggle-row {
+    padding: 8px 8px;
+  }
+
+  /* Solo Score HUD sur mobile */
+  .solo-score-hud {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 0.88rem;
+  }
+
+  .solo-score-hud .pts {
+    font-size: 1.1rem;
+  }
+
+  /* Cartes de jeu Solo & QCM */
+  .solo-play-card,
+  .play-card {
+    padding: 20px 14px !important;
+    border-radius: 18px !important;
+  }
+
+  .prompt-word {
+    font-size: clamp(1.4rem, 6vw, 2.2rem) !important;
+  }
+
+  .prompt-emoji {
+    font-size: clamp(2.6rem, 10vw, 4rem) !important;
+  }
+
+  .options {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin-top: 18px !important;
+  }
+
+  .opt {
+    padding: 14px 16px !important;
+    font-size: 1.02rem !important;
+    min-height: 52px;
+  }
+
+  .solo-lifelines-bar {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0 8px;
+  }
+
+  .lifeline-btn {
+    padding: 8px 12px;
+    font-size: 0.82rem;
+  }
+
+  /* Lecteur d'histoire & Bibliothèque */
   .story-reader-view {
-    padding: 20px 14px;
+    padding: 18px 14px;
+    border-radius: 18px;
   }
+
+  .story-reader-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .story-reader-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: space-between;
+  }
+
+  .story-speed-select {
+    padding: 6px 8px;
+    font-size: 0.82rem;
+  }
+
+  .stories-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .stories-search-box {
+    width: 100%;
+    min-width: 100%;
+  }
+
   .story-word-popover {
-    width: calc(100vw - 32px);
-    left: 16px !important;
-    right: 16px !important;
-    bottom: 20px !important;
+    position: fixed !important;
+    width: calc(100vw - 24px) !important;
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 16px !important;
     top: auto !important;
+    border-radius: 18px !important;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.3) !important;
+    z-index: 999999 !important;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+}
+
+/* --- Petits Téléphones (<= 480px) --- */
+@media (max-width: 480px) {
+  .app {
+    padding: 0 8px 30px;
+  }
+
+  .topbar {
+    padding: 7px 10px;
+  }
+
+  .topbar .logo span {
+    font-size: 0.95rem;
+    max-width: 140px;
+  }
+
+  .topbar-more-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .solo-config-card .config-pill {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .btn {
+    font-size: 0.95rem;
+    padding: 10px 18px;
+  }
+
+  .choice-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .choice {
+    padding: 18px 16px;
   }
 }
