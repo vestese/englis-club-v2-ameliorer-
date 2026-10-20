@@ -1,131 +1,253 @@
-# Accra English Club 🌟 — English learning games app
+# Accra English Club 🌟 — English Learning Games App
 
-A web app of games for learning English, in **groups** (on a TV, run by a referee) or **solo**. The whole app is in English. Works **offline**, with no installation.
+> A web app of games for learning English, in **groups** (on a TV, run by a referee) or **solo**. The whole app is in English. Works **offline**, with no installation.
 
----
-
-## ▶️ How to run it
-
-**Simplest way:** double-click the **`index.html`** file. It opens in your browser (Chrome, Edge, Firefox…). That's it.
-
-> Meeting tip: connect the computer to the TV/projector, open `index.html`, then go fullscreen (press **F11**).
-
-*Note: some saving features (daily streak, season leaderboard, your content edits) may not persist when you open the file directly. To keep everything, host the folder online (see below) — it's free — or use the editor's "Make permanent" button.*
+[![GitHub](https://img.shields.io/badge/GitHub-vestese%2Fenglis--club--v2-181717?logo=github&style=flat-square)](https://github.com/vestese/englis-club-v2-ameliorer-/tree/main)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&style=flat-square)](https://python.org)
 
 ---
 
-## 🎮 What's in the app
+## 👨‍💻 Concepteur / Designer
 
-### 🗓️ Meeting Mode — hosts the whole session (recommended)
-The **"Meeting Mode"** button guides the host through an entire club meeting:
-1. **🔥 Warm-up** — a few words on the TV, to repeat together (with pronunciation).
-2. **🏆 The Big Challenge** — the big team game (see below).
-3. **🗣️ Speaking game** — English conversation cards; the referee gives participation bonus points.
-4. **📚 Word review** — go over the words of the session together.
-5. **🥇 Podium** — final ranking with confetti, saved to the season leaderboard.
-
-The **teams** and their **points** carry over from stage to stage. You can choose which stages to include before starting.
-
-### In a group — games on the TV (referee mode)
-Open **"Play in a group"**, then pick:
-
-**🏆 The Big Challenge** — a game-show board:
-- **8 topics** (Sport, Music, History, Geography, Science, Food, Animals, Cinema).
-- Each topic has questions worth **100, 200, 300…** (the more points, the harder).
-- The referee creates the **teams**, then each team picks a cell.
-- **Chrono Steal**: the team answers during the **green** phase; if they get it wrong or run out of time, the **orange** phase opens the question to the other teams, who can **steal the points**.
-- **Mystery gift 🎁**: on some cells, the winning team gets a gift they **keep or give away blindly** (minor point gifts or rare **Major Tier game-changers** like 🔄 Point Swap, 💥 Score Steal %, 🎯 Leader Target, 💣 Bankrupt, 🎁 Jackpot, 🧊 Freeze, 🃏 Reverse Ranking!).
-- **Podium** with confetti at the end.
-
-**🐝 Spelling Bee** — a listening and spelling challenge on TV:
-- A word is **spoken out loud (TTS)** on the TV, but **never shown**.
-- The team spells the word out loud, and the referee types what they said.
-- Supports **Beginner mode** (with emoji image hint) and **Medium mode** (audio-only). Correct spelling awards 100 pts.
-
-**🔤 Anagram** — each team gets a time budget. Scrambled words appear one at a time (big colour-friendly tiles); the team says the word and the **referee types it in**. A correct word scores up to 100 points and the next word appears; a **wrong answer cuts 5 seconds** off the clock; each team may **pass up to 3 words**. Stuck? A **💡 hint reveals the next letter** but lowers that word's points (100 → 60 → 30 → 20). Referee typos are forgiven — a close spelling still counts, so a mistype never penalises the team. When time runs out it's the next team's turn.
-
-**📝 Grammar Duel** — a fill-the-gap sentence and its options on the TV. Pick a **topic** (verb tenses, active & passive, modal verbs, tag questions…) or play a mix. Same Chrono Steal rule, 100 points per correct answer.
-
-**🔗 Word Chain** — a starting word appears; each new word must begin with the **last letter** of the previous one. The referee types each word the team says; the app checks the letter and blocks repeats. Every valid word scores points. Two modes:
-- **Each team separate** — every team gets its own timed round and builds the longest chain it can.
-- **One shared chain (steals)** — teams take turns adding to a single chain; if a team gets **stuck** (runs out of time or passes), the other teams can **steal the points** by supplying the next word.
-
-**🎡 Spin the Wheel** — a game-show wheel of **challenges and special slices**. The referee spins; it can land on:
-- a **Challenge** (Easy 50 / Medium 100 / Hard 200 pts) — the team must **perform it before a timer runs out**. Succeed and score the stake; **fail and the other teams can steal it**, or (if nobody steals) the team draws a **gage** — a fun forfeit.
-- a **Special slice**: **JACKPOT** (+300), **DOUBLE** (a challenge worth double), **STEAL** (take points from the leader), **SWAP** (swap scores with the leader), **BANKRUPT** (lose half), **BONUS** (+150), or **IMMUNITY** (skip your next gage).
-
-The challenges and gages are editable in the content file.
-
-**🎭 Charades** — one actor from the team reads a secret word (everyone else looks away!), then **mimes** it — no talking — while their team guesses before the timer runs out. A correct guess scores points; the word is revealed at the end either way. The word list is editable in the content file.
-
-**🔡 Word Builder** — each team gets its own box of **22+ letters, sorted A→Z** for easy scanning (letters can repeat). The team first looks at the letters, then the referee presses **▶ Start** to begin the timer. Team members call out words made only from those letters — each letter used no more than it appears, minimum 3 letters — and the **referee types each word live** as it's said. **Longer words score more** (a word is worth its length squared), and every valid word scores instantly. Then it's the next team's turn on a fresh box of letters; highest total wins.
-
-### Solo — practice
-- **Word Match** — see a picture and choose the matching English word (from 650+ words base).
-- **Spelling Bee 🐝** — hear the word spoken out loud via TTS and type the exact spelling (optional image hint toggle).
-- **Fill in the Blank** — grammar (verb to be, articles, plurals, prepositions…).
-- **Anagram** — a timed challenge: scrambled words appear on big colour-friendly tiles (with a picture + letter-count hint) and you **type** each one. A wrong answer costs 5 seconds and you can pass up to 3 words; solve as many as you can before the clock runs out.
-- A **🔊** button everywhere to **hear the English pronunciation**.
-- **Daily streak** and a words-seen counter.
+| | |
+|---|---|
+| **Nom** | Steve Kabore Aymar Séraphin |
+| **Titre** | 🎓 Ingénieur de Conception — Génie des Systèmes Numériques |
+| 📱 **WhatsApp** | [69 65 31 27](https://wa.me/22669653127) |
+| 📧 **Email** | [kaboesteven@gmail.com](mailto:kaboesteven@gmail.com) |
+| 💻 **GitHub** | [vestese/englis-club-v2-ameliorer-](https://github.com/vestese/englis-club-v2-ameliorer-/tree/main) |
 
 ---
 
-## ✏️ Editing the content (adding your questions)
+## 🚀 Installation & Démarrage
 
-### Easiest: the visual editor (no coding)
+### ✅ Option 1 — Utilisation directe (sans serveur, recommandé pour débuter)
 
-From the home screen, click **"✏️ Manage content"**. You can:
+1. **Télécharger** le projet :
+   ```bash
+   git clone https://github.com/vestese/englis-club-v2-ameliorer-.git
+   cd englis-club-v2-ameliorer-
+   ```
+   > Ou téléchargez le ZIP depuis GitHub → **Code** → **Download ZIP**, puis décompressez.
 
-- **The Big Challenge** — add/edit/delete topics and their questions (question, answers, correct answer, points value, gift cell 🎁).
-- **Vocabulary** — add/edit words (word, emoji/picture, category).
- 
-## Learning mode
+2. **Double-cliquez** sur le fichier **`index.html`** — il s'ouvre directement dans votre navigateur (Chrome, Edge, Firefox…). C'est tout !
 
-Visit `/learning.html` to access the Learning UI. You can upload PDF lessons (stored in `uploads/`) and browse vocabulary, pronunciation and phrasal verbs pulled from `content/content.js`.
-- **Grammar** — add fill-in-the-blank sentences (put `___` where the blank goes).
-- **Anagrams** — manage the word list.
+   > 💡 **Astuce réunion** : connectez l'ordinateur au TV/projecteur, ouvrez `index.html`, puis passez en plein écran avec **F11**.
 
-Your changes are **saved automatically in the browser**. Then:
-
-- **⬇️ Export pack (.json)** — saves a file to keep or **share** with another host.
-- **⬆️ Import a pack** — reloads a `.json` file you exported.
-- **💾 Make permanent (content.js)** — downloads a `content.js` file; put it in the `content` folder (replace the old one) to keep your changes **for good**, even after clearing the browser.
-- **↺ Reset** — go back to the original content.
-
-### By hand (optional)
-
-All the starter content is in **`content/content.js`** (open it with a text editor). Keep the **same structure** as the examples, save, then reload the page. Add `gift: true` to a `grandDefi` question to make it a **mystery gift** cell.
+*Note : certaines fonctionnalités (streak quotidien, classement saison, modifications de contenu persistantes) peuvent ne pas être sauvegardées en ouverture directe. Pour tout conserver, hébergez le projet en ligne (voir Options 2 & 3).*
 
 ---
 
-## 🌐 Host it online (optional, free)
+### 🐍 Option 2 — Avec le serveur Python local (fonctionnalités complètes)
 
-To share a link and keep all saved data:
-1. Create a free account on **Netlify** or **Vercel**.
-2. Drag and drop this folder.
-3. You get a link to share with the club.
+#### Prérequis
+
+- **Python 3.10+** → [Télécharger Python](https://www.python.org/downloads/)
+- **pip** (inclus avec Python)
+
+#### Étapes
+
+1. **Cloner** le dépôt :
+   ```bash
+   git clone https://github.com/vestese/englis-club-v2-ameliorer-.git
+   cd englis-club-v2-ameliorer-
+   ```
+
+2. **Créer un environnement virtuel** (recommandé) :
+   ```bash
+   python -m venv venv
+   # Windows
+   venv\Scripts\activate
+   # macOS / Linux
+   source venv/bin/activate
+   ```
+
+3. **Installer les dépendances** :
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Lancer le serveur** :
+   ```bash
+   python qserver.py
+   ```
+
+5. **Ouvrir** dans le navigateur :
+   ```
+   http://localhost:5000
+   ```
+
+#### Dépendances principales (`requirements.txt`)
+
+| Paquet | Rôle |
+|--------|------|
+| `flask` | Serveur web |
+| `flask-socketio` | Multijoueur temps réel |
+| `eventlet` | Serveur async |
+| `gunicorn` | Production |
 
 ---
 
-## 🗂️ File structure
+### ☁️ Option 3 — Hébergement en ligne gratuit (Render / Vercel / Netlify)
+
+#### Render (recommandé pour le mode serveur complet)
+
+1. Créez un compte sur [render.com](https://render.com)
+2. Cliquez **New → Web Service**
+3. Connectez votre dépôt GitHub
+4. Les paramètres sont déjà configurés dans `render.yaml` :
+   - **Build Command** : `pip install -r requirements.txt`
+   - **Start Command** : `gunicorn qserver:app`
+5. Cliquez **Deploy** — vous obtenez un lien public 🎉
+
+#### Vercel (mode statique, sans serveur Python)
+
+1. Créez un compte sur [vercel.com](https://vercel.com)
+2. **New Project → Import** votre dépôt GitHub
+3. La config `vercel.json` est déjà présente
+4. Cliquez **Deploy**
+
+#### Netlify (drag & drop)
+
+1. Créez un compte sur [netlify.com](https://netlify.com)
+2. Glissez-déposez **le dossier du projet** dans l'interface
+3. Partagez le lien obtenu avec le club !
+
+---
+
+## ▶️ Comment utiliser l'application
+
+### 🗓️ Mode Réunion (recommandé pour animer une séance)
+
+Cliquez sur **"Meeting Mode"** — le mode guidé qui enchaîne automatiquement :
+
+1. **🔥 Échauffement** — mots à répéter en groupe avec prononciation
+2. **🏆 Le Grand Défi** — plateau de jeu par équipes
+3. **🗣️ Jeu oral** — cartes de conversation
+4. **📚 Révision des mots** — récap de la session
+5. **🥇 Podium** — classement final avec confettis
+
+---
+
+### 👥 En groupe — Jeux sur grand écran (mode arbitre)
+
+Ouvrez **"Jouer en groupe"** et choisissez :
+
+| Jeu | Description |
+|-----|-------------|
+| 🏆 **Grand Défi** | Plateau 8 thèmes × 5 niveaux, vol de points, cadeaux mystères |
+| 🐝 **Spelling Bee** | Un mot est énoncé à voix haute — les équipes l'épellent |
+| 🔤 **Anagramme** | Mots mélangés sur tuiles colorées, timer, indices |
+| 📝 **Grammar Duel** | Complète la phrase, vole les points (règle Chrono Steal) |
+| 🔗 **Word Chain** | Chaîne de mots, chaque mot commence par la dernière lettre |
+| 🎡 **Roue** | Roue de défis et de tranches spéciales (JACKPOT, BANKRUPT…) |
+| 🎭 **Charades** | Mime sans parler — ton équipe devine |
+| 🔡 **Word Builder** | Forme des mots depuis un set de 22+ lettres |
+
+---
+
+### 👤 Solo — Entraînement personnel
+
+| Exercice | Description |
+|----------|-------------|
+| 🖼️ **Word Match** | Associe image et mot anglais (650+ mots) |
+| 🐝 **Spelling Bee** | Écoute → épelle le mot |
+| ✍️ **Fill in the Blank** | Grammaire : conjugaisons, articles, prépositions |
+| 🔤 **Anagramme** | Version solo avec timer |
+
+> 🔊 Bouton prononciation disponible partout.  
+> 📅 Streak quotidien et compteur de mots vus.
+
+---
+
+### 📖 Mode Apprentissage (`/learning.html`)
+
+- Téléversement de leçons PDF (stockées dans `uploads/`)
+- Navigation vocabulaire, prononciation, verbes à particule
+- Contenu tiré de `content/content.js`
+
+---
+
+## ✏️ Modifier le contenu
+
+### Éditeur visuel (aucun code requis)
+
+Depuis l'écran d'accueil → **"✏️ Gérer le contenu"** :
+- **Grand Défi** : ajouter/modifier/supprimer questions et thèmes
+- **Vocabulaire** : gérer les mots, emojis, catégories
+- **Grammaire** : phrases à trou (`___` = emplacement du blanc)
+- **Anagrammes** : liste de mots
+
+| Action | Effet |
+|--------|-------|
+| ⬇️ Exporter (.json) | Sauvegarde un fichier à partager |
+| ⬆️ Importer un pack | Recharge un .json exporté |
+| 💾 Rendre permanent | Télécharge `content.js` → à placer dans `/content/` |
+| ↺ Réinitialiser | Retour au contenu d'origine |
+
+### À la main (optionnel)
+
+Éditez directement **`content/content.js`** avec un éditeur de texte.
+Respectez la structure existante. Ajoutez `gift: true` à une question `grandDefi` pour en faire une cellule cadeau mystère 🎁.
+
+---
+
+## 🗂️ Structure des fichiers
 
 ```
-club_anglais_accra/
-├── index.html          ← open this file
-├── css/styles.css      ← the look
-├── content/content.js  ← THE CONTENT (editable)
+englis-club-v2-ameliorer-/
+├── index.html              ← Page d'accueil (ouvrir ce fichier)
+├── games.html              ← Hub des jeux
+├── learning.html           ← Mode apprentissage
+├── teaching.html           ← Espace enseignant
+├── css/
+│   ├── styles.css          ← Système de design principal
+│   ├── premium.css         ← Styles premium & glassmorphisme
+│   └── arcade-and-stories.css
+├── content/
+│   ├── content.js          ← LE CONTENU (modifiable)
+│   └── description_data.js
 ├── js/
-│   ├── util.js         ← tools (navigation, sound, confetti, saving)
-│   ├── solo.js         ← the solo games
-│   ├── group.js        ← group games (The Big Challenge + Anagram)
-│   ├── meeting.js      ← Meeting Mode (full session)
-│   ├── editor.js       ← visual content editor
-│   └── app.js          ← home screen
-├── DESIGN.md           ← the full design document
-└── README.md           ← this file
+│   ├── app.js              ← Écran d'accueil
+│   ├── util.js             ← Outils (navigation, son, confetti, sauvegarde)
+│   ├── solo.js             ← Jeux solo
+│   ├── group.js            ← Jeux en groupe
+│   ├── multiplayer.js      ← Mode multijoueur temps réel
+│   ├── meeting.js          ← Mode réunion complet
+│   ├── editor.js           ← Éditeur de contenu visuel
+│   └── theme.js            ← Gestion thème clair/sombre
+├── qserver.py              ← Serveur Python (Flask + Socket.IO)
+├── requirements.txt        ← Dépendances Python
+├── render.yaml             ← Config déploiement Render
+├── vercel.json             ← Config déploiement Vercel
+├── DESIGN.md               ← Document de design complet
+└── README.md               ← Ce fichier
 ```
 
 ---
 
-*Built for the Accra English Club. The interface and all content are in English.*
+## 🔧 Dépannage
+
+| Problème | Solution |
+|----------|----------|
+| La page ne s'ouvre pas | Vérifiez que `index.html` est bien dans le bon dossier |
+| TTS ne fonctionne pas | Utilisez Chrome ou Edge (meilleur support Web Speech API) |
+| Streak non sauvegardé | Hébergez en ligne ou utilisez le serveur Python |
+| Socket.IO erreur | Ignoré en mode fichier local, c'est normal |
+| Port 5000 occupé | Modifiez le port dans `qserver.py` |
+
+---
+
+## 🌐 Contribuer
+
+1. **Fork** le dépôt sur GitHub
+2. Créez une branche : `git checkout -b feature/ma-fonctionnalite`
+3. Committez vos changements : `git commit -m "feat: description"`
+4. Poussez : `git push origin feature/ma-fonctionnalite`
+5. Ouvrez une **Pull Request**
+
+---
+
+*Conçu avec ❤️ par **Steve Kabore Aymar Séraphin** pour l'apprentissage de l'anglais — Accra English Club*
+
 # englis-club-v2-ameliorer-
