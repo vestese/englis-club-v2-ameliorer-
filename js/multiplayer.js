@@ -12,6 +12,70 @@ CAA.multiplayer = (function () {
   let ROOM = null;
   let PLAYER = { id: '', name: '', team: '', isHost: false };
   let ACTIVE_TIMERS = [];
+  let _socketConnected = false;
+  let _socketAttempted = false;
+  let _socketRetryTimer = null;
+
+  // ── Statut de connexion visible dans l'UI ──
+  function _updateStatusBadge(state) {
+    const badge = document.getElementById('mp-status-badge');
+    if (!badge) return;
+    if (state === 'connected') {
+      badge.className = 'mp-conn-badge connected';
+      badge.innerHTML = '<span class="mp-conn-dot"></span> Serveur connecté';
+    } else if (state === 'connecting') {
+      badge.className = 'mp-conn-badge connecting';
+      badge.innerHTML = '<span class="mp-conn-dot"></span> Connexion…';
+    } else {
+      badge.className = 'mp-conn-badge offline';
+      badge.innerHTML = '<span class="mp-conn-dot"></span> Hors-ligne (fichier local)';
+    }
+  }
+
+  function getSocket() {
+    try {
+      if (!socket && typeof io !== 'undefined') {
+        _socketAttempted = true;
+        _updateStatusBadge('connecting');
+        socket = io({ reconnection: true, reconnectionAttempts: 10, reconnectionDelay: 1500 });
+
+        socket.on('connect', () => {
+          _socketConnected = true;
+          _updateStatusBadge('connected');
+          if (_socketRetryTimer) { clearTimeout(_socketRetryTimer); _socketRetryTimer = null; }
+        });
+        socket.on('disconnect', () => {
+          _socketConnected = false;
+          _updateStatusBadge('connecting');
+        });
+        socket.on('connect_error', () => {
+          _socketConnected = false;
+          _updateStatusBadge('offline');
+        });
+
+        setupSocketEvents();
+      } else if (!socket && typeof io === 'undefined') {
+        _updateStatusBadge('offline');
+      }
+    } catch (e) {
+      console.warn('Socket init error:', e);
+      _updateStatusBadge('offline');
+    }
+    return socket;
+  }
+
+  // Tente une reconnexion manuelle (utile quand l'app est lancée sur un vrai serveur)
+  function retrySocketConnect() {
+    socket = null;
+    _socketConnected = false;
+    getSocket();
+    showToast('🔄 Tentative de reconnexion au serveur…', false);
+    _socketRetryTimer = setTimeout(() => {
+      if (!_socketConnected) {
+        showToast('❌ Serveur introuvable. Lancez qserver.py ou hébergez sur Render/Heroku.', true);
+      }
+    }, 4000);
+  }
 
   const GAME_LABELS = {
     wordChain: 'Word Chain',
@@ -278,13 +342,80 @@ CAA.multiplayer = (function () {
     getSocket();
     U().show((scr) => {
       const h = U().h;
-      scr.appendChild(h('h2', { class: 'section-title' }, ['Multiplayer Server']));
-      scr.appendChild(h('p', { class: 'section-sub' }, ['Create a room on qserver, invite players with the code, then launch a multiplayer game.']));
-      scr.appendChild(h('div', { class: 'row mt-lg' }, [
-        h('button', { class: 'btn btn-primary', onclick: () => createRoomView() }, ['Create a room']),
-        h('button', { class: 'btn btn-ghost', onclick: () => joinRoomView() }, ['Join a room'])
-      ]));
-      scr.appendChild(h('div', { class: 'section-note mt-lg' }, ['Server connection: real-time Socket.IO sync.']));
+
+      // ─── Hero Header ───
+      const hero = h('div', { class: 'mp-hero' }, [
+        h('div', { class: 'mp-hero-icon' }, ['🌐']),
+        h('div', {}, [
+          h('h2', { class: 'mp-hero-title' }, ['Serveur Multijoueur Live']),
+          h('p', { class: 'mp-hero-sub' }, ['Créez une salle, invitez vos joueurs avec le code, et jouez en temps réel sur vos smartphones.'])
+        ])
+      ]);
+      scr.appendChild(hero);
+
+      // ─── Connection Status Badge ───
+      const statusWrap = h('div', { class: 'mp-status-wrap' }, [
+        h('span', { id: 'mp-status-badge', class: 'mp-conn-badge offline' }, [
+          h('span', { class: 'mp-conn-dot' }, []),
+          ' Vérification de la connexion…'
+        ]),
+        h('button', {
+          class: 'mp-retry-btn',
+          onclick: () => { retrySocketConnect(); }
+        }, ['🔄 Reconnecter'])
+      ]);
+      scr.appendChild(statusWrap);
+
+      // ─── Info box quand hors-ligne ───
+      const offlineBox = h('div', { class: 'mp-offline-box' }, [
+        h('div', { class: 'mp-offline-icon' }, ['⚠️']),
+        h('div', {}, [
+          h('div', { style: 'font-weight:800;margin-bottom:4px;' }, ['Mode hors-ligne détecté']),
+          h('div', { style: 'font-size:0.9rem;opacity:0.85;line-height:1.6;' }, [
+            'Pour utiliser le mode multijoueur, lancez le serveur Python :',
+            h('br', {}),
+            h('code', { class: 'mp-code-block' }, ['python qserver.py']),
+            h('br', {}),
+            'ou accédez via l\'URL Render/Heroku de votre déploiement.'
+          ])
+        ])
+      ]);
+      scr.appendChild(offlineBox);
+
+      // ─── Action Cards ───
+      const cards = h('div', { class: 'mp-action-cards mt-lg' });
+
+      // Card: Créer une salle
+      const createCard = h('div', { class: 'mp-action-card host-card', onclick: () => createRoomView() }, [
+        h('div', { class: 'mp-action-card-icon' }, ['👑']),
+        h('div', { class: 'mp-action-card-title' }, ['Créer une Salle']),
+        h('div', { class: 'mp-action-card-desc' }, ['Configurez les équipes, choisissez les jeux et lancez la partie. Vous serez l\'hôte TV.']),
+        h('div', { class: 'mp-action-card-btn' }, ['Créer →'])
+      ]);
+
+      // Card: Rejoindre
+      const joinCard = h('div', { class: 'mp-action-card join-card', onclick: () => joinRoomView() }, [
+        h('div', { class: 'mp-action-card-icon' }, ['🎮']),
+        h('div', { class: 'mp-action-card-title' }, ['Rejoindre une Salle']),
+        h('div', { class: 'mp-action-card-desc' }, ['Entrez le code de la salle fourni par l\'hôte, choisissez votre équipe et jouez !']),
+        h('div', { class: 'mp-action-card-btn' }, ['Rejoindre →'])
+      ]);
+
+      cards.appendChild(createCard);
+      cards.appendChild(joinCard);
+      scr.appendChild(cards);
+
+      // ─── Features grid ───
+      const features = h('div', { class: 'mp-features-grid mt-lg' }, [
+        h('div', { class: 'mp-feature-item' }, ['⚡', h('span', {}, ['Temps réel'])]),
+        h('div', { class: 'mp-feature-item' }, ['📱', h('span', {}, ['Multi-appareils'])]),
+        h('div', { class: 'mp-feature-item' }, ['🏆', h('span', {}, ['11 Jeux inclus'])]),
+        h('div', { class: 'mp-feature-item' }, ['👥', h('span', {}, ['Jusqu\'à 6 équipes'])])
+      ]);
+      scr.appendChild(features);
+
+      // Mise à jour du badge après un court délai (laisse Socket.IO tenter la connexion)
+      setTimeout(() => _updateStatusBadge(_socketConnected ? 'connected' : (socket ? 'connecting' : 'offline')), 800);
     });
   }
 
@@ -474,7 +605,11 @@ CAA.multiplayer = (function () {
           style: 'padding:16px 28px;font-size:1.15rem;font-weight:900;border-radius:14px;box-shadow:var(--glow-brand);',
           onclick: () => {
             const s = getSocket();
-            if (!s) { showToast('Socket connection offline', true); return; }
+            if (!s || !_socketConnected) {
+              showToast('❌ Serveur hors-ligne. Lancez qserver.py puis cliquez sur Reconnecter.', true);
+              retrySocketConnect();
+              return;
+            }
             if (!selectedGames.length) { showToast('Sélectionnez au moins un jeu', true); return; }
             const namesClean = teamNames.slice(0, teamCount).map((n, i) => (String(n || '').trim() || `Team ${String.fromCharCode(65 + i)}`));
             const uniq = new Set(namesClean.map((n) => n.toLowerCase()));
@@ -610,10 +745,14 @@ CAA.multiplayer = (function () {
       scr.appendChild(h('div', { class: 'row center mt-lg' }, [
         h('button', {
           class: 'btn btn-primary', onclick: () => {
-            if (!roomCode.trim()) { showToast('Enter room code', true); return; }
-            if (!name.trim()) { showToast('Enter your name', true); return; }
+            if (!roomCode.trim()) { showToast('Entrez le code de la salle', true); return; }
+            if (!name.trim()) { showToast('Entrez votre prénom', true); return; }
             const s = getSocket();
-            if (!s) { showToast('Socket offline', true); return; }
+            if (!s || !_socketConnected) {
+              showToast('❌ Serveur hors-ligne. Revenez au menu et cliquez Reconnecter.', true);
+              retrySocketConnect();
+              return;
+            }
             const finalTeam = selectedTeam || fetchedTeams[0] || 'Team A';
             PLAYER.name = name.trim();
             PLAYER.team = finalTeam;   // stocké AVANT l'emit pour que syncPlayerData ait une valeur
@@ -1266,6 +1405,7 @@ CAA.multiplayer = (function () {
     createRoomView,
     joinRoomView,
     renderRoomLobby,
-    leaveCurrentRoom
+    leaveCurrentRoom,
+    retrySocketConnect
   };
 })();
