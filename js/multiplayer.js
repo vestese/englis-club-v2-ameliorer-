@@ -16,19 +16,43 @@ CAA.multiplayer = (function () {
   let _socketAttempted = false;
   let _socketRetryTimer = null;
 
+  function getServerUrl() {
+    try {
+      const saved = localStorage.getItem('caa_server_url');
+      if (saved && saved.trim()) return saved.trim();
+    } catch (e) {}
+    if (window.location.protocol === 'file:') return 'http://localhost:5000';
+    return ''; // Même origine (ex: sur Render ou domaine principal)
+  }
+
+  function setServerUrl(url) {
+    try {
+      if (url && url.trim()) {
+        localStorage.setItem('caa_server_url', url.trim());
+      } else {
+        localStorage.removeItem('caa_server_url');
+      }
+    } catch (e) {}
+    retrySocketConnect();
+  }
+
   // ── Statut de connexion visible dans l'UI ──
   function _updateStatusBadge(state) {
     const badge = document.getElementById('mp-status-badge');
-    if (!badge) return;
-    if (state === 'connected') {
-      badge.className = 'mp-conn-badge connected';
-      badge.innerHTML = '<span class="mp-conn-dot"></span> Serveur connecté';
-    } else if (state === 'connecting') {
-      badge.className = 'mp-conn-badge connecting';
-      badge.innerHTML = '<span class="mp-conn-dot"></span> Connexion…';
-    } else {
-      badge.className = 'mp-conn-badge offline';
-      badge.innerHTML = '<span class="mp-conn-dot"></span> Hors-ligne (fichier local)';
+    const offlineBox = document.getElementById('mp-offline-box');
+    if (badge) {
+      if (state === 'connected') {
+        badge.className = 'mp-conn-badge connected';
+        badge.innerHTML = '<span class="mp-conn-dot"></span> Serveur En Ligne';
+        if (offlineBox) offlineBox.style.display = 'none';
+      } else if (state === 'connecting') {
+        badge.className = 'mp-conn-badge connecting';
+        badge.innerHTML = '<span class="mp-conn-dot"></span> Connexion en cours…';
+      } else {
+        badge.className = 'mp-conn-badge offline';
+        badge.innerHTML = '<span class="mp-conn-dot"></span> Serveur Hors-Ligne';
+        if (offlineBox) offlineBox.style.display = 'flex';
+      }
     }
   }
 
@@ -37,17 +61,30 @@ CAA.multiplayer = (function () {
       if (!socket && typeof io !== 'undefined') {
         _socketAttempted = true;
         _updateStatusBadge('connecting');
-        socket = io({ reconnection: true, reconnectionAttempts: 10, reconnectionDelay: 1500 });
+        const sUrl = getServerUrl();
+        const opts = {
+          reconnection: true,
+          reconnectionAttempts: 15,
+          reconnectionDelay: 1000,
+          reconnectionDelayMax: 4000,
+          transports: ['websocket', 'polling'],
+          timeout: 10000
+        };
+        socket = sUrl ? io(sUrl, opts) : io(opts);
 
         socket.on('connect', () => {
           _socketConnected = true;
           _updateStatusBadge('connected');
           if (_socketRetryTimer) { clearTimeout(_socketRetryTimer); _socketRetryTimer = null; }
+          const offlineBox = document.getElementById('mp-offline-box');
+          if (offlineBox) offlineBox.style.display = 'none';
         });
+
         socket.on('disconnect', () => {
           _socketConnected = false;
           _updateStatusBadge('connecting');
         });
+
         socket.on('connect_error', () => {
           _socketConnected = false;
           _updateStatusBadge('offline');
@@ -64,17 +101,52 @@ CAA.multiplayer = (function () {
     return socket;
   }
 
-  // Tente une reconnexion manuelle (utile quand l'app est lancée sur un vrai serveur)
+  // Tente une reconnexion manuelle
   function retrySocketConnect() {
+    try {
+      if (socket) {
+        socket.removeAllListeners();
+        socket.disconnect();
+      }
+    } catch (e) {}
     socket = null;
     _socketConnected = false;
+    _updateStatusBadge('connecting');
     getSocket();
-    showToast('🔄 Tentative de reconnexion au serveur…', false);
+    showToast('🔄 Tentative de connexion au serveur…', false);
+    if (_socketRetryTimer) clearTimeout(_socketRetryTimer);
     _socketRetryTimer = setTimeout(() => {
-      if (!_socketConnected) {
-        showToast('❌ Serveur introuvable. Lancez qserver.py ou hébergez sur Render/Heroku.', true);
+      if (!socket || (!socket.connected && !_socketConnected)) {
+        _updateStatusBadge('offline');
+        showToast('❌ Serveur introuvable. Si vous êtes sur Render, le premier démarrage peut prendre ~30 secondes.', true);
       }
-    }, 4000);
+    }, 4500);
+  }
+
+  // Vérifie la connexion avant d'émettre
+  function ensureConnected(callback) {
+    const s = getSocket();
+    if (!s) {
+      showToast('❌ Librairie Socket.IO introuvable. Vérifiez votre connexion Internet.', true);
+      return;
+    }
+    if (s.connected || _socketConnected) {
+      callback(s);
+      return;
+    }
+    showToast('⏳ Connexion au serveur en cours...', false);
+    let waited = 0;
+    const interval = setInterval(() => {
+      waited += 200;
+      if (s.connected || _socketConnected) {
+        clearInterval(interval);
+        callback(s);
+      } else if (waited >= 3500) {
+        clearInterval(interval);
+        showToast('❌ Serveur inaccessible. Si vous utilisez Render, patientez 30s que le serveur gratuit se réveille.', true);
+        _updateStatusBadge('offline');
+      }
+    }, 200);
   }
 
   const GAME_LABELS = {
@@ -92,21 +164,9 @@ CAA.multiplayer = (function () {
     phrasal: 'Phrasal Verbs',
     wheel: 'Spin the Wheel',
     charades: 'Charades',
-    description: 'Description Challenge'
-    ,tvVocab: 'TV Vocab'
+    description: 'Description Challenge',
+    tvVocab: 'TV Vocab'
   };
-
-  function getSocket() {
-    try {
-      if (!socket && typeof io !== 'undefined') {
-        socket = io();
-        setupSocketEvents();
-      }
-    } catch (e) {
-      console.warn('Socket init error:', e);
-    }
-    return socket;
-  }
 
   function clearTimers() {
     ACTIVE_TIMERS.forEach((t) => clearInterval(t));
@@ -348,16 +408,16 @@ CAA.multiplayer = (function () {
         h('div', { class: 'mp-hero-icon' }, ['🌐']),
         h('div', {}, [
           h('h2', { class: 'mp-hero-title' }, ['Serveur Multijoueur Live']),
-          h('p', { class: 'mp-hero-sub' }, ['Créez une salle, invitez vos joueurs avec le code, et jouez en temps réel sur vos smartphones.'])
+          h('p', { class: 'mp-hero-sub' }, ['Créez une salle, invitez vos joueurs avec le code PIN, et jouez en direct sur vos smartphones.'])
         ])
       ]);
       scr.appendChild(hero);
 
-      // ─── Connection Status Badge ───
+      // ─── Connection Status Badge & Reconnect ───
       const statusWrap = h('div', { class: 'mp-status-wrap' }, [
-        h('span', { id: 'mp-status-badge', class: 'mp-conn-badge offline' }, [
+        h('span', { id: 'mp-status-badge', class: 'mp-conn-badge ' + (_socketConnected ? 'connected' : (socket ? 'connecting' : 'offline')) }, [
           h('span', { class: 'mp-conn-dot' }, []),
-          ' Vérification de la connexion…'
+          _socketConnected ? ' Serveur En Ligne' : (socket ? ' Connexion en cours…' : ' Serveur Hors-Ligne')
         ]),
         h('button', {
           class: 'mp-retry-btn',
@@ -366,17 +426,57 @@ CAA.multiplayer = (function () {
       ]);
       scr.appendChild(statusWrap);
 
-      // ─── Info box quand hors-ligne ───
-      const offlineBox = h('div', { class: 'mp-offline-box' }, [
+      // ─── Server URL Toolbar ───
+      const activeUrl = getServerUrl() || (window.location.protocol.startsWith('http') ? window.location.origin : 'http://localhost:5000');
+      const isCustom = !!localStorage.getItem('caa_server_url');
+      const serverBar = h('div', { class: 'mp-server-bar' }, [
+        h('div', { class: 'mp-server-info' }, [
+          h('span', {}, ['📡 Serveur :']),
+          h('span', { class: 'mp-server-url-tag' }, [activeUrl]),
+          isCustom ? h('span', { style: 'font-size:0.75rem;color:var(--brand);font-weight:700;' }, ['(Personnalisé)']) : null
+        ]),
+        h('div', { style: 'display:flex;gap:6px;' }, [
+          h('button', {
+            class: 'mp-server-btn',
+            onclick: () => {
+              const current = localStorage.getItem('caa_server_url') || '';
+              const input = prompt(
+                'Entrez l\'URL de votre serveur Render (ex: https://club-anglais-accra.onrender.com) ou laissez vide pour utiliser l\'origine automatique :',
+                current
+              );
+              if (input !== null) {
+                setServerUrl(input);
+                menu();
+              }
+            }
+          }, ['⚙️ Configurer l\'URL']),
+          isCustom ? h('button', {
+            class: 'mp-server-btn',
+            style: 'color:#ef4444;',
+            onclick: () => {
+              setServerUrl('');
+              menu();
+            }
+          }, ['✕ Auto']) : null
+        ])
+      ]);
+      scr.appendChild(serverBar);
+
+      // ─── Info box quand hors-ligne (cachée par défaut si en cours de connexion ou connectée) ───
+      const offlineBox = h('div', {
+        id: 'mp-offline-box',
+        class: 'mp-offline-box',
+        style: _socketConnected ? 'display:none;' : ''
+      }, [
         h('div', { class: 'mp-offline-icon' }, ['⚠️']),
         h('div', {}, [
-          h('div', { style: 'font-weight:800;margin-bottom:4px;' }, ['Mode hors-ligne détecté']),
+          h('div', { style: 'font-weight:800;margin-bottom:4px;' }, ['Serveur en attente de réponse']),
           h('div', { style: 'font-size:0.9rem;opacity:0.85;line-height:1.6;' }, [
-            'Pour utiliser le mode multijoueur, lancez le serveur Python :',
+            'Si vous utilisez l\'hébergement gratuit sur Render, le serveur s\'endort après inactivité et prend environ 30 secondes pour se réveiller.',
             h('br', {}),
-            h('code', { class: 'mp-code-block' }, ['python qserver.py']),
+            '• Pour héberger en local : ', h('code', { class: 'mp-code-block' }, ['python qserver.py']),
             h('br', {}),
-            'ou accédez via l\'URL Render/Heroku de votre déploiement.'
+            '• Cliquez sur ', h('b', {}, ['🔄 Reconnecter']), ' dès que le service Render est prêt.'
           ])
         ])
       ]);
@@ -389,16 +489,16 @@ CAA.multiplayer = (function () {
       const createCard = h('div', { class: 'mp-action-card host-card', onclick: () => createRoomView() }, [
         h('div', { class: 'mp-action-card-icon' }, ['👑']),
         h('div', { class: 'mp-action-card-title' }, ['Créer une Salle']),
-        h('div', { class: 'mp-action-card-desc' }, ['Configurez les équipes, choisissez les jeux et lancez la partie. Vous serez l\'hôte TV.']),
-        h('div', { class: 'mp-action-card-btn' }, ['Créer →'])
+        h('div', { class: 'mp-action-card-desc' }, ['Configurez les équipes, choisissez les jeux et lancez la partie. Vous serez l\'écran hôte TV.']),
+        h('div', { class: 'mp-action-card-btn' }, ['Créer la Salle →'])
       ]);
 
       // Card: Rejoindre
       const joinCard = h('div', { class: 'mp-action-card join-card', onclick: () => joinRoomView() }, [
         h('div', { class: 'mp-action-card-icon' }, ['🎮']),
         h('div', { class: 'mp-action-card-title' }, ['Rejoindre une Salle']),
-        h('div', { class: 'mp-action-card-desc' }, ['Entrez le code de la salle fourni par l\'hôte, choisissez votre équipe et jouez !']),
-        h('div', { class: 'mp-action-card-btn' }, ['Rejoindre →'])
+        h('div', { class: 'mp-action-card-desc' }, ['Entrez le code PIN affiché sur la TV hôte, choisissez votre équipe et répondez en direct !']),
+        h('div', { class: 'mp-action-card-btn' }, ['Rejoindre le Jeu →'])
       ]);
 
       cards.appendChild(createCard);
@@ -407,20 +507,20 @@ CAA.multiplayer = (function () {
 
       // ─── Features grid ───
       const features = h('div', { class: 'mp-features-grid mt-lg' }, [
-        h('div', { class: 'mp-feature-item' }, ['⚡', h('span', {}, ['Temps réel'])]),
-        h('div', { class: 'mp-feature-item' }, ['📱', h('span', {}, ['Multi-appareils'])]),
-        h('div', { class: 'mp-feature-item' }, ['🏆', h('span', {}, ['11 Jeux inclus'])]),
+        h('div', { class: 'mp-feature-item' }, ['⚡', h('span', {}, ['Temps réel WebSocket'])]),
+        h('div', { class: 'mp-feature-item' }, ['📱', h('span', {}, ['Smartphones & Tablettes'])]),
+        h('div', { class: 'mp-feature-item' }, ['🏆', h('span', {}, ['11 Jeux interactifs'])]),
         h('div', { class: 'mp-feature-item' }, ['👥', h('span', {}, ['Jusqu\'à 6 équipes'])])
       ]);
       scr.appendChild(features);
 
-      // Mise à jour du badge après un court délai (laisse Socket.IO tenter la connexion)
-      setTimeout(() => _updateStatusBadge(_socketConnected ? 'connected' : (socket ? 'connecting' : 'offline')), 800);
+      // Rafraîchir badge après vérification
+      setTimeout(() => _updateStatusBadge(_socketConnected ? 'connected' : (socket && socket.connected ? 'connected' : (socket ? 'connecting' : 'offline'))), 600);
     });
   }
 
   function createRoomView() {
-    let hostName = 'Host';
+    let hostName = 'Host TV';
     let teamCount = 3;
     let teamNames = ['Team A', 'Team B', 'Team C', 'Team D', 'Team E', 'Team F'];
     const teamColors = [
@@ -447,17 +547,17 @@ CAA.multiplayer = (function () {
     };
 
     const GAME_ICONS = {
-      wordChain: '',
-      alphabetRace: '',
-      anagram: '',
-      spellingBee: '',
-      wordBuilder: '',
-      wordFromWord: '',
-      mysteryObject: '',
-      grammar: '',
-      irregular: '',
-      phrasal: '',
-      tvVocab: ''
+      wordChain: '🔗',
+      alphabetRace: '🔤',
+      anagram: '🔀',
+      spellingBee: '🐝',
+      wordBuilder: '🏗️',
+      wordFromWord: '🧩',
+      mysteryObject: '🔍',
+      grammar: '⚔️',
+      irregular: '📖',
+      phrasal: '💡',
+      tvVocab: '📺'
     };
 
     const allowedGames = ['wordChain', 'alphabetRace', 'anagram', 'spellingBee', 'wordBuilder', 'wordFromWord', 'tvVocab', 'mysteryObject', 'grammar', 'irregular', 'phrasal'];
@@ -604,21 +704,17 @@ CAA.multiplayer = (function () {
           class: 'btn btn-primary',
           style: 'padding:16px 28px;font-size:1.15rem;font-weight:900;border-radius:14px;box-shadow:var(--glow-brand);',
           onclick: () => {
-            const s = getSocket();
-            if (!s || !_socketConnected) {
-              showToast('❌ Serveur hors-ligne. Lancez qserver.py puis cliquez sur Reconnecter.', true);
-              retrySocketConnect();
-              return;
-            }
-            if (!selectedGames.length) { showToast('Sélectionnez au moins un jeu', true); return; }
-            const namesClean = teamNames.slice(0, teamCount).map((n, i) => (String(n || '').trim() || `Team ${String.fromCharCode(65 + i)}`));
-            const uniq = new Set(namesClean.map((n) => n.toLowerCase()));
-            if (uniq.size !== namesClean.length) { showToast('Les noms d\'équipes doivent être uniques', true); return; }
-            s.emit('create_room', {
-              hostName: hostName.trim() || 'Host',
-              teamCount,
-              teamNames: namesClean,
-              allowedGames: selectedGames
+            ensureConnected((s) => {
+              if (!selectedGames.length) { showToast('Sélectionnez au moins un jeu', true); return; }
+              const namesClean = teamNames.slice(0, teamCount).map((n, i) => (String(n || '').trim() || `Team ${String.fromCharCode(65 + i)}`));
+              const uniq = new Set(namesClean.map((n) => n.toLowerCase()));
+              if (uniq.size !== namesClean.length) { showToast('Les noms d\'équipes doivent être uniques', true); return; }
+              s.emit('create_room', {
+                hostName: hostName.trim() || 'Host TV',
+                teamCount,
+                teamNames: namesClean,
+                allowedGames: selectedGames
+              });
             });
           }
         }, ['🚀 Créer la Salle & Ouvrir le Lobby']),
@@ -630,7 +726,7 @@ CAA.multiplayer = (function () {
         if (!el) return;
         el.innerHTML = '';
         const namesClean = teamNames.slice(0, teamCount).map((n, i) => (String(n || '').trim() || `Team ${String.fromCharCode(65 + i)}`));
-        el.appendChild(h('div', { class: 'room-summary-chip' }, ['👑 Hôte: ', h('b', {}, [hostName.trim() || 'Host'])]));
+        el.appendChild(h('div', { class: 'room-summary-chip' }, ['👑 Hôte: ', h('b', {}, [hostName.trim() || 'Host TV'])]));
         el.appendChild(h('div', { class: 'room-summary-chip' }, ['👥 Équipes: ', h('b', {}, [teamCount + ' (' + namesClean.join(', ') + ')'])]));
         el.appendChild(h('div', { class: 'room-summary-chip' }, ['🎯 Jeux: ', h('b', {}, [selectedGames.length + ' / ' + allowedGames.length])]));
       }
@@ -645,21 +741,19 @@ CAA.multiplayer = (function () {
     let roomCode = prefillCode || '';
     let name = '';
     let fetchedTeams = ['Team A', 'Team B', 'Team C'];
-    let selectedTeam = fetchedTeams[0];  // toujours initialisé, jamais vide
-    let userSelectedTeam = false; // si vrai, ne pas écraser la sélection lors des fetch
-    let teamSelectEl = null; // référence directe au <select>
-    let teamSizesEl = null;  // référence directe au bloc info équipes
+    let selectedTeam = fetchedTeams[0];
+    let userSelectedTeam = false;
+    let teamSelectEl = null;
+    let teamSizesEl = null;
     let lastFetchedRoom = null;
 
     function updateTeamSelect() {
       if (!teamSelectEl) return;
-      // Préserver la valeur choisie si toujours disponible
       if (!fetchedTeams.includes(selectedTeam)) {
         selectedTeam = fetchedTeams[0];
         userSelectedTeam = false;
       }
       teamSelectEl.innerHTML = '';
-      const h = U().h;
       fetchedTeams.forEach((t) => {
         const opt = document.createElement('option');
         opt.value = t;
@@ -667,18 +761,18 @@ CAA.multiplayer = (function () {
         if (t === selectedTeam) opt.selected = true;
         teamSelectEl.appendChild(opt);
       });
-      // Mettre à jour aussi les tailles d'équipes
       if (teamSizesEl && Array.isArray(fetchedTeams) && fetchedTeams.length) {
         const counts = {};
         ((lastFetchedRoom && lastFetchedRoom.playerScores) || []).forEach((ps) => { counts[ps.team] = (counts[ps.team] || 0) + 1; });
-        const sizes = fetchedTeams.map((t) => `${t} (${counts[t] || 0} player${(counts[t] || 0) !== 1 ? 's' : ''})`).join(' · ');
-        teamSizesEl.textContent = 'Members: ' + sizes;
+        const sizes = fetchedTeams.map((t) => `${t} (${counts[t] || 0} joueur${(counts[t] || 0) > 1 ? 's' : ''})`).join(' · ');
+        teamSizesEl.textContent = 'Membres actuels : ' + sizes;
       }
     }
 
     function fetchTeamsForCode(code) {
       if (code && code.length >= 4) {
-        fetch(`/api/rooms/${encodeURIComponent(code)}`)
+        const baseUrl = getServerUrl() || '';
+        fetch(`${baseUrl}/api/rooms/${encodeURIComponent(code)}`)
           .then((res) => res.json())
           .then((data) => {
             if (data && data.teams && data.teams.length) {
@@ -688,7 +782,7 @@ CAA.multiplayer = (function () {
                 selectedTeam = fetchedTeams[0];
                 userSelectedTeam = false;
               }
-              updateTeamSelect(); // Mise à jour partielle — pas de re-render complet
+              updateTeamSelect();
             }
           })
           .catch(() => { });
@@ -699,68 +793,87 @@ CAA.multiplayer = (function () {
       const h = U().h;
       scr.innerHTML = '';
 
-      scr.appendChild(h('h2', { class: 'section-title' }, ['🔑 Join a Room']));
-      scr.appendChild(h('p', { class: 'section-sub' }, ['Enter the room code, your name, and choose your team.']));
+      const wrap = h('div', { class: 'mp-join-box' });
 
-      const card = h('div', { class: 'gd-question mt-lg', style: 'text-align:left;' });
+      wrap.appendChild(h('div', { style: 'text-align:center;margin-bottom:16px;' }, [
+        h('div', { style: 'font-size:2.8rem;margin-bottom:6px;' }, ['🎮']),
+        h('h2', { class: 'section-title', style: 'margin:0;' }, ['Rejoindre une Partie']),
+        h('p', { class: 'section-sub', style: 'margin:4px 0 0 0;' }, ['Entrez le code de la salle affiché sur l\'écran hôte.'])
+      ]));
 
-      // Build the team <select> element and keep a reference
+      // Select pour équipe
       teamSelectEl = h('select', {
+        style: 'width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--card-2);color:var(--ink);font-weight:700;font-size:1rem;',
         onchange: (e) => { selectedTeam = e.target.value; userSelectedTeam = true; }
       }, fetchedTeams.map((t) => h('option', { value: t, selected: t === selectedTeam }, [t])));
 
-      const form = h('div', { class: 'form-grid' }, [
-        h('label', {}, ['Room Code (5 characters)', h('input', {
-          type: 'text',
-          value: roomCode,
-          placeholder: 'EX: ABCDE',
-          style: 'text-transform:uppercase;font-weight:700;letter-spacing:2px;',
-          oninput: (e) => {
-            roomCode = e.target.value.toUpperCase().trim();
-            if (roomCode.length >= 4) fetchTeamsForCode(roomCode);
-          }
-        })]),
-        h('label', {}, ['Your Player Name', h('input', {
-          type: 'text',
-          value: name,
-          placeholder: 'Enter your name...',
-          oninput: (e) => { name = e.target.value; }
-        })]),
-        h('label', { style: 'grid-column: 1 / -1;' }, ['Choose Your Team', teamSelectEl])
+      const form = h('div', { style: 'display:flex;flex-direction:column;gap:16px;' }, [
+        h('div', {}, [
+          h('label', { style: 'display:block;font-weight:800;font-size:0.9rem;margin-bottom:6px;' }, ['Code PIN de la Salle']),
+          h('div', { class: 'mp-pin-input-wrap' }, [
+            h('input', {
+              class: 'mp-pin-input',
+              type: 'text',
+              maxlength: 6,
+              value: roomCode,
+              placeholder: 'ABCDE',
+              autofocus: true,
+              oninput: (e) => {
+                roomCode = e.target.value.toUpperCase().trim();
+                e.target.value = roomCode;
+                if (roomCode.length >= 4) fetchTeamsForCode(roomCode);
+              }
+            })
+          ])
+        ]),
+
+        h('div', {}, [
+          h('label', { style: 'display:block;font-weight:800;font-size:0.9rem;margin-bottom:6px;' }, ['Votre Prénom / Pseudo']),
+          h('input', {
+            type: 'text',
+            value: name,
+            placeholder: 'Ex: Steve, Sarah...',
+            style: 'width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--card-2);color:var(--ink);font-weight:700;font-size:1.05rem;',
+            oninput: (e) => { name = e.target.value; }
+          })
+        ]),
+
+        h('div', {}, [
+          h('label', { style: 'display:block;font-weight:800;font-size:0.9rem;margin-bottom:6px;' }, ['Choisissez votre Équipe']),
+          teamSelectEl
+        ])
       ]);
 
-      card.appendChild(form);
+      wrap.appendChild(form);
 
-      // Bloc taille des équipes (mise à jour partielle possible)
-      teamSizesEl = h('div', { class: 'section-note mt', style: 'font-size:0.95rem;opacity:0.9;' });
+      teamSizesEl = h('div', { class: 'section-note mt', style: 'font-size:0.88rem;opacity:0.9;' });
       if (Array.isArray(fetchedTeams) && fetchedTeams.length) {
         const counts = {};
         ((lastFetchedRoom && lastFetchedRoom.playerScores) || []).forEach((ps) => { counts[ps.team] = (counts[ps.team] || 0) + 1; });
-        const sizes = fetchedTeams.map((t) => `${t} (${counts[t] || 0} player${(counts[t] || 0) !== 1 ? 's' : ''})`).join(' · ');
-        teamSizesEl.textContent = 'Members: ' + sizes;
+        const sizes = fetchedTeams.map((t) => `${t} (${counts[t] || 0} joueur${(counts[t] || 0) > 1 ? 's' : ''})`).join(' · ');
+        teamSizesEl.textContent = 'Membres actuels : ' + sizes;
       }
-      card.appendChild(teamSizesEl);
-      scr.appendChild(card);
+      wrap.appendChild(teamSizesEl);
 
-      scr.appendChild(h('div', { class: 'row center mt-lg' }, [
+      wrap.appendChild(h('div', { class: 'row center mt-lg', style: 'gap:12px;' }, [
         h('button', {
-          class: 'btn btn-primary', onclick: () => {
+          class: 'btn btn-primary',
+          style: 'padding:14px 28px;font-size:1.1rem;font-weight:900;border-radius:14px;flex:1;',
+          onclick: () => {
             if (!roomCode.trim()) { showToast('Entrez le code de la salle', true); return; }
             if (!name.trim()) { showToast('Entrez votre prénom', true); return; }
-            const s = getSocket();
-            if (!s || !_socketConnected) {
-              showToast('❌ Serveur hors-ligne. Revenez au menu et cliquez Reconnecter.', true);
-              retrySocketConnect();
-              return;
-            }
-            const finalTeam = selectedTeam || fetchedTeams[0] || 'Team A';
-            PLAYER.name = name.trim();
-            PLAYER.team = finalTeam;   // stocké AVANT l'emit pour que syncPlayerData ait une valeur
-            s.emit('join_room', { code: roomCode.trim(), name: name.trim(), team: finalTeam });
+            ensureConnected((s) => {
+              const finalTeam = selectedTeam || fetchedTeams[0] || 'Team A';
+              PLAYER.name = name.trim();
+              PLAYER.team = finalTeam;
+              s.emit('join_room', { code: roomCode.trim(), name: name.trim(), team: finalTeam });
+            });
           }
-        }, ['Join Room ▶']),
-        h('button', { class: 'btn btn-ghost', onclick: () => menu() }, ['Back'])
+        }, ['🚀 Rejoindre le Jeu']),
+        h('button', { class: 'btn btn-ghost', onclick: () => menu() }, ['Retour'])
       ]));
+
+      scr.appendChild(wrap);
     }
 
     if (roomCode) fetchTeamsForCode(roomCode);
@@ -774,66 +887,85 @@ CAA.multiplayer = (function () {
 
     U().show((scr) => {
       const h = U().h;
-      scr.appendChild(h('div', { class: 'row space-between' }, [
-        h('h2', { class: 'section-title' }, ['Room ' + ROOM.code]),
-        h('button', { class: 'btn btn-ghost', onclick: () => U().confirmBox('Leave room?', leaveCurrentRoom) }, ['🚪 Leave Room'])
+
+      // Hero PIN Code Display
+      const pinHero = h('div', { class: 'mp-lobby-hero' }, [
+        h('div', { class: 'mp-lobby-pin-label' }, ['Code de la Salle (PIN)']),
+        h('div', { class: 'mp-lobby-pin-code' }, [ROOM.code]),
+        h('button', {
+          class: 'mp-lobby-copy-btn',
+          onclick: () => {
+            if (navigator.clipboard) {
+              navigator.clipboard.writeText(ROOM.code);
+              showToast('📋 Code ' + ROOM.code + ' copié dans le presse-papier !', false);
+            } else {
+              showToast('Code PIN : ' + ROOM.code, false);
+            }
+          }
+        }, ['📋 Copier le Code PIN'])
+      ]);
+      scr.appendChild(pinHero);
+
+      // Top bar info & leave
+      scr.appendChild(h('div', { class: 'row space-between', style: 'align-items:center;margin-bottom:14px;' }, [
+        h('div', {}, [
+          h('h3', { style: 'margin:0;font-size:1.2rem;font-weight:800;' }, ['👑 Hôte TV : ' + ROOM.hostName]),
+          h('p', { class: 'section-sub', style: 'margin:2px 0 0 0;' }, [
+            'Jeu sélectionné : ',
+            h('b', { style: 'color:var(--brand);' }, [ROOM.currentGame ? (GAME_LABELS[ROOM.currentGame] || ROOM.currentGame) : 'Aucun jeu sélectionné'])
+          ])
+        ]),
+        h('button', { class: 'btn btn-ghost', onclick: () => U().confirmBox('Quitter la salle ?', leaveCurrentRoom) }, ['🚪 Quitter la Salle'])
       ]));
-      scr.appendChild(h('p', { class: 'section-sub' }, ['Host: ' + ROOM.hostName]));
 
-      if (ROOM.currentGame) {
-        scr.appendChild(h('div', { class: 'section-note' }, ['Selected game: ' + (GAME_LABELS[ROOM.currentGame] || ROOM.currentGame)]));
-      } else {
-        scr.appendChild(h('div', { class: 'section-note' }, ['No game selected.']));
-      }
+      // Tableau des scores en direct
+      scr.appendChild(h('div', { class: 'section-sub mt-lg' }, ['🏆 Scores des Équipes']));
+      scr.appendChild(renderLiveScoreboard(U().h));
 
-      const teamList = h('div', { class: 'room-teams mt' });
-      (ROOM.teams || []).forEach((t) => {
-        teamList.appendChild(h('div', { class: 'room-team' }, [t.name]));
-      });
-      scr.appendChild(teamList);
-
+      // Liste des joueurs connectés
+      const players = ROOM.players || [];
+      scr.appendChild(h('div', { class: 'section-sub mt-lg' }, [`👥 Joueurs dans la Salle (${players.length})`]));
       const playerList = h('div', { class: 'player-list mt' });
-      (ROOM.players || []).forEach((p) => {
+      players.forEach((p) => {
         const isMe = p.id === PLAYER.id;
         playerList.appendChild(h('div', { class: 'player-card' + (isMe ? ' me' : '') }, [
-          h('div', { class: 'player-name' }, [p.name + (p.isCaptain ? ' 👑 (Capt)' : '')]),
-          h('div', { class: 'player-meta' }, [p.team || 'No team']),
+          h('div', { class: 'player-name' }, [p.name + (p.isCaptain ? ' 👑 (Capt)' : '') + (isMe ? ' (Vous)' : '')]),
+          h('div', { class: 'player-meta' }, ['🚩 ' + (p.team || 'Sans équipe')]),
           h('div', { class: 'player-score' }, ['Score: ' + (p.score || 0) + ' pts'])
         ]));
       });
-      // Show live team scoreboard in lobby
-      scr.appendChild(h('div', { class: 'section-sub mt-lg' }, ['Team Scores']));
-      scr.appendChild(renderLiveScoreboard(U().h));
-      scr.appendChild(h('div', { class: 'section-sub mt-lg' }, ['Players in Room (' + (ROOM.players || []).length + ')']));
       scr.appendChild(playerList);
 
+      // Panneau Hôte vs Joueur
       if (PLAYER.isHost) {
-        scr.appendChild(h('div', { class: 'section-note mt-lg', style: 'background:rgba(241,196,15,0.15);border:1px solid #f1c40f;' }, [
-          '👑 You are the Host. Select a game and click Start to launch it for all connected players.'
+        scr.appendChild(h('div', { class: 'section-note mt-lg', style: 'background:rgba(37,99,235,0.12);border:1.5px solid var(--brand);' }, [
+          '👑 Vous êtes l\'Hôte TV. Choisissez un jeu puis cliquez sur "Démarrer" pour lancer la partie sur tous les appareils.'
         ]));
-        const hostControls = h('div', { class: 'row mt-lg' }, [
-          h('button', { class: 'btn btn-primary', onclick: () => chooseGameView() }, ['🎯 Select & Configure Game']),
+        const hostControls = h('div', { class: 'row mt-lg', style: 'gap:12px;flex-wrap:wrap;' }, [
+          h('button', { class: 'btn btn-primary', onclick: () => chooseGameView() }, ['🎯 Choisir le Jeu & Paramètres']),
           ROOM.currentGame ? h('button', {
-            class: 'btn btn-primary', onclick: () => {
+            class: 'btn btn-primary',
+            style: 'background:linear-gradient(135deg,#10b981,#059669);border-color:#10b981;',
+            onclick: () => {
               getSocket().emit('start_game', { code: ROOM.code, playerId: PLAYER.id });
             }
-          }, ['🚀 Start Game Now']) : null,
-          ROOM.currentGame ? h('button', { class: 'btn btn-red', onclick: () => U().confirmBox('End game and show results?', () => { getSocket().emit('end_game', { code: ROOM.code, playerId: PLAYER.id }); }) }, ['🏁 End Game']) : null
+          }, ['🚀 Démarrer la Partie']) : null,
+          ROOM.currentGame ? h('button', { class: 'btn btn-red', onclick: () => U().confirmBox('Terminer la partie et afficher le podium ?', () => { getSocket().emit('end_game', { code: ROOM.code, playerId: PLAYER.id }); }) }, ['🏁 Terminer la Partie']) : null
         ]);
         scr.appendChild(hostControls);
       } else {
-        const me = (ROOM.players || []).find((p) => p.id === PLAYER.id);
+        const me = players.find((p) => p.id === PLAYER.id);
         const myTeam = (me && me.team) || PLAYER.team || (ROOM.teams && ROOM.teams[0] && ROOM.teams[0].name) || '';
-        scr.appendChild(h('div', { class: 'section-sub mt-lg' }, ['Your Player Settings']));
+        scr.appendChild(h('div', { class: 'section-sub mt-lg' }, ['Vos Paramètres']));
         scr.appendChild(h('div', { class: 'form-grid' }, [
-          h('label', {}, ['Your Name', h('input', {
+          h('label', {}, ['Votre Prénom', h('input', {
             type: 'text', value: (me && me.name) || PLAYER.name, onchange: (e) => {
               getSocket().emit('update_player', { code: ROOM.code, playerId: PLAYER.id, name: e.target.value });
             }
           })]),
-          h('div', { class: 'section-note', style: 'margin-top:20px;font-weight:700;font-size:1.1rem;' }, ['🚩 Team: ' + myTeam])
+          h('div', { class: 'section-note', style: 'margin-top:20px;font-weight:700;font-size:1.1rem;' }, ['🚩 Équipe : ' + myTeam])
         ]));
-        scr.appendChild(h('div', { class: 'section-note mt-lg' }, ['Waiting for the host to launch the game...']));
+        scr.appendChild(h('div', { class: 'section-note mt-lg', style: 'background:rgba(245,158,11,0.1);border:1px solid #f59e0b;' }, ['⏳ En attente que l\'hôte TV lance le prochain jeu... Préparez-vous !']));
       }
     });
   }
@@ -1406,6 +1538,8 @@ CAA.multiplayer = (function () {
     joinRoomView,
     renderRoomLobby,
     leaveCurrentRoom,
-    retrySocketConnect
+    retrySocketConnect,
+    getServerUrl,
+    setServerUrl
   };
 })();
