@@ -5,7 +5,7 @@ services:
     region: oregon
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn -k gevent -w 1 --bind 0.0.0.0:$PORT --timeout 120 qserver:app
+    startCommand: gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 --bind 0.0.0.0:$PORT --timeout 120 qserver:app
     envVars:
       - key: PORT
         value: 10000
