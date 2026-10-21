@@ -26,6 +26,15 @@ et se connecter avec : const socket = io();
 
 import os
 import sys
+
+# Patch gevent avant tout import standard (threading, socket, time) en production Linux / Render
+if sys.platform != 'win32' and (os.environ.get('RENDER') or 'gevent' in sys.modules):
+    try:
+        from gevent import monkey
+        monkey.patch_all()
+    except Exception as _e:
+        print(f"[WARN] Gevent monkey patch bypassed: {_e}")
+
 from flask import Flask, jsonify, request, send_from_directory, Response
 from werkzeug.utils import secure_filename
 from flask_socketio import SocketIO, join_room as sio_join_room, leave_room as sio_leave_room, emit
@@ -49,7 +58,7 @@ app = Flask(__name__, static_folder='.', static_url_path='')
 # Configuration intelligente du mode asynchrone :
 # - Local Windows : 'threading' (100% stable, rapide, sans warning eventlet)
 # - Production Render / Linux : 'gevent'
-if sys.platform == 'win32' or not os.environ.get('RENDER'):
+if sys.platform == 'win32' and not os.environ.get('RENDER'):
     async_mode = 'threading'
 else:
     try:
@@ -58,7 +67,13 @@ else:
     except ImportError:
         async_mode = 'threading'
 
-socketio = SocketIO(app, cors_allowed_origins='*', async_mode=async_mode)
+socketio = SocketIO(
+    app,
+    cors_allowed_origins='*',
+    async_mode=async_mode,
+    ping_timeout=60,
+    ping_interval=25
+)
 
 # ---------------------------------------------------------------------------
 # État en mémoire (source de vérité) + verrou pour les accès concurrents
